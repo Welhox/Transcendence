@@ -1,0 +1,32 @@
+services:
+  nginx:
+    build:
+      context:  .
+      dockerfile: ./nginx/Dockerfile
+    container_name: nginx
+    image:  nginx
+    # depends_on:
+    #   - wordpress
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/conf/:/etc/nginx/ #this makes the conf file available inside the dockerfile  might not be allowed wiht more volumes
+    #   - ./requirements/nginx/tools:/etc/nginx/ssl/ #this makes the ssl certificates available inside nginx
+    #   - wordpress-volume:/var/www/html/
+    # networks:
+    #   - inception
+    restart: always
+
+# volumes:
+#   mariadb-volume:
+#     name: mariadb
+#     driver: local
+#     driver_opts:
+#       o:  bind
+#       type: none
+#       device: /home/${USER}/data/mariadb
+
+# networks:
+#   inception:
+#     name: inception
+    # driver: bridge
