@@ -10,7 +10,7 @@ services:
     ports:
       - "8443:8443"
     volumes:
-      - ./frontend/srcs/:/var/www/html/ #this makes the project available inside the container
+      - ./frontend/srcs/react/dist:/var/www/html/ #this makes the project available inside the container
     # networks:
     #   - trancendance
     restart: always

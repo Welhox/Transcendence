@@ -12,6 +12,7 @@ name = transcendence
 #------------- COMMANDS ------#
 
 all: ssl
+	@npm --prefix ./frontend/srcs/react run build
 	@docker compose -f docker-compose.yml up -d --build
 
 
@@ -33,6 +34,7 @@ down:
 fclean: down
 	@printf "Clean of all docker configs\n"
 	@docker system prune --all
+	@rm -rf ./frontend/srcs/react/dist
 
 .PHONY: all down ssl
 
