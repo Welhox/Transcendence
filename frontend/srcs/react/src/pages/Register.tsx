@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import  axios from 'axios'
 
 // tells TypeScript to expect string type values for these attributes
@@ -8,7 +8,6 @@ interface SignUpState {
 	email: string;
 	password: string
 }
-
 
 const Register: React.FC = () => {
 
@@ -40,6 +39,13 @@ const Register: React.FC = () => {
 		}catch (error) {
 			console.log(error);
 		}
+	}
+
+	const navigate = useNavigate();
+
+	// takes you to profile page when button is clicked
+	const handleRegistration = () => {
+		navigate('/profile')
 	}
 
   return (
@@ -75,6 +81,7 @@ const Register: React.FC = () => {
         />
         <button
           type="submit"
+		  onClick={handleRegistration}
         >
           Register
         </button>
