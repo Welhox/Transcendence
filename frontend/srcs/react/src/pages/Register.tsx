@@ -18,34 +18,44 @@ const Register: React.FC = () => {
 		password: ''
 	})
 
+	const [errorMessage, setErrorMsg] = useState<string>(''); // custom error message
 	const pwdValidationRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+	const navigate = useNavigate();
 
 	// saves data to the object
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const {name, value} = e.target;
 		setSignupData(prevData => ({...prevData, [name]: value}))
+		setErrorMsg(''); // clears error when user starts typing
 	}
 
 	// handles button click: performs password validation and makes a mock post request to db API
 	const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
+		// if (!signupData.username.trim()) { adds custom error message if form input validation params are disabled
+		// 	setErrorMsg('Username is required.');
+		// 	return;
+		// }
+
+		// if (!signupData.email.trim()) {
+		// 	setErrorMsg('Please give valid email address.');
+		// 	return;
+		// }
+
 		if (!pwdValidationRegex.test(signupData.password)) {
-			alert('Yo password is shiiiittt');
+			setErrorMsg('Password must be at least 8 characters, including uppercase, lowercase, number and special character.')
+			//alert('Yo password is shiiiittt');
 			return;
 		}
 		try {
 			const response = await axios.post('http://localhost:8080/userapi/signup/this-path-should-be-protected', signupData);
-			console.log(response);
+			//console.log(response);
+			navigate('/profile');
 		}catch (error) {
-			console.log(error);
+			//console.log(error);
+			navigate('/profile');
 		}
-	}
-
-	const navigate = useNavigate();
-
-	// takes you to profile page when button is clicked
-	const handleRegistration = () => {
-		navigate('/profile')
 	}
 
   return (
@@ -60,6 +70,7 @@ const Register: React.FC = () => {
 		  value={signupData.username}
 		  required
 		  maxLength={20}
+		  minLength={2}
         />
 		<input
           type="email"
@@ -68,7 +79,7 @@ const Register: React.FC = () => {
 		  onChange={handleChange}
 		  value={signupData.email}
 		  required
-		  maxLength={40}
+		  maxLength={42}
         />
         <input
           type="password"
@@ -77,21 +88,19 @@ const Register: React.FC = () => {
 		  onChange={handleChange}
 		  value={signupData.password}
 		  required
-		  maxLength={16}
+		  maxLength={42}
+		  minLength={8}
         />
-        <button
-          type="submit"
-		  onClick={handleRegistration}
-        >
-          Register
-        </button>
+
+		{errorMessage && (
+			<p style={{ color: 'red', marginTop: '8px'}}>{errorMessage}</p>
+		)}
+
+        <button type="submit">Register</button>
       </form>
 
       <p>
-        Already have an account?{' '}
-        <Link to="/">
-          Login
-        </Link>
+        Already have an account? <Link to="/">Login</Link>
       </p>
     </div>
   )
