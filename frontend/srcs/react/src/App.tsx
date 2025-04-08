@@ -5,6 +5,15 @@ import Register from './pages/Register'
 import Profile from './pages/Profile'
 
 const App: React.FC = () => {
+  fetch('http://localhost:3000/app/data')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data); // actual response data
+  })
+  .catch(error => {
+    console.error('Error fetching:', error);
+  });
+
   return (
     <Router>
       <Routes>
