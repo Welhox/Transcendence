@@ -10,27 +10,31 @@ services:
     ports:
       - "8443:8443"
     volumes:
-      - ./frontend/srcs/react/dist:/var/www/html/ #this makes the project available inside the container
-    # networks:
-    #   - trancendance
+      - ./frontend/react:/var/www/html/ #this makes the project available inside the container
+    networks:
+      - transcendence
     restart: always
 
-  # backend:
-  #   build:
-  #     context:  .
-  #     dockerfile: ./backend/Dockerfile
-  #   container_name: backend
-  #   image:  backend
-  #   # depends_on:
-  #   #   - database
-  #   ports:
-  #     - "8191:8191" #check if valid port for sqlite
-  #   volumes:
-  #     - ./backend/srcs/:./srcs #this makes the project available inside the container
-  #   # networks:
-  #   #   - trancendance
-  #   restart: always
+  backend:
+    build:
+      context:  .
+      dockerfile: ./backend/Dockerfile
+    container_name: backend
+    image:  backend
+    # depends_on:
+    #   - database
+    ports:
+      - "3000"
+    volumes:
+      - ./backend/:/backend #this makes the project available inside the container
+    networks:
+      - transcendence
+    restart: always
 
+networks:
+  transcendence:
+    name: transcendence
+    driver: bridge
 
 
 
@@ -42,8 +46,3 @@ services:
 #       o:  bind
 #       type: none
 #       device: /home/${USER}/data/sqlite
-
-# networks:
-#   trancendance:
-#     name: trancendance
-    # driver: bridge

@@ -1,0 +1,15 @@
+FROM node:23-alpine3.20
+
+WORKDIR /backend
+
+COPY ./backend/backend_script.sh /backend_script.sh 
+
+RUN chmod +x /backend_script.sh
+# # Fix permissions
+# RUN chown -R root:root /backend
+
+# RUN chmod 777 backend/package.json
+
+# RUN npm install
+
+ENTRYPOINT [ "/backend_script.sh" ]
