@@ -10,7 +10,7 @@ services:
     ports:
       - "8443:8443"
     volumes:
-      - ./frontend/srcs/react/dist:/var/www/html/ #this makes the project available inside the container
+      - ./frontend/react:/var/www/html/ #this makes the project available inside the container
     networks:
       - transcendence
     restart: always
@@ -24,17 +24,17 @@ services:
     # depends_on:
     #   - database
     ports:
-      - "3000:3000"
+      - "3000"
     volumes:
-      - ./backend/:./srcs #this makes the project available inside the container
+      - ./backend/:/backend #this makes the project available inside the container
     networks:
       - transcendence
     restart: always
 
-  networks:
-    transcendence:
-      name: transcendence
-      driver: bridge
+networks:
+  transcendence:
+    name: transcendence
+    driver: bridge
 
 
 

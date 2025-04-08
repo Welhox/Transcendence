@@ -12,7 +12,7 @@ name = transcendence
 #------------- COMMANDS ------#
 
 all: ssl
-	@npm --prefix ./frontend/srcs/react run build
+# @npm --prefix ./frontend/srcs/react run build
 	@docker compose -f docker-compose.yml up -d --build
 
 

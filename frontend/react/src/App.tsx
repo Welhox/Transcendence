@@ -4,8 +4,10 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 
+const dev = ''//'http://localhost:3000'
+
 const App: React.FC = () => {
-  fetch('http://localhost:3000/app/data')
+  fetch(dev + '/app/data')
   .then(response => response.json())
   .then(data => {
     console.log(data); // actual response data
