@@ -10,16 +10,29 @@ const Login: React.FC = () => {
 	// sends post request to server for credential validation
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		let response
 		try {
-			const response = await axios.post('http://localhost:8080/api/login/this-also-needs-to-be-protected', {
+			response = await axios.post('http://localhost:3000/users/login', {
 				username,
 				password,
 			});
-			// insert if-else to check for response
-			navigate('/profile');
-		} catch (error) {
+			console.log('Response: ', response)
+			if (response.status === 200)
+				{
+					navigate('/profile');
+					return;
+				}
+				else
+				{
+					console.log('why not here?')
+					return;
+					//do something
+				}
+			} catch (error) {
+				console.log('Response: ', response)
+				console.log('try failed')
 			// add error handling
-			navigate('/profile');
+			// navigate('/profile');
 		}
 	}
 

@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 
-const dev = ''//'http://localhost:3000'
+const dev = 'http://localhost:3000'
 
 const App: React.FC = () => {
   fetch(dev + '/app/data')
@@ -20,8 +20,8 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-		<Route path="/register" element={<Register />} /> {'./pages/Register.tsx'}
-		<Route path="/profile" element={<Profile />} /> {'./pages/Profile.tsx'}
+        <Route path="/register" element={<Register />} /> {'./pages/Register.tsx'}
+        <Route path="/profile" element={<Profile />} /> {'./pages/Profile.tsx'}
       </Routes>
     </Router>
   )
