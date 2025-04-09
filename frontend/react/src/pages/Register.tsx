@@ -48,14 +48,23 @@ const Register: React.FC = () => {
 			//alert('Yo password is shiiiittt');
 			return;
 		}
-		// try {
-		// 	const response = await axios.post('http://localhost:8080/userapi/signup/this-path-should-be-protected', signupData);
-		// 	//console.log(response);
-		// 	navigate('/profile');
-		// }catch (error) {
-		// 	//console.log(error);
-		// 	navigate('/profile');
-		// }
+		try {
+			const response = await axios.post('http://localhost:3000/users/register', signupData);
+			console.log('Response: ', response)
+			if (response.status === 200)
+			{
+				navigate('/profile');
+			}
+			else
+			{
+				return;
+				//do something
+			}
+
+		}catch (error) {
+			console.log(error);
+			//navigate('/profile');
+		}
 	}
 
   return (

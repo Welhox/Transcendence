@@ -1,4 +1,6 @@
-FROM node:23-alpine3.20
+FROM node:23-bookworm-slim
+
+# RUN apk update && apk add python3 make g++
 
 WORKDIR /backend
 
