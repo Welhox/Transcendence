@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
+const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+
 const Login: React.FC = () => {
 	const [username, setUsername] = useState(''); // (*)
 	const [password, setPassword] = useState(''); // (**)
@@ -10,9 +12,10 @@ const Login: React.FC = () => {
 	// sends post request to server for credential validation
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		console.log('apiUrl:', apiUrl);
 		let response
 		try {
-			response = await axios.post('http://localhost:3000/users/login', {
+			response = await axios.post(apiUrl + '/users/login', {
 				username,
 				password,
 			});

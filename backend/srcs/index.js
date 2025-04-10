@@ -31,8 +31,13 @@ const start = async () => {
   try {
     
     await fastify.register(require('@fastify/cors'), {
-      origin: true
+      origin: true, // this is needed for dev!!!! DON'T CHANGE
     });
+
+	// fastify.addHook('onRequest', (request, reply, done) => { // for debugging
+	// 	console.log('Request Headers:', request.headers);
+	// 	done();
+	// });
 
     // login user
     fastify.post('/users/login', (request, reply) => {
@@ -48,8 +53,6 @@ const start = async () => {
         }
         reply.status(200).send({ message: 'Login successful' });
       });
-
-
     });
 
     // create user
