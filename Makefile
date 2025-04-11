@@ -12,6 +12,7 @@ name = transcendence
 all: ssl
 	@docker compose -f docker-compose.yml up -d --build
 
+# dev depends on package called concurrently; if prompted for installation, choose yes
 dev:
 	@npx concurrently "cd ./backend && npm install && npm run start" "cd ./frontend/react && npm install && npm run dev"
 
