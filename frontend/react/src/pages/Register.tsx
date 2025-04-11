@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import  axios from 'axios'
 
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+
 // tells TypeScript to expect string type values for these attributes
 interface SignUpState {
 	username: string;
@@ -49,7 +51,7 @@ const Register: React.FC = () => {
 			return;
 		}
 		try {
-			const response = await axios.post('http://localhost:3000/users/register', signupData);
+			const response = await axios.post(apiUrl + '/users/register', signupData);
 			console.log('Response: ', response)
 			if (response.status === 200)
 			{
