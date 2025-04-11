@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState(''); // (*)

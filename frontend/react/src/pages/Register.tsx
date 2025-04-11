@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import  axios from 'axios'
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 // tells TypeScript to expect string type values for these attributes
 interface SignUpState {

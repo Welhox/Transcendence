@@ -10,7 +10,6 @@ name = transcendence
 #------------- COMMANDS ------#
 
 all: ssl
-# @npm --prefix ./frontend/srcs/react run build
 	@docker compose -f docker-compose.yml up -d --build
 
 dev:
@@ -19,9 +18,6 @@ dev:
 restart-front:
 	@docker exec -it frontend pkill -f node || true
 	@docker exec -it frontend sh -c "cd /var/www/html && npm run build"
-
-restart-back:
-	@docker restart backend
 
 # env:
 # 	./make_env.sh
@@ -45,7 +41,7 @@ fclean: down
 
 re: fclean all
 
-.PHONY: all down ssl dev re restart-front restart-back up
+.PHONY: all down ssl dev re restart-front up
 
 
 

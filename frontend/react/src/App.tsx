@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || '';
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 //const dev = 'http://localhost:3000'
 

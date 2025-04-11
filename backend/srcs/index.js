@@ -34,11 +34,6 @@ const start = async () => {
       origin: true, // this is needed for dev!!!! DON'T CHANGE
     });
 
-	// fastify.addHook('onRequest', (request, reply, done) => { // for debugging
-	// 	console.log('Request Headers:', request.headers);
-	// 	done();
-	// });
-
     // login user
     fastify.post('/users/login', (request, reply) => {
       const { username, password } = request.body;
