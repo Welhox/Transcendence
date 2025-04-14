@@ -7,6 +7,9 @@ WORKDIR /backend
 COPY ./backend/backend_script.sh /backend_script.sh 
 
 RUN chmod +x /backend_script.sh
+
+RUN apt-get update -y && apt-get install -y openssl
+
 # # Fix permissions
 # RUN chown -R root:root /backend
 

@@ -1,6 +1,7 @@
 {
   "name": "srcs",
   "version": "1.0.0",
+  "type": "module",
   "main": "./srcs/index.js",
   "scripts": {
     "start": "node ./srcs/index.js",
@@ -13,7 +14,10 @@
   "description": "",
   "dependencies": {
     "@fastify/cors": "^11.0.1",
+    "@prisma/client": "^6.6.0",
+    "bcryptjs": "^2.4.3",
     "fastify": "^5.2.2",
+    "prisma": "^6.6.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
