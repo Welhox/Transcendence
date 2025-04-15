@@ -9,19 +9,19 @@ name = transcendence
 
 #------------- COMMANDS ------#
 
-all: ssl
+all: ssl env
 	@docker compose -f docker-compose.yml up -d --build
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
-dev:
-	@npx concurrently "cd ./backend && npm install && npm run start" "cd ./frontend/react && npm install && npm run dev"
+dev: env
+	@npx concurrently "cd ./backend && npm install && npx prisma generate && npm run start" "cd ./frontend/react && npm install && npm run dev"
 
 restart-front:
 	@docker exec -it frontend pkill -f node || true
 	@docker exec -it frontend sh -c "cd /var/www/html && npm run build"
 
-# env:
-# 	./make_env.sh
+env:
+	@cd ./backend/prisma && echo "DATABASE_URL=\"file:./mydb.sqlite\"" > .env
 
 ssl:
 	@if [ ! -f "./frontend/nginx/ssl/transcendence.crt" ] || [ ! -f "./frontend/nginx/ssl/transcendence.key" ]; then \
