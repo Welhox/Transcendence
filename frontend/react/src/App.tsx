@@ -3,13 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Profile from './pages/Profile'
-
+import showDatabase from './components/showDatabase'
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
-//const dev = 'http://localhost:3000'
 
 const App: React.FC = () => {
-  //fetch(dev + '/app/data')
   fetch(apiUrl + '/app/data')
   .then(response => response.json())
   .then(data => {
@@ -21,6 +19,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
+        <button onClick={showDatabase}>show Database</button>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} /> {'./pages/Register.tsx'}

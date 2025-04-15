@@ -24,7 +24,7 @@ services:
     # depends_on:
     #   - database
     ports:
-      - "3000"
+      - "3000:3000" #should only be "3000"
     volumes:
       - ./backend/:/backend #this makes the project available inside the container
     networks:
