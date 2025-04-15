@@ -1,8 +1,8 @@
 // const fastify = require('fastify')({ logger: true });
 import Fastify from 'fastify';
-import userRoutes from './routes/users.js';
+// import userRoutes from './routes/users.js';
 import cors from '@fastify/cors'
-
+import { userRoutes } from './routes/users.js'
 const fastify = Fastify({ logger: true});
 
 // const sqlite3 = require('sqlite3').verbose();
@@ -44,69 +44,9 @@ const start = async () => {
       origin: true,
     });
 
-    fastify.register(userRoutes);
-    // // login user
-    // fastify.post('/users/login', (request, reply) => {
-    //   const { username, password } = request.body;
-    //   db.get("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, rows) => {
-    //     if (err) {
-    //       reply.status(500).send({ error: 'Database error' });
-    //       return;
-    //     }
-    //     else if (!rows) {
-    //       reply.status(400).send({ message: 'Invalid login credentials' });
-    //       return;
-    //     }
-    //     reply.status(200).send({ message: 'Login successful' });
-    //   });
-    // });
 
-    // // create user
-    // fastify.post('/users/register', (request, reply) => {
-    //   const { username, password, email } = request.body;
-    //   db.get("SELECT * FROM users WHERE username = ?", [username], (err, rows) => {
-    //     if (err) {
-    //       reply.status(500).send({ error: 'Database error' });
-    //       return;
-    //     }
-    //     else if (rows) {
-    //       reply.status(400).send({ error: 'Username exists' });
-    //       return;
-    //     }
-    //   });
-    //   db.run("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username, password, email], function (err) {
-    //     if (err) {
-    //       reply.status(500).send({ error: 'Database error' });
-    //       return;
-    //     }
-    //     reply.status(200).send({ error: 'Username added' });
-      
-    //   });
-    // });
-
-
-    // // Route to fetch all users
-    // fastify.get('/users/temp', (request, reply) => {
-    //   db.all("SELECT * FROM users", [], (err, rows) => {
-    //     if (err) {
-    //       reply.status(500).send({ error: 'Database error' });
-    //       return;
-    //     }
-    //     reply.send(rows);
-    //   });
-    // });
-
-    // // Route to insert a user
-    // fastify.post('/users/create', (request, reply) => {
-    //   const { username, password } = request.body;
-    //   db.run("INSERT INTO users (username, password) VALUES (?, ?)", [username, password], function (err) {
-    //     if (err) {
-    //       reply.status(500).send({ error: 'Database error' });
-    //       return;
-    //     }
-    //     reply.send({ message: 'User added successfully' });
-    //   });
-    // });
+    fastify.register(userRoutes)
+    
     
     
     fastify.get('/', async (request, reply) => {

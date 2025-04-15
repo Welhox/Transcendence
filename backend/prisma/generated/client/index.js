@@ -114,7 +114,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/backend/prisma/generated/client",
+      "value": "/home/clundber/code/hive/rank6/Transcendence/backend/prisma/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -136,7 +136,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/backend/prisma/schema.prisma",
+    "sourceFilePath": "/home/clundber/code/hive/rank6/Transcendence/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -150,11 +150,12 @@ const config = {
     "db"
   ],
   "activeProvider": "sqlite",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "file:./mydb.sqlite"
+        "value": null
       }
     }
   },
