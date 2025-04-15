@@ -5,44 +5,27 @@ import bcryptjs from 'bcryptjs'
 
 export async function userRoutes(fastify, options) {
 
-
-	// // login user
-    // fastify.post('/users/login', async (request, reply) => {
-    //   const { username, password } = request.body;
-    //   db.get("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, rows) => {
-    //     if (err) {
-    //       reply.status(500).send({ error: 'Database error' });
-    //       return;
-    //     }
-    //     else if (!rows) {
-    //       reply.status(400).send({ message: 'Invalid login credentials' });
-    //       return;
-    //     }
-    //     reply.status(200).send({ message: 'Login successful' });
-    //   });
-    // });
-	
 	// login user
 	fastify.post('/users/login', async (req, reply) => {
 		const { username, password } = req.body
 	  
-		// 1. Find user by username (or email)
+		// Find user by username
 		const user = await prisma.user.findUnique({
 		  where: { username },
 		})
-	  
+		// if user not found then return  error
 		if (!user) {
 		  return reply.code(400).send({ error: 'Invalid username or password' }) //should probably be 401
 		}
 	  
-		// 2. Compare plain password with hashed one
+		// Compare plain password with hashed one
 		const isPasswordValid = await bcryptjs.compare(password, user.password)
-	  
+		//if invalid password, then return same error
 		if (!isPasswordValid) {
 		  return reply.code(400).send({ error: 'Invalid username or password' }) //shuold probably be 401
 		}
 	  
-		// 3. Login success — optionally create JWT, etc
+		// Login success — optionally create JWT, etc
 	    reply.status(200).send({ message: 'Login successful' });
 		// reply.send({
 		//   message: 'Login successful',
@@ -57,11 +40,17 @@ export async function userRoutes(fastify, options) {
 	//route to fetch all users - passwords
 	fastify.get('/users/all', async (req, reply) => {
 	  const users = await prisma.user.findMany({
-		select: { id: true, username: true, email: true }, // Don't send passwords
+		select: { id: true, username: true, email: true },
 	  })
 	  reply.send(users)
 	})
   
+	//REMOVE FOR PRODUCTION!!
+	fastify.get('/users/allInfo', async (req, reply) => {
+		const users = await prisma.user.findMany()
+		reply.send(users)
+	  })
+
 	// route to insert a user into the database
 	fastify.post('/users/register', async (req, reply) => {
 	  const { username, email, password } = req.body

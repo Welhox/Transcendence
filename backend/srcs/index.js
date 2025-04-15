@@ -12,11 +12,11 @@ const start = async () => {
       origin: true,
     });
 
-
+    //connect the routes to the backend
     fastify.register(userRoutes)
-    
-    await seedUsers()
 
+    //add a seed of 5 users to the db
+    await seedUsers()
     
     fastify.get('/', async (request, reply) => {
       return { hello: 'world' };
