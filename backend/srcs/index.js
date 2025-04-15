@@ -1,44 +1,12 @@
-// const fastify = require('fastify')({ logger: true });
-import Fastify from 'fastify';
-// import userRoutes from './routes/users.js';
+
+import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { userRoutes } from './routes/users.js'
-const fastify = Fastify({ logger: true});
-
-// const sqlite3 = require('sqlite3').verbose();
-
-// // Open or create the SQLite database file
-// const db = new sqlite3.Database('./mydb.sqlite', (err) => {
-//   if (err) return console.error('DB init error:', err.message);
-
-//   db.run(`
-//     CREATE TABLE IF NOT EXISTS users (
-//       id INTEGER PRIMARY KEY,
-//       username TEXT,
-//       password TEXT,
-//       email TEXT
-//     )
-//   `, (err) => {
-//     if (err) return console.error('Table creation failed:', err.message);
-//     console.log('Users table ready');
-
-//     //for development test users
-//     db.run("INSERT INTO users (username, password, email) VALUES ('casi', '42', 'casi@hive.fi')");
-//     db.run("INSERT INTO users (username, password, email) VALUES ('emmi', '42', 'emmi@hive.fi')");
-//     db.run("INSERT INTO users (username, password, email) VALUES ('armin', '42', 'armin@hive.fi')");
-//     db.run("INSERT INTO users (username, password, email) VALUES ('sahra', '42', 'sahra@hive.fi')");
-//     db.run("INSERT INTO users (username, password, email) VALUES ('ryan', '42', 'ryan@hive.fi')");
-
-
-//   });
-// });
+import seedUsers from './seed.js'
+const fastify = Fastify({ logger: true})
 
 const start = async () => {
   try {
-    
-    // await fastify.register(require('@fastify/cors'), {
-    //   origin: true, // this is needed for dev!!!! DON'T CHANGE
-    // });
 
     await fastify.register(cors, {
       origin: true,
@@ -47,7 +15,8 @@ const start = async () => {
 
     fastify.register(userRoutes)
     
-    
+    await seedUsers()
+
     
     fastify.get('/', async (request, reply) => {
       return { hello: 'world' };

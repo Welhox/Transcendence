@@ -15,8 +15,41 @@ datasource db {
 //this stores the password as plain text for now. Needs to be changed to storing it hashed for later!
 
 model User {
-  id    Int    @id @default(autoincrement())
-  username String @unique
-  password String
-  email    String @unique
+  id        Int    @id @default(autoincrement())
+  username  String @unique
+  password  String
+  email     String @unique
+  OTP       String?
+  language  String @default("en")
+  wins      Int @default(0)
+  losses    Int @default(0)
+  played    Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+
+//model Post {
+//  id        Int      @id @default(autoincrement())
+//  title     String   @db.VarChar(255)
+//  createdAt DateTime @default(now()) @db.Timestamp(6)
+//  content   String?
+//  published Boolean  @default(false)
+//  authorId  Int
+//  author    User     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//}
+
+//model Profile {
+//  id     Int     @id @default(autoincrement())
+//  bio    String?
+//  userId Int     @unique
+//  user   User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//}
+
+//model User {
+//  id      Int      @id @default(autoincrement())
+//  name    String?  @db.VarChar(255)
+//  email   String   @unique @db.VarChar(255)
+//  posts   Post[]
+//  profile Profile?
+//}

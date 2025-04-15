@@ -6,8 +6,8 @@
 echo "Installing dependencies..."
 npm install
 
-echo "Rebuilding sqlite3 from source (if needed)..."
-npm install --build-from-source sqlite3
+# echo "Rebuilding sqlite3 from source (if needed)..."
+# npm install --build-from-source sqlite3
 
 echo "Installing Prisma and generating client..."
 npm install prisma @prisma/client
@@ -25,7 +25,7 @@ else
 fi
 
 echo "creating the database"
-npx prisma migrate dev --name init
+npx prisma db push
 
 echo "Starting the app..."
 npm run start

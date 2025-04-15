@@ -5,6 +5,7 @@ import bcryptjs from 'bcryptjs'
 
 export async function userRoutes(fastify, options) {
 
+
 	// // login user
     // fastify.post('/users/login', async (request, reply) => {
     //   const { username, password } = request.body;

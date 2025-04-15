@@ -5,7 +5,7 @@
   "main": "./srcs/index.js",
   "scripts": {
     "start": "node ./srcs/index.js",
-    "dev": "nodemon ./srcs/index.js",
+    "dev": "npx prisma db push && nodemon ./srcs/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate"
   },
@@ -18,10 +18,10 @@
     "@prisma/client": "^6.6.0",
     "bcryptjs": "^2.4.3",
     "fastify": "^5.2.2",
-    "prisma": "^6.6.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "prisma": "^6.6.0"
   }
 }

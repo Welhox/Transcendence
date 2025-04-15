@@ -11,6 +11,7 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 const App: React.FC = () => {
   //fetch(dev + '/app/data')
   fetch(apiUrl + '/app/data')
+  fetch(apiUrl + '/users/all') 
   .then(response => response.json())
   .then(data => {
     console.log(data); // actual response data

@@ -21,7 +21,7 @@ restart-front:
 	@docker exec -it frontend sh -c "cd /var/www/html && npm run build"
 
 env:
-	@cd ./backend/prisma && echo "DATABASE_URL=\"file:./mydb.sqlite\"" > .env
+	@cd ./backend && echo "DATABASE_URL=\"file:./mydb.sqlite\"" > .env
 
 ssl:
 	@if [ ! -f "./frontend/nginx/ssl/transcendence.crt" ] || [ ! -f "./frontend/nginx/ssl/transcendence.key" ]; then \
