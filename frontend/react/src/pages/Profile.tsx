@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 const Profile: React.FC = () => {
 	const navigate = useNavigate();
+	const { logout } = useAuth();
 	
-	// takes you back to home page when button is clicked
 	const handleLogout = () => {
-		// clear up resources if needed
+		logout();
 		navigate('/');
 	}
 

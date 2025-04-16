@@ -14,7 +14,7 @@ all: ssl env
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
 dev: env
-	@npx concurrently "cd ./backend && npm install && npx prisma generate && npm run start" "cd ./frontend/react && npm install && npm run dev"
+	@npx concurrently "cd ./backend && npm install && npx prisma generate && npx prisma db push && npm run start" "cd ./frontend/react && npm install && npm run dev"
 
 restart-front:
 	@docker exec -it frontend pkill -f node || true
