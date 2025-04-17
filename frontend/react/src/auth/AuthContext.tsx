@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 // define token contents
 interface JwtPayload {
@@ -33,6 +35,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		setToken(null);
 		setUser(null);
 	}
+
+	// on mount, checks for an existing session
+	useEffect(() => {
+		const checkSession = async () => {
+			try {
+				const res = await fetch(apiUrl + '/users/session', {
+					method: "GET",
+					credentials: "include", // needed for cookies, yummy
+				});
+
+				if (res.ok) {
+					const data = await res.json();
+					if (data.token) {
+						login(data.token);
+					}
+				}
+
+			} catch (error) {
+				console.error("Session check failed", error);
+			}
+		};
+
+		checkSession();
+	}, []);
 
 	return ( // these variables become available through useAuth() call
 		<AuthContext.Provider value={{ user, token, login, logout }}> 

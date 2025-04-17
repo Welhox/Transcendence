@@ -3,6 +3,7 @@ import prisma from '../prisma.js'
 //import the hashing functions
 import bcryptjs from 'bcryptjs'
 
+
 export async function userRoutes(fastify, options) {
 
 	// login user
@@ -26,7 +27,7 @@ export async function userRoutes(fastify, options) {
 		}
 	  
 		// Login success — optionally create JWT, etc
-	    reply.status(200).send({ message: 'Login successful' });
+	    //reply.status(200).send({ message: 'Login successful' });
 		// reply.send({
 		//   message: 'Login successful',
 		//   user: {
@@ -35,7 +36,54 @@ export async function userRoutes(fastify, options) {
 		// 	email: user.email,
 		//   },
 		// })
-	  })
+
+		const token = fastify.jwt.sign({
+			sub: user.id,
+			name: user.username,
+		});
+
+		// the insecure way:
+		/* return reply.code(200).send({
+			message: 'Login successful',
+			token,
+		}); */
+
+		// new reply format to use httpOnly cookies
+		return reply
+			.setCookie('token', token, {
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'production',
+				sameSite: 'strict',
+				path: '/',
+				maxAge: 60 * 60,
+			})
+			.code(200)
+			.send({ message: 'Login succesful' });
+	});
+
+	// route to check if user is logged in
+	fastify.get('users/session', async (req, reply) => {
+
+		try {
+			const token = req.cookies.token
+
+			if (!token) {
+				return reply.code(401).send({ error: 'Not authenticated' });
+			}
+
+			const decoded = fastify.jwt.verify(token);
+
+			return reply.code(200).send({
+				message: 'Session valid',
+				token,
+			});
+
+		} catch (error) {
+			return reply.code(401).send({ error: 'Invalid or expired session' });
+		}
+	});
+
+	fastify.post('/users/logout')
 
 	//route to fetch all users - passwords
 	fastify.get('/users/all', async (req, reply) => {
