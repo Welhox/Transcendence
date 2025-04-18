@@ -59,7 +59,7 @@ const Register: React.FC = () => {
 			const response = await axios.post(apiUrl + '/users/register', signupData);
 			console.log('Response: ', response);
 			if (response.status === 200) {
-				navigate('/profile');
+				navigate('/verifyemail');
 			}
 			return;
 

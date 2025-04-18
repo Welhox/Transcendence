@@ -10,6 +10,18 @@ const Home: React.FC = () => {
 		navigate('/login');
 	}
 
+	const handleStats = () => {
+		navigate('/stats');
+	}
+
+	const handlePals = () => {
+		navigate('/pongpals');
+	}
+
+	const handleSettings = () => {
+		navigate('/settings');
+	}
+
 	return (
 		<div>
 			<h1>Welcome!</h1>
@@ -17,9 +29,9 @@ const Home: React.FC = () => {
 				<>
 					<p>Hello, {user?.name}</p>
 					<button onClick={logout}>Logout</button>
-					<button>Your stats</button>
-					<button>Pong pals</button>
-					<button>Settings</button>
+					<button onClick={handleStats}>My stats</button>
+					<button onClick={handlePals}>Pong pals</button>
+					<button onClick={handleSettings}>Settings</button>
 				</>
 			) : (
 				<>

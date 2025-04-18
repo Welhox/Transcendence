@@ -69,7 +69,7 @@ const Login: React.FC = () => {
         </Link>
       </p>
 
-	  <p><Link to="/renewpassword">Forgot password</Link></p>
+	  <p><Link to="/forgotpassword">Forgot password</Link></p>
     </div>
   )
 }
