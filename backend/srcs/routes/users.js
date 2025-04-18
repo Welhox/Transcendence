@@ -53,7 +53,7 @@ export async function userRoutes(fastify, options) {
 			.setCookie('token', token, {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'production',
-				sameSite: 'strict',
+				sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
 				path: '/',
 				maxAge: 60 * 60,
 			})

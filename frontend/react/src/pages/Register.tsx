@@ -34,7 +34,7 @@ const Register: React.FC = () => {
 		setErrorMsg(''); // clears error when user starts typing
 	}
 
-	// handles button click: performs password validation and makes a mock post request to db API
+	// handles button click: performs password validation and makes post request to db API
 	const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
@@ -61,9 +61,7 @@ const Register: React.FC = () => {
 			if (response.status === 200) {
 				navigate('/profile');
 			}
-			else {
-				return;
-			}
+			return;
 
 		} catch (error) {
 			console.log(error);
