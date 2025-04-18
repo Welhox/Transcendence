@@ -62,7 +62,7 @@ export async function userRoutes(fastify, options) {
 	});
 
 	// route to check if user is logged in
-	fastify.get('users/session', async (req, reply) => {
+	fastify.get('/users/session', async (req, reply) => {
 
 		try {
 			const token = req.cookies.token
@@ -83,7 +83,12 @@ export async function userRoutes(fastify, options) {
 		}
 	});
 
-	fastify.post('/users/logout')
+	fastify.post('/users/logout', async (req, reply) => {
+		reply.clearCookie('token', { // tells the browser to delete the cookie by setting an expired date
+			path: '/', // this should match the path used in .setCookie
+		});
+		return reply.send({ message: 'Logged out' });
+	});
 
 	//route to fetch all users - passwords
 	fastify.get('/users/all', async (req, reply) => {

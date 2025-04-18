@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -16,6 +17,7 @@ interface AuthContextType {
 	token: string | null;
 	login: (token: string) => void;
 	logout: () => void;
+	checkSession: () => Promise<void>;
 }
 
 // creates a context that is either AuthCntextType object or undefined, real value is defined later in AuthProvider
@@ -31,37 +33,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		setUser(decoded);
 	}
 
-	const logout = () => {
+	const logout = async () => {
+		try {
+			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
+		} catch (error) {
+			console.error("Error logging out: ", error);
+		}
 		setToken(null);
 		setUser(null);
 	}
 
+	const checkSession = async () => {
+		try {
+			const res = await fetch(apiUrl + '/users/session', {
+				method: "GET",
+				credentials: "include", // needed for cookies, yummy
+			});
+
+			if (res.ok) {
+				const data = await res.json();
+				if (data.token) {
+					login(data.token);
+				}
+			}
+
+		} catch (error) {
+			console.error("Session check failed", error);
+		}
+	};
+
 	// on mount, checks for an existing session
 	useEffect(() => {
-		const checkSession = async () => {
-			try {
-				const res = await fetch(apiUrl + '/users/session', {
-					method: "GET",
-					credentials: "include", // needed for cookies, yummy
-				});
-
-				if (res.ok) {
-					const data = await res.json();
-					if (data.token) {
-						login(data.token);
-					}
-				}
-
-			} catch (error) {
-				console.error("Session check failed", error);
-			}
-		};
-
 		checkSession();
 	}, []);
 
 	return ( // these variables become available through useAuth() call
-		<AuthContext.Provider value={{ user, token, login, logout }}> 
+		<AuthContext.Provider value={{ user, token, login, logout, checkSession }}> 
 			{children}
 		</AuthContext.Provider>
 	);

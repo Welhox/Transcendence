@@ -9,7 +9,7 @@ const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
-	const { user, login } = useAuth();
+	const { user, checkSession } = useAuth();
 
 	if (user) {
 		return <Navigate to="/profile" replace />;
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
 			);
 
 			console.log('Login successful: ', response.data)
-			login(response.data.token);
+			await checkSession();
 			navigate('/profile');
 			return;
 
