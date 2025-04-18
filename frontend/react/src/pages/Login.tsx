@@ -12,7 +12,7 @@ const Login: React.FC = () => {
 	const { user, checkSession } = useAuth();
 
 	if (user) {
-		return <Navigate to="/profile" replace />;
+		return <Navigate to="/" replace />;
 	}
 
 	// sends post request to server for credential validation
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
 
 			console.log('Login successful: ', response.data)
 			await checkSession();
-			navigate('/profile');
+			navigate('/');
 			return;
 
 		} catch (error: any) {
@@ -68,6 +68,8 @@ const Login: React.FC = () => {
           Register here
         </Link>
       </p>
+
+	  <p><Link to="/renewpassword">Forgot password</Link></p>
     </div>
   )
 }
