@@ -28,10 +28,10 @@ const Home: React.FC = () => {
 			 {isLoggedIn ? (
 				<>
 					<p>Hello, {user?.name}</p>
-					<button onClick={logout}>Logout</button>
 					<button onClick={handleStats}>My stats</button>
 					<button onClick={handlePals}>Pong pals</button>
 					<button onClick={handleSettings}>Settings</button>
+					<button onClick={logout}>Logout</button>
 				</>
 			) : (
 				<>

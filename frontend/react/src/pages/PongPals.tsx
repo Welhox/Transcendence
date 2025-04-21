@@ -21,6 +21,8 @@ const PongPals: React.FC = () => {
 	}
 
 	// add api call for user connections data
+	// - list of friends and their online statuses
+	// - list of pending friend requests
 
 	return (
 		<div>

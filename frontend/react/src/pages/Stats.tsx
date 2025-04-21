@@ -14,7 +14,11 @@ const Stats: React.FC = () => {
 		navigate('/');
 	}
 
-	// api call to fetch users match data
+	// api call to fetch user's match data:
+	// - total wins
+	// - total losses
+	// - total tournaments won
+	// - history of all the matches with date, result and opponent
 
 	return (
 		<div>

@@ -7,7 +7,7 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 // define token contents
 interface JwtPayload {
 	sub: string; // subject (usually user ID)
-	name: string; // username?
+	name: string; // username
 	exp: number; // expiration time stamp
 }
 
@@ -15,7 +15,7 @@ interface JwtPayload {
 interface AuthContextType {
 	user: JwtPayload | null;
 	token: string | null;
-	isLoggedIn: boolean;
+	isLoggedIn: boolean; // MAKE TGUS A BACKEND FLAG TOO
 	login: (token: string) => void;
 	logout: () => void;
 	checkSession: () => Promise<void>;
