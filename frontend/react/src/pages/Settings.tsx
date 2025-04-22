@@ -8,9 +8,9 @@ import LanguageSelector from '../components/LanguageSelector';
 
 // add fields for user customization:
 	// - change password
-	// - change email address
+	// - change email address: needs to trigger email verification process
 	// - change language preference
-	// - upload avatar / choose a default one
+	// - upload avatar / choose a default one: set up max size 2MB
 	// - remove user data and delete account
 
 const Settings: React.FC = () => {
