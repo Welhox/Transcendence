@@ -5,6 +5,7 @@ import { userRoutes } from './routes/users.js'
 import seedUsers from './seed.js'
 import fastifyJwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
+import sendOTP from './routes/email.js'
 const fastify = Fastify({ logger: true})
 
 const start = async () => {

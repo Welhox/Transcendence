@@ -70,14 +70,11 @@ export async function userRoutes(fastify, options) {
 			if (!token) {
 				return reply.code(299).send({ error: 'Not authenticated' });
 			}
-
 			const decoded = fastify.jwt.verify(token);
-
 			return reply.code(200).send({
 				message: 'Session valid',
 				token,
 			});
-
 		} catch (error) {
 			return reply.code(401).send({ error: 'Invalid or expired session' });
 		}
@@ -104,6 +101,8 @@ export async function userRoutes(fastify, options) {
 		reply.send(users)
 	  })
 
+	
+
 	// route to insert a user into the database
 	fastify.post('/users/register', async (req, reply) => {
 	  const { username, email, password } = req.body
@@ -123,3 +122,4 @@ export async function userRoutes(fastify, options) {
 	  }
 	})
   }
+

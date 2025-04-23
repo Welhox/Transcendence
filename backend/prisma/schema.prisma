@@ -12,20 +12,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//this stores the password as plain text for now. Needs to be changed to storing it hashed for later!
-
+//the user data, including hashed password, and another table with OTP data
 model User {
   id        Int    @id @default(autoincrement())
   username  String @unique
   password  String
   email     String @unique
-  OTP       String?
+  OTP       Otp[]
   language  String @default("en")
   wins      Int @default(0)
   losses    Int @default(0)
   played    Int @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Otp {
+  id        Int @id @default(autoincrement())
+  code      String
+  expiresAt DateTime
+  used      Boolean @default(false)
+
+  userId    Int
+  user      User  @relation(fields: [userId], references: [id])
 }
 
 
