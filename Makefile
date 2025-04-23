@@ -14,11 +14,11 @@ all: ssl env
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
 dev: env
-	@npx concurrently "cd ./backend && npm install && npx prisma generate && npm run start" "cd ./frontend/react && npm install && npm run dev"
+	@npx concurrently "cd ./backend && npm install && npx prisma generate && npx prisma db push && npm run start" "cd ./frontend/react && npm install && npm run dev"
 
 restart-front:
 	@docker exec -it frontend pkill -f node || true
-	@docker exec -it frontend sh -c "cd /var/www/html && npm run build"
+	@docker exec -it frontend sh -c "cd /var/www/html && rm -r dist && npm run build"
 
 env:
 	@cd ./backend && echo "DATABASE_URL=\"file:./mydb.sqlite\"" > .env
