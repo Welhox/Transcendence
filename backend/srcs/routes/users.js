@@ -68,7 +68,7 @@ export async function userRoutes(fastify, options) {
 			const token = req.cookies.token
 
 			if (!token) {
-				return reply.code(401).send({ error: 'Not authenticated' });
+				return reply.code(299).send({ error: 'Not authenticated' });
 			}
 
 			const decoded = fastify.jwt.verify(token);

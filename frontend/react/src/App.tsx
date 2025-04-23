@@ -11,18 +11,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import Stats from './pages/Stats';
 import VerifyEmail from './pages/VerifyEmail';
 import showDatabase from './components/showDatabase';
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
-
 
 const App: React.FC = () => {
-  fetch(apiUrl + '/app/data') // test for backend connection
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Error fetching:', error);
-  });
 
   return (
     <Router>

@@ -48,16 +48,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	}
 
 	const checkSession = async () => {
+
 		try {
 			const res = await fetch(apiUrl + '/users/session', {
-				method: "GET",
 				credentials: "include", // needed for cookies, yummy
 			});
 
-			if (res.ok) {
+			if (res.status === 200) {
 				const data = await res.json();
 				if (data.token) {
 					login(data.token);
+					return;
 				}
 			}
 
