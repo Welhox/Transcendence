@@ -8,6 +8,10 @@ interface FieldProps {
 	mask?: boolean; // for password
 }
 
+/*
+Displays the name of the setting, it's current value next to it (passwords are masked with '*') and
+Update button. When button is clicked, input field opens up with save and cancel option.
+*/
 const SettingsField: React.FC<FieldProps> = ({
 	label,
 	type = "text",
@@ -21,33 +25,42 @@ const SettingsField: React.FC<FieldProps> = ({
 	const displayValue = mask ? "*".repeat(value.length) : value;
 
 	const handleSave = () => {
-		onSave(inputValue);
+		if (inputValue.trim()) {
+			onSave(inputValue);
+		}
 		setIsEditing(false);
+		setInputValue(""); // reset field after save
+	};
+
+	const handleCancel = () => {
+		setIsEditing(false);
+		setInputValue("");
 	};
 
 	return (
 		<div>
-			<strong>{label}:</strong>{" "}
+			<strong>{label}:</strong>{" "}{displayValue}{" "}
 			{!isEditing ? (
 				<>
-					<span style={{ marginLeft: "0.5rem" }}>{displayValue}</span>{" "}
 					<button onClick={() => {
-						setInputValue(value);
+						setInputValue("");
 						setIsEditing(true);
-					}}>Change</button>
+					}}>Update</button>
 				</>
 			) : (
-				<div>
+				<>
+					<br/>
 					<input
 						type={type}
 						value={inputValue}
+						placeholder={`Enter new ${label.toLowerCase()}`}
 						onChange={(e) => setInputValue(e.target.value)}
 					/>
 					<div>
-						<button onClick={handleSave}>Save</button>{" "}
-						<button onClick={() => setIsEditing(false)}>Cancel</button>
+						<button onClick={handleSave} disabled={!inputValue.trim()}>Save</button>{" "}
+						<button onClick={handleCancel}>Cancel</button>
 					</div>
-				</div>
+				</>
 			)}
 		</div>
 	);
