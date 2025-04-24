@@ -25,69 +25,43 @@ export async function userRoutes(fastify, options) {
 		if (!isPasswordValid) {
 		  return reply.code(400).send({ error: 'Invalid username or password' }) //shuold probably be 401
 		}
-	  
-		// Login success — optionally create JWT, etc
-	    //reply.status(200).send({ message: 'Login successful' });
-		// reply.send({
-		//   message: 'Login successful',
-		//   user: {
-		// 	id: user.id,
-		// 	username: user.username,
-		// 	email: user.email,
-		//   },
-		// })
 
-		const token = fastify.jwt.sign({
-			sub: user.id,
-			name: user.username,
-		});
-
-		// the insecure way:
-		/* return reply.code(200).send({
-			message: 'Login successful',
-			token,
-		}); */
+		const accessToken = fastify.jwt.sign({ sub: user.id }, { expiredIn: '15m' });
+		const refreshToken = fastify.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
 
 		// new reply format to use httpOnly cookies
 		return reply
-			.setCookie('token', token, {
+			.setCookie('refreshToken', refreshToken, {
 				httpOnly: true,
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
 				path: '/',
-				maxAge: 60 * 60,
+				maxAge: 2 * 24 * 60 * 60,
 			})
 			.code(200)
-			.send({ message: 'Login succesful' });
+			.send({ accessToken });
 	});
 
-	// route to check if user is logged in
-	fastify.get('/users/session', async (req, reply) => {
-
+	// updates refresh token for front
+	fastify.get('/refresh', async (req, reply) => {
 		try {
-			const token = req.cookies.token
+			const token = req.cookies.refreshToken;
+			if (!token) return reply.code(401).send({ error: 'No refresh token' });
 
-			if (!token) {
-				return reply.code(299).send({ error: 'Not authenticated' });
-			}
+			const payload = fastify.jwt.verify(token);
+			const newAccessToken = fastify.jwt.sign({ sub: payload.sub }, { expiredIn: '15m' });
 
-			const decoded = fastify.jwt.verify(token);
-
-			return reply.code(200).send({
-				message: 'Session valid',
-				token,
-			});
-
+			reply.send({ accessToken: newAccessToken });
+		
 		} catch (error) {
-			return reply.code(401).send({ error: 'Invalid or expired session' });
+			reply.code(401).send({ error: 'Invalid refresh token' });
 		}
 	});
 
 	fastify.post('/users/logout', async (req, reply) => {
-		reply.clearCookie('token', { // tells the browser to delete the cookie by setting an expired date
-			path: '/', // this should match the path used in .setCookie
-		});
-		return reply.send({ message: 'Logged out' });
+		reply
+		.clearCookie('refreshToken', { path: '/' }) // tells the browser to delete the cookie, path should match the path used in .setCookie
+		.send({ message: 'Logged out' });
 	});
 
 	//route to fetch all users - passwords

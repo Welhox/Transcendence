@@ -20,7 +20,6 @@ const Login: React.FC = () => {
 		e.preventDefault();
 		let response
 		try {
-
 			response = await axios.post(
 				apiUrl + '/users/login',
 				{ username, password },

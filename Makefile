@@ -9,12 +9,12 @@ name = transcendence
 
 #------------- COMMANDS ------#
 
-all: ssl env
+all: ssl env jwt-secret
 	@docker compose -f docker-compose.yml up -d --build
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
-dev: env
-	@npx concurrently "cd ./backend && npm install && npx prisma generate && npx prisma db push && npm run start" "cd ./frontend/react && npm install && npm run dev"
+dev: env jwt-secret
+	@npx concurrently "cd ./backend && npm install && npx prisma generate && npm run dev" "cd ./frontend/react && npm install && npm run dev"
 
 restart-front:
 	@docker exec -it frontend pkill -f node || true
@@ -31,18 +31,30 @@ ssl:
 			-out "./frontend/nginx/ssl/transcendence.crt" \
 			-subj "/CN=pong"; \
 	fi
+
+jwt-secret:
+	@echo "Generating JWT secret..."
+	@(cd ./backend && \
+	SECRET=$$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))") && \
+	if grep -q '^JWT_SECRET=' .env; then \
+		sed -i.bak "s|^JWT_SECRET=.*|JWT_SECRET=$$SECRET|" .env; \
+	else \
+		echo "JWT_SECRET=$$SECRET" >> .env; \
+	fi && \
+	echo "✅ JWT_SECRET updated in .env")
+
 	
 down:
 	@docker compose -f docker-compose.yml down
 
-fclean: down
+fclean: down clean
 	@printf "Clean of all docker configs\n"
 	@docker system prune --all
 	@rm -rf ./frontend/srcs/react/dist
 
 re: fclean all
 
-.PHONY: all down ssl dev re restart-front up
+.PHONY: all down ssl dev re restart-front up clean
 
 
 

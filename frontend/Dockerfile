@@ -1,7 +1,7 @@
 
 FROM alpine:3.20
 
-RUN apk update && apk upgrade && apk add --no-cache nginx npm
+RUN apk update && apk upgrade && apk add --no-cache nginx npm curl
 
 RUN mkdir ssl
 
