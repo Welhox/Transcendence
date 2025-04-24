@@ -9,9 +9,9 @@ const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
-	const { user, checkSession } = useAuth();
+	const { token, checkSession } = useAuth();
 
-	if (user) {
+	if (token) {
 		return <Navigate to="/" replace />;
 	}
 

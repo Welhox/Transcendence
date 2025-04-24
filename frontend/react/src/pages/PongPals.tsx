@@ -4,10 +4,10 @@ import { useAuth } from '../auth/AuthContext';
 import SearchPals from '../components/SearchPals';
 
 const PongPals: React.FC = () => {
-	const { user } = useAuth();
+	const { token } = useAuth();
 	const navigate = useNavigate();
 
-	if (!user) {
+	if (!token) {
 		return <Navigate to="/" replace />;
 	}
 

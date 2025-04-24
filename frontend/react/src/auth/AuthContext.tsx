@@ -6,16 +6,15 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 // define token contents
 interface JwtPayload {
-	sub: string; // subject (usually user ID)
+	sub: string; // user ID
 	name: string; // username
-	exp: number; // expiration time stamp
+	exp: number; // expiration time stamp != expiresIn
 }
 
 // definition of context type
 interface AuthContextType {
 	user: JwtPayload | null;
 	token: string | null;
-	isLoggedIn: boolean; // MAKE THIS A BACKEND FLAG TOO
 	login: (token: string) => void;
 	logout: () => void;
 	checkSession: () => Promise<void>;
@@ -27,11 +26,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState<JwtPayload | null>(null);
 	const [token, setToken] = useState<string | null>(null);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const login = (newToken: string) => { // newToken = JWT sstring (typically from a login API) following header.payload.signature format
 		const decoded = jwtDecode<JwtPayload>(newToken); // decodes payload part and returns it as a JS object (as JwtPayload, defined earlier)
-		setIsLoggedIn(true);
 		setToken(newToken);
 		setUser(decoded);
 	}
@@ -42,7 +39,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 		} catch (error) {
 			console.error("Error logging out: ", error);
 		}
-		setIsLoggedIn(false);
 		setToken(null);
 		setUser(null);
 	}
@@ -57,7 +53,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 				login(res.data.accessToken);
 				return;
 			}
-
 		} catch (error) {
 			console.log("No active session");
 			//logout(); -> could be used to clear out client state (optional)
@@ -70,7 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	}, []);
 
 	return ( // these variables become available through useAuth() call
-		<AuthContext.Provider value={{ user, token, isLoggedIn, login, logout, checkSession }}> 
+		<AuthContext.Provider value={{ user, token, login, logout, checkSession }}> 
 			{children}
 		</AuthContext.Provider>
 	);

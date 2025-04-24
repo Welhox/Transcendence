@@ -26,8 +26,14 @@ export async function userRoutes(fastify, options) {
 		  return reply.code(400).send({ error: 'Invalid username or password' }) //shuold probably be 401
 		}
 
-		const accessToken = fastify.jwt.sign({ sub: user.id }, { expiredIn: '15m' });
-		const refreshToken = fastify.jwt.sign({ sub: user.id }, { expiresIn: '7d' });
+		const accessToken = fastify.jwt.sign(
+			{ 
+				sub: user.id,
+				name: user.username,
+			}, 
+			{ expiresIn: '1m' } // change back to 15m
+		);
+		const refreshToken = fastify.jwt.sign({ sub: user.id }, { expiresIn: '15m' }); // change back to 7d
 
 		// new reply format to use httpOnly cookies
 		return reply
@@ -36,7 +42,7 @@ export async function userRoutes(fastify, options) {
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
 				path: '/',
-				maxAge: 2 * 24 * 60 * 60,
+				maxAge: 60 * 60, // change back to 2 * 24 * 60 * 60
 			})
 			.code(200)
 			.send({ accessToken });
@@ -46,15 +52,25 @@ export async function userRoutes(fastify, options) {
 	fastify.get('/refresh', async (req, reply) => {
 		try {
 			const token = req.cookies.refreshToken;
-			if (!token) return reply.code(401).send({ error: 'No refresh token' });
+			if (!token) return reply.code(299).send({ error: 'No refresh token' }); // check this error code
 
 			const payload = fastify.jwt.verify(token);
-			const newAccessToken = fastify.jwt.sign({ sub: payload.sub }, { expiredIn: '15m' });
+
+			const user = await prisma.user.findUnique({
+				where: { id: payload.sub },
+			});
+
+			if (!user) return reply.code(404).send({ error: 'User not found' });
+
+			const newAccessToken = fastify.jwt.sign(
+				{ sub: user.id, name: user.username },
+				{ expiresIn: '1m' } // change back to 15m
+			);
 
 			reply.send({ accessToken: newAccessToken });
 		
 		} catch (error) {
-			reply.code(401).send({ error: 'Invalid refresh token' });
+			reply.code(299).send({ error: 'Invalid refresh token' }); // double check the error code
 		}
 	});
 

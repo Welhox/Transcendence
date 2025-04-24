@@ -9,10 +9,10 @@ const ForgotPassword: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [submitted, setSubmitted] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { user } = useAuth();
+	const { token } = useAuth();
 	const navigate = useNavigate();
 
-	if (user) {
+	if (token) {
 		return <Navigate to="/" replace />;
 	}
 

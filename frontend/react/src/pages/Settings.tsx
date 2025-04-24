@@ -14,7 +14,7 @@ import LanguageSelector from '../components/LanguageSelector';
 	// - remove user data and delete account
 
 const Settings: React.FC = () => {
-	const { user } = useAuth();
+	const { token } = useAuth();
 	const navigate = useNavigate();
 
 	// import current settings from backend
@@ -23,7 +23,7 @@ const Settings: React.FC = () => {
 	const [profilePic, setProfilePic] = useState<File | null>(null);
 	const [language, setLanguage] = useState("en");
 
-	if (!user) {
+	if (!token) {
 		return <Navigate to="/" replace />;
 	}
 

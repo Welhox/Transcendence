@@ -13,8 +13,6 @@ dotenv.config({ path: './.env' });
 const start = async () => {
   try {
 
-	console.log('JWT secret from env:', process.env.JWT_SECRET);
-
 	if (!process.env.JWT_SECRET) {
 		throw new Error("❌ JWT_SECRET is not defined in the environment.");
 	}

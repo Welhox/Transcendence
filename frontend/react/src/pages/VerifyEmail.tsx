@@ -4,9 +4,9 @@ import { useAuth } from '../auth/AuthContext';
 import Passcode from '../components/Passcode'
 
 const VerifyEmail: React.FC = () => {
-	const { user } = useAuth();
+	const { token } = useAuth();
 
-	if (user) {
+	if (token) {
 		return <Navigate to="/" replace />;
 	}
 

@@ -3,10 +3,10 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
 const Stats: React.FC = () => {
-	const { user } = useAuth();
+	const { user, token } = useAuth();
 	const navigate = useNavigate();
 
-	if (!user) {
+	if (!user || !token) {
 		return <Navigate to="/" replace />;
 	}
 
