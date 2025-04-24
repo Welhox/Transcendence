@@ -15,7 +15,7 @@ interface JwtPayload {
 interface AuthContextType {
 	user: JwtPayload | null;
 	token: string | null;
-	isLoggedIn: boolean; // MAKE TGUS A BACKEND FLAG TOO
+	isLoggedIn: boolean; // MAKE THIS A BACKEND FLAG TOO
 	login: (token: string) => void;
 	logout: () => void;
 	checkSession: () => Promise<void>;
@@ -48,22 +48,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 	}
 
 	const checkSession = async () => {
-
 		try {
-			const res = await fetch(apiUrl + '/users/session', {
-				credentials: "include", // needed for cookies, yummy
+			const res = await axios.get(apiUrl + '/refresh', {
+				withCredentials: true,
 			});
 
-			if (res.status === 200) {
-				const data = await res.json();
-				if (data.token) {
-					login(data.token);
-					return;
-				}
+			if (!user && res.data.accessToken) {
+				login(res.data.accessToken);
+				return;
 			}
 
 		} catch (error) {
-			console.error("Session check failed", error);
+			console.log("No active session");
+			//logout(); -> could be used to clear out client state (optional)
 		}
 	};
 

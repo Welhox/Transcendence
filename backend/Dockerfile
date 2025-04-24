@@ -4,6 +4,8 @@ FROM node:23-bookworm-slim
 
 WORKDIR /backend
 
+ENV NODE_ENV=production
+
 COPY ./backend/backend_script.sh /backend_script.sh 
 
 RUN chmod +x /backend_script.sh

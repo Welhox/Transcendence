@@ -91,10 +91,9 @@ export async function userRoutes(fastify, options) {
 	// });
 
 	fastify.post('/users/logout', async (req, reply) => {
-		reply.clearCookie('token', { // tells the browser to delete the cookie by setting an expired date
-			path: '/', // this should match the path used in .setCookie
-		});
-		return reply.send({ message: 'Logged out' });
+		reply
+		.clearCookie('refreshToken', { path: '/' }) // tells the browser to delete the cookie, path should match the path used in .setCookie
+		.send({ message: 'Logged out' });
 	});
 
 	//route to fetch all users - passwords
