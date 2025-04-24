@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 
 const Home: React.FC = () => {
 	const navigate = useNavigate();
-	const { user, isLoggedIn, logout } = useAuth();
+	const { user, token, logout } = useAuth();
 
 	const handleLogin = () => {
 		navigate('/login');
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
 	return (
 		<div>
 			<h1>Welcome!</h1>
-			 {isLoggedIn ? (
+			 {user && token ? (
 				<>
 					<p>Hello, {user?.name}</p>
 					<button onClick={handleStats}>My stats</button>
