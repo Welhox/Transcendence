@@ -2,10 +2,10 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { userRoutes } from './routes/users.js'
+import { otpRoutes } from './routes/otp.js'
 import seedUsers from './seed.js'
 import fastifyJwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
-import sendOTP from './routes/email.js'
 const fastify = Fastify({ logger: true})
 
 const start = async () => {
@@ -26,7 +26,7 @@ const start = async () => {
 
     //connect the routes to the backend
     fastify.register(userRoutes)
-
+    fastify.register(otpRoutes)
     //add a seed of 5 users to the db
     await seedUsers()
     

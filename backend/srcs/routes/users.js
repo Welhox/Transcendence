@@ -121,5 +121,46 @@ export async function userRoutes(fastify, options) {
 		reply.code(500).send({ error: 'Internal server error' })
 	  }
 	})
+
+
+	// get user information with id (username, id, email)
+	fastify.get('/users/id', async (req, reply) => {
+		const { id } = req.params
+		const user = await prisma.user.findUnique({
+		  where: { id: Number(id) },
+		  select: { id: true, username: true, email: true },
+		})
+		if (!user) {
+		  return reply.code(404).send({ error: 'User not found' })
+		}
+		reply.send(user)
+	  })
+
+	// get user information with username (username, id, email)
+	fastify.get('/users/username', async (req, reply) => {
+		const { username } = req.params
+		const user = await prisma.user.findUnique({
+		  where: { username: username },
+		  select: { id: true, username: true, email: true },
+		})
+		if (!user) {
+		  return reply.code(404).send({ error: 'User not found' })
+		}
+		reply.send(user)
+	  })
+
+	// get user information with email (username, id, email)
+	fastify.get('/users/email', async (req, reply) => {
+		const { email } = req.params
+		const user = await prisma.user.findUnique({
+		  where: { email: email },
+		  select: { id: true, username: true, email: true },
+		})
+		if (!user) {
+		  return reply.code(404).send({ error: 'User not found' })
+		}
+		reply.send(user)
+	  })
+
   }
 

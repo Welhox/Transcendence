@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-        <button onClick={showDatabase}>show Database</button>
+        <button onClick={showDatabase}>show Database (for dev use only)</button>
 		<AuthProvider>
 			<Routes>
 				<Route path="/" element={<Home />} />
