@@ -95,11 +95,23 @@ export async function userRoutes(fastify, options) {
 	  reply.send(users)
 	})
   
-	//REMOVE FOR PRODUCTION!!
-	fastify.get('/users/allInfo', async (req, reply) => {
-		const users = await prisma.user.findMany()
-		reply.send(users)
-	  })
+//REMOVE FOR PRODUCTION!!
+fastify.get('/users/allInfo', async (req, reply) => {
+	try {
+	  // Get users along with associated OTP information
+	  const users = await prisma.user.findMany({
+		include: {
+		  OTP: true,  // Include the OTPs related to each user
+		},
+	  });
+  
+	  // Send the response with user data along with OTPs
+	  reply.send(users);
+	} catch (error) {
+	  console.error('Error retrieving users and OTPs:', error);
+	  reply.status(500).send('Error retrieving users and OTPs');
+	}
+  });
 
 	
 

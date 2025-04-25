@@ -84,4 +84,51 @@ fastify.post('/auth/send-otp', async (req, reply) => {
 	  reply.code(500).send({ error: 'Failed to send OTP' });
 	}
   });
+
+
+  // check if the OTP is valid and not expired
+fastify.post('/auth/verify-otp', async (req, reply) => {
+  const { email, code } = req.body;
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  if (!user) {
+    return reply.code(404).send({ error: 'User not found' });
+  }
+  const userId = user.id;
+  try {
+    const otp = await prisma.otp.findFirst({
+      where: {
+        userId,
+      },
+    });
+    if (!otp) {
+      return reply.code(404).send({ error: 'OTP not found' });
+    }
+    const isValid = await bcryptjs.compare(code, otp.code);
+    if (!isValid) {
+      return reply.code(401).send({ error: 'Invalid OTP' });
+    }
+    //check that otp has not expired
+    const now = new Date();
+    if (now > otp.expiresAt) {
+      return reply.code(401).send({ error: 'OTP expired' });
+    }
+    // delete the OTP after successful verification
+    await prisma.otp.delete({
+      where: {
+        id: otp.id,
+      },
+    });
+    // set user to active if inactive
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isActive: true },
+    });
+    reply.code(200).send({ message: 'OTP verified!' });
+  } catch (err) {
+    fastify.log.error(err);
+    reply.code(500).send({ error: 'Failed to verify OTP' });
+  } 
+  });
 }
