@@ -35,9 +35,9 @@ model Otp {
   used      Boolean @default(false)
 
   userId    Int
-  user      User  @relation(fields: [userId], references: [id])
+  user      User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
+// added onDelete: Cascade, so the OTP gets delted automatically with the user
 
 //model Post {
 //  id        Int      @id @default(autoincrement())

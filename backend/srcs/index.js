@@ -21,7 +21,11 @@ const start = async () => {
     });
 
     fastify.register(fastifyJwt, {
-      secret: 'supersecretkey' // need to be changed for production -> env variable?
+      secret: process.env.JWT_SECRET,
+      cookie: {
+        cookieName: 'token',
+        signed: false,
+      },
     });
 
     //connect the routes to the backend

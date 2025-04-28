@@ -1,0 +1,46 @@
+
+//no cookies for you!
+@no-cookie-jar
+
+###
+
+//SHOW WHOLE DATABASE
+GET http://localhost:3000/users/allInfo HTTP/1.1
+
+###
+
+//SHOW USER BY EMAIL WITH QUERY STRING
+GET http://localhost:3000/users/email?email=casi@gmail.com HTTP/1.1
+
+
+###
+
+//SHOW USER BY USERNAME WITH QUERY STRING
+GET http://localhost:3000/users/username?username=casi HTTP/1.1
+
+
+###
+
+//SHOW USER BY ID WITH QUERY STRING
+GET http://localhost:3000/users/id?id=1 HTTP/1.1
+
+
+###
+
+//ADD USER TO DATABASE WITH BODY(JSON)
+POST http://localhost:3000/users/register HTTP/1.1
+content-type: application/json
+
+{
+    "username": "sample",
+    "password": "sample",
+    "email"   : "sample@hive.fi"
+}
+
+###
+
+//DELETE USER WITH ID
+//change the number after delete/ to correspond to the id of the user you want to delete
+DELETE http://localhost:3000/users/delete/9 HTTP/1.1
+
+###

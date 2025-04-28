@@ -1,0 +1,168 @@
+
+//in order to tesst/use the API, add extension REST client.
+//then send request should show above the requests. The return shows in 
+//a new window.
+//you can also use the command palette to send the request.
+//remember to add ### after each request to separate them.
+
+###
+//first you need to login, in order to get a cookie! Yummy!
+POST http://localhost:3000/users/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "casi",
+    "password": "42"
+}
+
+
+###
+
+//SHOW WHOLE DATABASE
+GET http://localhost:3000/users/allInfo HTTP/1.1
+
+###
+
+//SHOW USER BY EMAIL WITH QUERY STRING
+GET http://localhost:3000/users/email?email=casi@gmail.com HTTP/1.1
+
+
+###
+
+//SHOW USER BY USERNAME WITH QUERY STRING
+GET http://localhost:3000/users/username?username=casi HTTP/1.1
+
+
+###
+
+//SHOW USER BY ID WITH QUERY STRING
+GET http://localhost:3000/users/id?id=1 HTTP/1.1
+
+
+###
+
+//ADD USER TO DATABASE WITH BODY(JSON)
+POST http://localhost:3000/users/register HTTP/1.1
+content-type: application/json
+
+{
+    "username": "sample",
+    "password": "sample",
+    "email"   : "sample@hive.fi"
+}
+
+###
+
+
+
+//DELETE USER WITH ID
+//change the number after delete/ to correspond to the id of the user you want to delete
+DELETE http://localhost:3000/users/delete/9 HTTP/1.1
+
+###
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//examples from here down
+
+<!-- Request Body
+If you want to provide the request body, please add a blank line after the request headers like the POST example in usage, and all content after it will be treated as Request Body. Below are examples of Request Body: -->
+
+POST https://example.com/comments HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<request>
+    <name>sample</name>
+    <time>Wed, 21 Oct 2015 18:27:50 GMT</time>
+</request>
+
+
+POST https://example.com/comments HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+
+GET https://example.com/comments/1 HTTP/1.1
+
+###
+
+GET https://example.com/topics/1 HTTP/1.1
+
+###
+
+POST https://example.com/comments HTTP/1.1
+content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+
+Request Line
+The first non-empty line of the selection (or document if nothing is selected) is the Request Line. Below are some examples of Request Line:
+
+GET https://example.com/comments/1 HTTP/1.1
+
+GET https://example.com/comments/1
+
+
+Query Strings
+You can always write query strings in the request line, like:
+
+GET https://example.com/comments?page=2&pageSize=10
+
+Sometimes there may be several query parameters in a single request, putting all the query parameters in Request Line is difficult to read and modify. So we allow you to spread query parameters into multiple lines(one line one query parameter), we will parse the lines in immediately after the Request Line which starts with ? and &, like
+
+GET https://example.com/comments
+    ?page=2
+    &pageSize=10
+
+Request Headers
+The lines immediately after the request line to first empty line are parsed as Request Headers. Please provide headers with the standard field-name: field-value format, each line represents one header. By default REST Client Extension will add a User-Agent header with value vscode-restclient in your request if you don't explicitly specify. You can also change the default value in setting rest-client.defaultHeaders. Below are examples of Request Headers:
+
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+
+Request Body
+If you want to provide the request body, please add a blank line after the request headers like the POST example in usage, and all content after it will be treated as Request Body. Below are examples of Request Body:
+
+POST https://example.com/comments HTTP/1.1
+Content-Type: application/xml
+Authorization: token xxx
+
+<request>
+    <name>sample</name>
+    <time>Wed, 21 Oct 2015 18:27:50 GMT</time>
+</request>
+
