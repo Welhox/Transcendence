@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from "./auth/AuthContext";
+import { AuthProvider } from './auth/AuthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -38,7 +38,7 @@ const App: React.FC = () => {
 						</ProtectedRoute>
 					}
 				/>
-				<Route path="/stats"
+				<Route path="/stats/:userId"
 					element={
 						<ProtectedRoute>
 							<Stats />

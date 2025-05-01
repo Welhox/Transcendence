@@ -6,6 +6,11 @@ import bcryptjs from 'bcryptjs'
 
 export async function userRoutes(fastify, options) {
 
+	// for API url checking:
+	/* fastify.addHook('onRequest', async (request, reply) => {
+		console.log('📥 Request received:', request.raw.url);
+	  }); */
+
 	// login user
 	fastify.post('/users/login', async (req, reply) => {
 		const { username, password } = req.body
@@ -28,12 +33,12 @@ export async function userRoutes(fastify, options) {
 
 		const accessToken = fastify.jwt.sign(
 			{ 
-				sub: user.id,
+				id: user.id,
 				name: user.username,
 			}, 
-			{ expiresIn: '1m' } // change back to 15m
+			{ expiresIn: '15m' } // change back to 15m
 		);
-		const refreshToken = fastify.jwt.sign({ sub: user.id }, { expiresIn: '15m' }); // change back to 7d
+		const refreshToken = fastify.jwt.sign({ id: user.id }, { expiresIn: '7d' }); // change back to 7d
 
 		// new reply format to use httpOnly cookies
 		return reply
@@ -42,36 +47,10 @@ export async function userRoutes(fastify, options) {
 				secure: process.env.NODE_ENV === 'production',
 				sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
 				path: '/',
-				maxAge: 60 * 60, // change back to 2 * 24 * 60 * 60
+				maxAge: 2 * 24 * 60 * 60, // change back to 2 * 24 * 60 * 60
 			})
 			.code(200)
 			.send({ accessToken });
-	});
-
-	// updates refresh token for front
-	fastify.get('/refresh', async (req, reply) => {
-		try {
-			const token = req.cookies.refreshToken;
-			if (!token) return reply.code(299).send({ error: 'No refresh token' }); // check this error code
-
-			const payload = fastify.jwt.verify(token);
-
-			const user = await prisma.user.findUnique({
-				where: { id: payload.sub },
-			});
-
-			if (!user) return reply.code(404).send({ error: 'User not found' });
-
-			const newAccessToken = fastify.jwt.sign(
-				{ sub: user.id, name: user.username },
-				{ expiresIn: '1m' } // change back to 15m
-			);
-
-			reply.send({ accessToken: newAccessToken });
-		
-		} catch (error) {
-			reply.code(299).send({ error: 'Invalid refresh token' }); // double check the error code
-		}
 	});
 
 	fastify.post('/users/logout', async (req, reply) => {
@@ -112,4 +91,4 @@ export async function userRoutes(fastify, options) {
 		reply.code(500).send({ error: 'Internal server error' })
 	  }
 	})
-  }
+}

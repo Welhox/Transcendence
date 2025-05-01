@@ -2,6 +2,8 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { userRoutes } from './routes/users.js'
+import { refreshTokens } from './routes/refreshTokens.js'
+import { pongStats } from './routes/pongStats.js'
 import seedUsers from './seed.js'
 import jwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
@@ -44,6 +46,8 @@ const start = async () => {
 
     //connect the routes to the backend
     fastify.register(userRoutes)
+	fastify.register(refreshTokens)
+	fastify.register(pongStats)
 
     //add a seed of 5 users to the db
     await seedUsers()
@@ -51,6 +55,12 @@ const start = async () => {
     fastify.get('/', async (request, reply) => {
       return { hello: 'world' };
     });
+
+	/* fastify.all('*', async (request, reply) => {
+		console.log('🔍 Unmatched route:', request.method, request.url);
+		reply.status(404).send({ message: 'Route not found' });
+	  }); */
+	  
     
     await fastify.listen({ port: 3000, host: '0.0.0.0' });
     console.log('Server listening on http://localhost:3000');
