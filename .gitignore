@@ -1,3 +1,4 @@
 transcendence.crt
 transcendence.key
 node_modules
+.env

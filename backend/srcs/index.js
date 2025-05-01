@@ -2,6 +2,7 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { userRoutes } from './routes/users.js'
+import { otpRoutes } from './routes/otp.js'
 import seedUsers from './seed.js'
 import fastifyJwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
@@ -20,12 +21,16 @@ const start = async () => {
     });
 
     fastify.register(fastifyJwt, {
-      secret: 'supersecretkey' // need to be changed for production -> env variable?
+      secret: process.env.JWT_SECRET,
+      cookie: {
+        cookieName: 'token',
+        signed: false,
+      },
     });
 
     //connect the routes to the backend
     fastify.register(userRoutes)
-
+    fastify.register(otpRoutes)
     //add a seed of 5 users to the db
     await seedUsers()
     
