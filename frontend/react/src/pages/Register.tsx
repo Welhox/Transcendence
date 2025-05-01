@@ -59,11 +59,12 @@ const Register: React.FC = () => {
 			const response = await axios.post(apiUrl + '/users/register', signupData);
 			console.log('Response: ', response);
 			if (response.status === 200) {
-			const otpResponse = await axios.post(apiUrl + '/auth/send-otp', {
-				email: signupData.email
-				});
-				console.log('OTP Response: ', otpResponse);	
-				navigate('/verifyemail', {
+			// const otpResponse = await axios.post(apiUrl + '/auth/send-otp', {
+			// 	email: signupData.email
+			// 	});
+			// 	console.log('OTP Response: ', otpResponse);	
+				// navigate('/verifyemail', {
+				navigate('/', {
 					state: {
 						email: signupData.email
 					}
