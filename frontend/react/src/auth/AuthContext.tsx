@@ -6,7 +6,7 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 // define token contents
 interface JwtPayload {
-	sub: string; // user ID
+	id: string; // user ID
 	name: string; // username
 	exp: number; // expiration time stamp != expiresIn
 }

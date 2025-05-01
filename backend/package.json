@@ -9,6 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate"
   },
+  "prisma": {
+    "seed": "node srcs/seed.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,7 +20,7 @@
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.0.1",
     "@fastify/jwt": "^9.1.0",
-    "@prisma/client": "^6.6.0",
+    "@prisma/client": "^6.7.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.5.0",
     "fastify": "^5.2.2",
@@ -26,6 +29,6 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
-    "prisma": "^6.6.0"
+    "prisma": "^6.7.0"
   }
 }

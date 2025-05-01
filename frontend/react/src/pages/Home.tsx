@@ -11,7 +11,9 @@ const Home: React.FC = () => {
 	}
 
 	const handleStats = () => {
-		navigate('/stats');
+		if (user?.id) {
+			navigate(`/stats/${user.id}`);
+		}
 	}
 
 	const handlePals = () => {

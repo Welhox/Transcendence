@@ -9,6 +9,11 @@ import { authenticate } from '../middleware/authenticate.js'
 
 export async function userRoutes(fastify, options) {
 
+	// for API url checking:
+	/* fastify.addHook('onRequest', async (request, reply) => {
+		console.log('📥 Request received:', request.raw.url);
+	  }); */
+
 	// login user
 	fastify.post('/users/login', {schema:loginUserSchema}, async (req, reply) => {
 		try {
