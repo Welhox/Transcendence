@@ -9,13 +9,14 @@ name = transcendence
 
 #------------- COMMANDS ------#
 
+
 # all: ssl env
 all: ssl
 	@docker compose -f docker-compose.yml up -d --build
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
-# dev: env
-dev:
+
+dev: jwt-secret
 	@printf "${COLOUR_BLUE}Starting backend and frontend in dev mode...${COLOUR_END}\n"
 	@npx concurrently "cd ./backend && npm install && npx prisma generate && npx prisma db push && npm run dev" "cd ./frontend/react && npm install && npm run dev"
 
@@ -34,6 +35,18 @@ ssl:
 			-out "./frontend/nginx/ssl/transcendence.crt" \
 			-subj "/CN=pong"; \
 	fi
+
+jwt-secret:
+	@echo "Generating JWT secret..."
+	@(cd ./backend && \
+	SECRET=$$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))") && \
+	if grep -q '^JWT_SECRET=' .env; then \
+		sed -i.bak "s|^JWT_SECRET=.*|JWT_SECRET=$$SECRET|" .env; \
+	else \
+		echo "JWT_SECRET=$$SECRET" >> .env; \
+	fi && \
+	echo "✅ JWT_SECRET updated in .env")
+
 	
 down:
 	@docker compose -f docker-compose.yml down

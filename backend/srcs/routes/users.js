@@ -9,6 +9,11 @@ import { authenticate } from '../middleware/authenticate.js'
 
 export async function userRoutes(fastify, options) {
 
+	// for API url checking:
+	/* fastify.addHook('onRequest', async (request, reply) => {
+		console.log('📥 Request received:', request.raw.url);
+	  }); */
+
 	// login user
 	fastify.post('/users/login', {schema:loginUserSchema}, async (req, reply) => {
 		try {
@@ -69,32 +74,10 @@ export async function userRoutes(fastify, options) {
 		}
 	});
 
-	// route to check if user is logged in
-	//should be redundant with the authenticate middleware
-
-	// fastify.get('/users/session', async  (req, reply) => {
-
-	// 	try {
-	// 		const token = req.cookies.token
-
-	// 		if (!token) {
-	// 			return reply.code(299).send({ error: 'Not authenticated' });
-	// 		}
-	// 		const decoded = fastify.jwt.verify(token);
-	// 		return reply.code(200).send({
-	// 			message: 'Session valid',
-	// 			token,
-	// 		});
-	// 	} catch (error) {
-	// 		return reply.code(401).send({ error: 'Invalid or expired session' });
-	// 	}
-	// });
-
 	fastify.post('/users/logout', async (req, reply) => {
-		reply.clearCookie('token', { // tells the browser to delete the cookie by setting an expired date
-			path: '/', // this should match the path used in .setCookie
-		});
-		return reply.send({ message: 'Logged out' });
+		reply
+		.clearCookie('token', { path: '/' }) // tells the browser to delete the cookie, path should match the path used in .setCookie
+		.send({ message: 'Logged out' });
 	});
 
 	//route to fetch all users - passwords

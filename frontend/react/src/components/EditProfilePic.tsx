@@ -17,6 +17,7 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange/*, onSave */}
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const [newPic, setNewPic] = useState<File | null>(null); // holds unconfirmed file
 	const [error, setError] = useState<string | null>(null);
+	const [success, setSuccess] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null); // to reset input
 
 	const allowedTypes = ["image/jpeg", "image/png"];
@@ -32,7 +33,7 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange/*, onSave */}
 			url = URL.createObjectURL(pic);
 		}
 
-		setPreviewUrl(url); // will this break if url === null...?
+		setPreviewUrl(url);
 
 		return () => {
 			if (url) URL.revokeObjectURL(url); // clean up
@@ -75,7 +76,9 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange/*, onSave */}
 			onChange(newPic);
 			//onSave(); // this is undefined and hitting save will make console go red
 			setNewPic(null);
+			setSuccess(true);
 			resetInput();
+			setTimeout(() => setSuccess(false), 2000); // clears after 2s
 		}
 	};
 
@@ -98,6 +101,7 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange/*, onSave */}
 					onChange={handleFileChange}
 				/>
 				{error && <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>}
+				{success && <div style={{ color: "green", marginTop: "0.5rem" }}>Picture saved!</div>}
 			</div>
 
 			{newPic && !error && (
