@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import prisma from '../prisma.js'
 import bcryptjs from 'bcryptjs';
+import { authenticate } from '../middleware/authenticate.js'
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',

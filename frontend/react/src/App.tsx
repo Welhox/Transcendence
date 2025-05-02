@@ -11,7 +11,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import Stats from './pages/Stats';
 import VerifyEmail from './pages/VerifyEmail';
 import showDatabase from './components/showDatabase';
-
+import MfaValidation from './pages/Mfa';
 const App: React.FC = () => {
 
   return (
@@ -24,6 +24,7 @@ const App: React.FC = () => {
 				<Route path="/login" element={<Login />} />
 				<Route path="/forgotpassword" element={<ForgotPassword />} />
 				<Route path="/verifyemail" element={<VerifyEmail />} />
+				<Route path="/Mfa" element={<MfaValidation />} />
 				<Route path="/pongpals"
 					element={
 						<ProtectedRoute>

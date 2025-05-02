@@ -14,18 +14,19 @@ datasource db {
 
 //the user data, including hashed password, and another table with OTP data
 model User {
-  id          Int    @id @default(autoincrement())
-  username    String @unique
-  password    String
-  email       String @unique
-  OTP         Otp[]
-  isActivated Boolean @default(false)
-  language    String @default("en")
-  wins        Int @default(0)
-  losses      Int @default(0)
-  played      Int @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int    @id @default(autoincrement())
+  username      String @unique
+  password      String
+  email         String @unique
+  OTP           Otp[]
+  isActivated   Boolean @default(false)
+  language      String @default("en")
+  wins          Int @default(0)
+  losses        Int @default(0)
+  played        Int @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  MFAActivated  Boolean @default(false)
 }
 
 model Otp {

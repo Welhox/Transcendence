@@ -20,18 +20,25 @@ const Login: React.FC = () => {
 		e.preventDefault();
 		let response
 		try {
-
 			response = await axios.post(
 				apiUrl + '/users/login',
 				{ username, password },
 				{ withCredentials: true} // enables HTTP-only cookies
 			);
-
+			console.log('Full response:', response);
+			const data = response.data
+			console.log('Response object:', response);
+			console.log('Response data:', response.data);
+			console.log(data.mfaRequired)
+			if (data.mfaRequired) {
+				console.log('mfaRequired!')
+				navigate('/mfa');
+				return;
+			}
 			console.log('Login successful: ', response.data)
 			await checkSession();
 			navigate('/');
 			return;
-
 		} catch (error: any) {
 
 			console.error('Login failed: ', error);

@@ -5,7 +5,7 @@ import bcryptjs from 'bcryptjs'
 //import the schema for the user
 import { deleteUserSchema, getUserByEmailSchema, getUserByUsernameSchema, getUserByIdSchema, registerUserSchema, loginUserSchema } from '../schemas/userSchemas.js'
 import { authenticate } from '../middleware/authenticate.js'
-
+import { makeCookie, createToken, makeMFACookie, createMFAToken } from '../components/createToken.js'
 
 export async function userRoutes(fastify, options) {
 
@@ -13,7 +13,7 @@ export async function userRoutes(fastify, options) {
 	fastify.post('/users/login', {schema:loginUserSchema}, async (req, reply) => {
 		try {
 		const { username, password } = req.body
-	  
+
 		// Check if username and password are provided
 		if (!username || !password) {
 		  return reply.code(400).send({ error: 'Username and password are required' })
@@ -24,6 +24,7 @@ export async function userRoutes(fastify, options) {
 		  where: { username },
 		})
 		// if user not found then return  error
+		console.log(user)
 		if (!user) {
 			//add a small wait to mitigate timed attacks
 			await new Promise(resolve => setTimeout(resolve, 100));
@@ -40,29 +41,42 @@ export async function userRoutes(fastify, options) {
 			// return 401 for invalid credentials
 		  return reply.code(401).send({ error: 'Invalid username or password' })
 		}
-		//credentials are valid, so we can create a JWT token
-		const token = fastify.jwt.sign(
-			{
-			id: user.id,
-			username: user.username,
-			},
-			{
-				expiresIn: '1h', // token expiration time
-			}
-		);
+		//change to true!!!
+		if (user.MFAActivated) {
+			console.log('got into MFAactivated')
+			const mfaToken = createMFAToken(fastify, { id: user.id})
+			console.log('got into MFAactivated')
+			makeMFACookie(reply, mfaToken);
+			console.log('➡️ Sending MFA required response');
+			return reply.code(200).send({mfaRequired: true});
+		}
 
+		//credentials are valid, so we can create a JWT token
+		const token = createToken(fastify, {id: user.id, username: user.username})
+
+		// const token = fastify.jwt.sign(
+		// 	{
+		// 	id: user.id,
+		// 	username: user.username,
+		// 	},
+		// 	{
+		// 		expiresIn: '1h', // token expiration time
+		// 	}
+		// );
+		makeCookie(reply, token);
 		// store JWT in cookie (httpOnly)
 		// httpOnly means the cookie cannot be accessed via JavaScript, which helps mitigate XSS attacks
 		// secure means the cookie will only be sent over HTTPS connections
-		reply.setCookie('token', token, {
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
-				sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
-				path: '/',
-				maxAge: 60 * 60, // 1 hour in seconds, same as JWT expiration
-		})
-		// send response with without token (token is in the cookie)
-		return reply.code(200).send({message: 'Login successful'});
+		// reply.setCookie('token', token, {
+		// 		httpOnly: true,
+		// 		secure: process.env.NODE_ENV === 'production',
+		// 		sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
+		// 		path: '/',
+		// 		maxAge: 60 * 60, // 1 hour in seconds, same as JWT expiration
+		// })
+		
+		// send response without token (token is in the cookie)
+		return reply.code(200).send({mfaRequired: false});
 		} catch (error) {
 			console.error('Error during login:', error);
 			return reply.code(500).send({ error: 'Internal server error' });
@@ -90,7 +104,7 @@ export async function userRoutes(fastify, options) {
 	// 	}
 	// });
 
-	fastify.post('/users/logout', async (req, reply) => {
+	fastify.post('/users/logout', {preHandler: authenticate},  async (req, reply) => {
 		reply.clearCookie('token', { // tells the browser to delete the cookie by setting an expired date
 			path: '/', // this should match the path used in .setCookie
 		});
@@ -145,6 +159,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	})
 
 	// route to delete a user from the database
+	// should add seperate for deleteion of user by user (which checks that it is same user to be deleted and authenticated)
 	fastify.delete('/users/delete/:id', { schema: deleteUserSchema, preHandler: authenticate }, async (req, reply) => {
 	  const { id } = req.params
 	  console.log('Deleting user with ID:', id)
