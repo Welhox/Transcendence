@@ -37,6 +37,14 @@ const start = async () => {
       },
     });
 
+	fastify.decorate("authenticate", async function (request, reply) {
+		try {
+			await request.jwtVerify();
+		} catch (error) {
+			reply.code(401).send({ error: 'Unauthorized' });
+		}
+	});
+
     //connect the routes to the backend
     fastify.register(userRoutes)
 	fastify.register(refreshTokens)
