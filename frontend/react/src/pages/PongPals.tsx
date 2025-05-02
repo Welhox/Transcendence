@@ -1,15 +1,16 @@
 import React from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
 import SearchPals from '../components/SearchPals';
+//import { useAuthCheck } from '../auth/useAuthCheck'
+import { useAuth } from '../auth/AuthProvider';
+
 
 const PongPals: React.FC = () => {
-	const { token } = useAuth();
 	const navigate = useNavigate();
+	const { status } = useAuth();
 
-	if (!token) {
-		return <Navigate to="/" replace />;
-	}
+	if (status === 'loading') return <p>Loading...</p>
+	if (status === 'unauthorized') return <Navigate to="/" replace />;
 
 	const handleReturn = () => {
 		navigate('/');

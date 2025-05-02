@@ -2,11 +2,11 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { userRoutes } from './routes/users.js'
-import { refreshTokens } from './routes/refreshTokens.js'
+import { verifySession } from './routes/verifySession.js'
 import { pongStats } from './routes/pongStats.js'
 import { otpRoutes } from './routes/otp.js'
 import seedUsers from './seed.js'
-import jwt from '@fastify/jwt';
+import fastifyJwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
 import dotenv from 'dotenv';
 const fastify = Fastify({ logger: true})
@@ -37,17 +37,9 @@ const start = async () => {
       },
     });
 
-	fastify.decorate("authenticate", async function (request, reply) {
-		try {
-			await request.jwtVerify();
-		} catch (error) {
-			reply.code(401).send({ error: 'Unauthorized' });
-		}
-	});
-
     //connect the routes to the backend
     fastify.register(userRoutes)
-	fastify.register(refreshTokens)
+	fastify.register(verifySession)
 	fastify.register(pongStats)
     fastify.register(otpRoutes)
     //add a seed of 5 users to the db
@@ -56,12 +48,6 @@ const start = async () => {
     fastify.get('/', async (request, reply) => {
       return { hello: 'world' };
     });
-
-	/* fastify.all('*', async (request, reply) => {
-		console.log('🔍 Unmatched route:', request.method, request.url);
-		reply.status(404).send({ message: 'Route not found' });
-	  }); */
-	  
     
     await fastify.listen({ port: 3000, host: '0.0.0.0' });
     console.log('Server listening on http://localhost:3000');

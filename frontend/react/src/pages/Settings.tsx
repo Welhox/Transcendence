@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthProvider';
 import DeleteAccountButton from '../components/DeleteAccount';
 import EditProfilePic from '../components/EditProfilePic';
 import SettingsField from '../components/SettingsField';
@@ -14,8 +14,8 @@ import LanguageSelector from '../components/LanguageSelector';
 	// - remove user data and delete account
 
 const Settings: React.FC = () => {
-	const { token } = useAuth();
 	const navigate = useNavigate();
+	const { status } = useAuth();
 
 	// import current settings from backend
 	const [email, setEmail] = useState("users.current@email.com");
@@ -23,9 +23,8 @@ const Settings: React.FC = () => {
 	const [profilePic, setProfilePic] = useState<File | null>(null);
 	const [language, setLanguage] = useState("en");
 
-	if (!token) {
-		return <Navigate to="/" replace />;
-	}
+	if (status === 'loading') return <p>Loading...</p>
+	if (status === 'unauthorized') return <Navigate to="/" replace />;
 
 	const handleReturn = () => {
 		navigate('/');

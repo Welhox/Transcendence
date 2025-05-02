@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
 import Passcode from '../components/Passcode';
+import { useAuth } from '../auth/AuthProvider';
 import axios from 'axios';
 
 const VerifyEmail: React.FC = () => {
-  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   
   const [email, setEmail] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

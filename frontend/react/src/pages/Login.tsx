@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthProvider';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -25,7 +25,7 @@ const Login: React.FC = () => {
 	const [cooldown, setCooldown] = useState(0);
 
 	const navigate = useNavigate();
-	const { token, checkSession } = useAuth();
+	const { status, refreshSession } = useAuth();
 
 	useEffect(() => {
 		let timer: ReturnType<typeof setTimeout>;
@@ -35,9 +35,13 @@ const Login: React.FC = () => {
 		return () => clearTimeout(timer);
 	}, [cooldown]);
 
-	if (token) {
-		return <Navigate to="/" replace />;
-	}
+	useEffect(() => {
+		if (status === 'authorized') {
+			navigate('/');
+		}
+	}, [status]);
+
+	if (status === 'loading') return <p>Loading...</p>
 
 	// sends post request to server for credential validation
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -68,10 +72,9 @@ const Login: React.FC = () => {
 				{ withCredentials: true} // enables HTTP-only cookies
 			);
 
-			console.log('Login successful: ', response.data)
-			await checkSession();
+			console.log('Login successful: ', response.data);
+			await refreshSession();
 			setAttempts(0);
-			navigate('/');
 			return;
 
 		} catch (error: any) {

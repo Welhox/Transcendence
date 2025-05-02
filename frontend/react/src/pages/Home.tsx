@@ -1,10 +1,23 @@
 import React from 'react';
+import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthProvider';
+
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 const Home: React.FC = () => {
 	const navigate = useNavigate();
-	const { user, token, logout } = useAuth();
+	const { status, user, refreshSession } = useAuth();
+
+	const logout = async () => {
+		try {
+			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
+			await refreshSession();
+			navigate('/');
+		} catch (error) {
+			console.error("Error logging out: ", error);
+		}
+	}
 
 	const handleLogin = () => {
 		navigate('/login');
@@ -27,9 +40,12 @@ const Home: React.FC = () => {
 	return (
 		<div>
 			<h1>Welcome!</h1>
-			 {user && token ? (
+
+			{status === 'loading' ? (
+				<p>Checkin session...</p>
+			) : status === 'authorized' && user ? (
 				<>
-					<p>Hello, {user?.name}</p>
+					<p>Hello, {user.username}</p>
 					<button onClick={handleStats}>My stats</button>
 					<button onClick={handlePals}>Pong pals</button>
 					<button onClick={handleSettings}>Settings</button>
@@ -46,4 +62,4 @@ const Home: React.FC = () => {
 	);
 };
 
-export default Home
+export default Home;

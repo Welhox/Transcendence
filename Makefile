@@ -16,7 +16,7 @@ all: ssl
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
 
-dev:
+dev: jwt-secret
 	@printf "${COLOUR_BLUE}Starting backend and frontend in dev mode...${COLOUR_END}\n"
 	@npx concurrently "cd ./backend && npm install && npx prisma generate && npx prisma db push && npm run dev" "cd ./frontend/react && npm install && npm run dev"
 
@@ -51,14 +51,14 @@ jwt-secret:
 down:
 	@docker compose -f docker-compose.yml down
 
-fclean: down clean
+fclean: down
 	@printf "Clean of all docker configs\n"
 	@docker system prune --all
 	@rm -rf ./frontend/srcs/react/dist
 
 re: fclean all
 
-.PHONY: all down ssl dev re restart-front up clean
+.PHONY: all down ssl dev re restart-front up
 
 
 

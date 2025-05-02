@@ -1,5 +1,6 @@
 node_modules
 mydb.sqlite
 .env
+.env.bak
 /prisma/generated
 /prisma/migrations

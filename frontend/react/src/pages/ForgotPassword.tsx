@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthProvider';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -9,12 +9,11 @@ const ForgotPassword: React.FC = () => {
 	const [email, setEmail] = useState('');
 	const [submitted, setSubmitted] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { token } = useAuth();
 	const navigate = useNavigate();
-
-	if (token) {
-		return <Navigate to="/" replace />;
-	}
+	const { status } = useAuth();
+	
+	if (status === 'loading') return <p>Loading...</p>
+	if (status === 'unauthorized') return <Navigate to="/" replace />;
 
 	const handleReturn = () => {
 		navigate('/');

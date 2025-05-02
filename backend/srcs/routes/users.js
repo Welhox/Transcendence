@@ -74,30 +74,9 @@ export async function userRoutes(fastify, options) {
 		}
 	});
 
-	// route to check if user is logged in
-	//should be redundant with the authenticate middleware
-
-	// fastify.get('/users/session', async  (req, reply) => {
-
-	// 	try {
-	// 		const token = req.cookies.token
-
-	// 		if (!token) {
-	// 			return reply.code(299).send({ error: 'Not authenticated' });
-	// 		}
-	// 		const decoded = fastify.jwt.verify(token);
-	// 		return reply.code(200).send({
-	// 			message: 'Session valid',
-	// 			token,
-	// 		});
-	// 	} catch (error) {
-	// 		return reply.code(401).send({ error: 'Invalid or expired session' });
-	// 	}
-	// });
-
 	fastify.post('/users/logout', async (req, reply) => {
 		reply
-		.clearCookie('refreshToken', { path: '/' }) // tells the browser to delete the cookie, path should match the path used in .setCookie
+		.clearCookie('token', { path: '/' }) // tells the browser to delete the cookie, path should match the path used in .setCookie
 		.send({ message: 'Logged out' });
 	});
 
