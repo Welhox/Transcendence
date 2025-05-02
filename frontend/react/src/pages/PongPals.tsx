@@ -27,8 +27,10 @@ const PongPals: React.FC = () => {
 	return (
 		<div>
 			<h1>Pong Pals</h1>
-			<p>Search users:</p>
+			<h2>Pending friend requests</h2>
+			<h2>Search users</h2>
 			<SearchPals onSearch={handleSearch} />
+			<h2>Your friends</h2>
 			<button onClick={handleReturn}>Back</button>
 		</div>
 	);
