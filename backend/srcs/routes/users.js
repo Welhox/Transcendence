@@ -194,7 +194,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	// change isActivated = true once MFA is ready
 	// is using queryRaw because Prisma 6 doesn't support the cleaner version I originally went for (requires Prisma < 5)
 	fastify.get('/users/search', async (request, reply) => {
-		const { query } = request.query;
+		const { query, excludeUserId } = request.query;
 
 		if (!query || !/^[a-zA-Z0-9]+$/.test(query)) {
 			return reply.status(400).send([]);
@@ -204,6 +204,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 		   SELECT id, username
 		   FROM User
 		   WHERE isActivated = false
+		   	AND id != ${Number(excludeUserId) || -1}
 		    AND LOWER(username) LIKE ${query.toLowerCase() + '%'}
 			LIMIT 20;
 		`;

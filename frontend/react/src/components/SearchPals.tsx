@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../auth/AuthProvider';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -11,6 +13,7 @@ const SearchPals: React.FC = () => {
 	const [query, setQuery] = useState('');
 	const [error, setError] = useState<string | null>(null);
 	const [results, setResults] = useState<User[]>([]);
+	const { user} = useAuth();
 
 	useEffect(() => {
 		const delayDebounce = setTimeout(() => {
@@ -30,17 +33,9 @@ const SearchPals: React.FC = () => {
 			}
 
 			setError(null);
-			fetch(apiUrl + `/users/search?query=${trimmed}`)
+			fetch(apiUrl + `/users/search?query=${trimmed}&excludeUserId=${user?.id}`)
 				.then((res) => res.json())
-				.then((data) => {
-					if (Array.isArray(data)) {
-						setResults(data);
-					} else {
-						console.error("Unexpected response:", data);
-						setResults([]);
-						setError("Unexpected respone from server.");
-					}
-				})
+				.then((data) => setResults(Array.isArray(data) ? data : []))
 				.catch((error) => {
 					console.error(error);
 					setError("Something went wrong while searching.");
@@ -63,10 +58,13 @@ const SearchPals: React.FC = () => {
 
 			<ul>
 				{results.map((user) => (
-					<li key={user.id}>{user.username}</li>
+					<li key={user.id}>
+						<Link to={`/stats/${user.id}`}>
+							{user.username}
+						</Link>
+					</li>
 				))}
 			</ul>
-
 		</div>
 	);
 };
