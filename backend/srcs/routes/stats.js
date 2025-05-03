@@ -1,11 +1,9 @@
 //import the prisma database
 import prisma from '../prisma.js'
-//import the hashing functions
-import bcryptjs from 'bcryptjs'
 
 console.log('📦 pongStats.js loaded');
 
-export async function pongStats(fastify, options) {
+export async function statsRoute(fastify, options) {
 
 	fastify.addHook('onRequest', async (request, reply) => {
 		console.log('📥 Request received:', request.raw.url);

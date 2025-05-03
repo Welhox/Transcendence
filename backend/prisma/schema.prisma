@@ -51,9 +51,10 @@ model Match {
   result     String // "win" or "loss"
   date       DateTime @default(now())
 
-  player   User @relation("PlayerMatches", fields: [playerId], references: [id])
-  opponent User @relation("OpponentMatches", fields: [opponentId], references: [id])
+  player   User @relation("PlayerMatches", fields: [playerId], references: [id], onDelete: Cascade)
+  opponent User @relation("OpponentMatches", fields: [opponentId], references: [id], onDelete: Cascade)
 }
+// what happens to a match data if one of the players who participated in the game gets deleted?
 
 //model Post {
 //  id        Int      @id @default(autoincrement())

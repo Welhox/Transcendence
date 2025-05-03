@@ -1,37 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-interface SearchProps {
-	onSearch: (query: string) => void;
+const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+
+interface User {
+	id: number;
+	username: string;
 }
 
-const SearchPals: React.FC<SearchProps> = ({ onSearch }) => {
+const SearchPals: React.FC = () => {
 	const [query, setQuery] = useState('');
 	const [error, setError] = useState<string | null>(null);
+	const [results, setResults] = useState<User[]>([]);
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		const trimmed = query.trim(); // get rid of 'em white space
+	useEffect(() => {
+		const delayDebounce = setTimeout(() => {
+			const trimmed = query.trim();
 
-		const isValid = /^[a-zA-Z0-9]+$/.test(trimmed);
+			if (!trimmed) {
+				setResults([]);
+				return;
+			}
 
-		if (!trimmed) {
-			setError("Please enter a username.");
-			return;
-		}
+			const isValid = /^[a-zA-Z0-9]+$/.test(trimmed);
 
-		if (!isValid) {
-			setError("Usernames only contain letters and numbers.");
-			return;
-		}
+			if (!isValid) {
+				setError("Usernames only contain letters and numbers.");
+				setResults([]);
+				return;
+			}
 
-		setError(null);
-		onSearch(trimmed);
-		setQuery('');
-		// api call for data to display a user profile -> create another custom react component
-	};
+			setError(null);
+			fetch(apiUrl + `/users/search?query=${trimmed}`)
+				.then((res) => res.json())
+				.then((data) => {
+					if (Array.isArray(data)) {
+						setResults(data);
+					} else {
+						console.error("Unexpected response:", data);
+						setResults([]);
+						setError("Unexpected respone from server.");
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+					setError("Something went wrong while searching.");
+				});
+		}, 300); // debounce for smoother UX
+
+		return () => clearTimeout(delayDebounce);
+	}, [query]);
 
 	return (
-		<form onSubmit={handleSubmit}>
+		<div>
 			<input
 				type="text"
 				placeholder="Give username"
@@ -39,10 +59,16 @@ const SearchPals: React.FC<SearchProps> = ({ onSearch }) => {
 				onChange={(e) => setQuery(e.target.value)}
 				maxLength={42}
 			/>
-			<button type="submit">Search</button>
 			{error && <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>}
-		</form>
+
+			<ul>
+				{results.map((user) => (
+					<li key={user.id}>{user.username}</li>
+				))}
+			</ul>
+
+		</div>
 	);
 };
 
-export default SearchPals
+export default SearchPals;
