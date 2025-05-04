@@ -25,7 +25,7 @@ const Home: React.FC = () => {
 
 	const handleStats = () => {
 		if (user?.id) {
-			navigate(`/stats/${user.id}`);
+			navigate(`/stats/${user.id}`, { state: { from: '/' } });
 		}
 	}
 

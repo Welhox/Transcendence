@@ -13,7 +13,7 @@ const SearchPals: React.FC = () => {
 	const [query, setQuery] = useState('');
 	const [error, setError] = useState<string | null>(null);
 	const [results, setResults] = useState<User[]>([]);
-	const { user} = useAuth();
+	const { user } = useAuth();
 
 	useEffect(() => {
 		const delayDebounce = setTimeout(() => {
@@ -59,7 +59,7 @@ const SearchPals: React.FC = () => {
 			<ul>
 				{results.map((user) => (
 					<li key={user.id}>
-						<Link to={`/stats/${user.id}`}>
+						<Link to={`/stats/${user.id}`} state={{ username: user.username, from: '/pongpals' }}>
 							{user.username}
 						</Link>
 					</li>
