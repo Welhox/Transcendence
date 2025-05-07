@@ -14,7 +14,7 @@ const App: React.FC = () => {
 
   return (
     <Router>
-        <button onClick={showDatabase}>show Database (for dev use only)</button>
+        
 		<Routes>
 			<Route path="/" element={<Home />} />
 			<Route path="/register" element={<Register />} />
@@ -25,6 +25,7 @@ const App: React.FC = () => {
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/stats/:userId" element={<Stats />} />
 		</Routes>
+		<button onClick={showDatabase}>show Database (for dev use only)</button>
     </Router>
   )
 }

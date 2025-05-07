@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
+import NavigationHeader from '../components/NavigationHeader';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -39,6 +40,11 @@ const Home: React.FC = () => {
 
 	return (
 		<div>
+			<NavigationHeader handleStats={handleStats}
+									  handlePals={handlePals}
+									  handleSettings={handleSettings}
+									  logout={logout} />
+			<img src="assets/pong-placeholder.gif"></img>
 			<h1>Welcome!</h1>
 
 			{status === 'loading' ? (
@@ -46,10 +52,9 @@ const Home: React.FC = () => {
 			) : status === 'authorized' && user ? (
 				<>
 					<p>Hello, {user.username}</p>
-					<button onClick={handleStats}>My stats</button>
-					<button onClick={handlePals}>Pong pals</button>
-					<button onClick={handleSettings}>Settings</button>
-					<button onClick={logout}>Logout</button>
+					
+					
+					
 				</>
 			) : (
 				<>
