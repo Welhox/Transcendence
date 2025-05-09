@@ -44,8 +44,8 @@ const Home: React.FC = () => {
 									  handlePals={handlePals}
 									  handleSettings={handleSettings}
 									  logout={logout} />
-			<img src="assets/pong-placeholder.gif"></img>
-			<h1>Welcome!</h1>
+			<div class="flex justify-center"><img class="object-contain max-h-full m-auto" src="assets/pong-placeholder.gif"></img></div>
+			<h1 class="text-6xl text-center text-teal-800 m-3">Welcome!</h1>
 
 			{status === 'loading' ? (
 				<p>Checkin session...</p>
@@ -58,9 +58,10 @@ const Home: React.FC = () => {
 				</>
 			) : (
 				<>
-					<p>Please log in to access exclusive Pong content and connect with other registered players!</p>
-					<button onClick={handleLogin}>Login</button>
-					<p>No account?{' '} <Link to="/register">Register</Link></p>
+					<p class="text-center">Please log in to access exclusive Pong content and connect with other registered players!</p>
+					{/*<button class="border bg-amber-900 font-semibold hover:font-extrabold
+					  hover:underline uppercase text-white p-4 mx-4 rounded-2xl" onClick={handleLogin}>Login</button>*/}
+					<p class="text-center">No account?{' '} <Link class="text-amber-900 font:semi-bold hover:font-extrabold" to="/register">Register</Link></p>
 				</>
 			)}
 		</div>

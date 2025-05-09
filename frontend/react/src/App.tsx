@@ -25,7 +25,9 @@ const App: React.FC = () => {
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/stats/:userId" element={<Stats />} />
 		</Routes>
-		<button onClick={showDatabase}>show Database (for dev use only)</button>
+		<div className="flex justify-center my-4"><button className="border bg-teal-500 font-semibold hover:font-extrabold 
+					  hover:underline uppercase text-white p-4 mx-4 rounded-2xl" 
+					  onClick={showDatabase}>show Database (for dev use only)</button></div>
     </Router>
   )
 }
