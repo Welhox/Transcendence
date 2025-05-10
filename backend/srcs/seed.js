@@ -75,7 +75,40 @@ async function seedMatches() {
 	}
 }
 
+async function resetFriendshipData() {
+	// clear all friend requests (both sent and received)
+	try {
+		await prisma.friendRequest.deleteMany({});
+		console.log('Friend requests reset');
+	} catch (error) {
+		console.log('Error resetting friend requests:', error.message);
+	}
+
+	// reset all friendships
+	try {
+		const users = await prisma.user.findMany();
+
+		for (const user of users) {
+			await prisma.user.update({
+				where: { id: user.id },
+				data: {
+					friends: {
+						disconnect: user.friends,
+					},
+					friendOf: {
+						disconnect: user.friendOf,
+					},
+				},
+			});
+		}
+		console.log('Friendships reset');
+	} catch (error) {
+		console.log('Error resetting friendships:', error.message);
+	}
+}
+
 async function main() {
+	await resetFriendshipData(); // resets all friendship data in the beginning!! comment out if wanting to preserve user connections
 	await seedUsers();
 	await seedMatches();
 	await recalculateUserStats();

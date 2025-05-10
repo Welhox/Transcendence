@@ -59,7 +59,7 @@ const SearchPals: React.FC = () => {
 			<ul>
 				{results.map((user) => (
 					<li key={user.id}>
-						<Link to={`/stats/${user.id}`} state={{ username: user.username, from: '/pongpals' }}>
+						<Link to={'/stats/'} state={{ userId: user.id, username: user.username, from: '/pongpals' }}>
 							{user.username}
 						</Link>
 					</li>

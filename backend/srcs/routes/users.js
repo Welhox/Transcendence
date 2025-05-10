@@ -132,6 +132,22 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	  const { id } = req.params
 	  console.log('Deleting user with ID:', id)
 	  try {
+
+		// manually disconnects user from all friendships since Cascade is not supported
+		// more thorough deletion needed?
+
+		await prisma.user.update({
+			where: { id: user.id },
+			data: {
+				friends: {
+					disconnect: user.friends,
+				},
+				friendOf: {
+					disconnect: user.friendOf,
+				},
+			},
+		})
+
 		await prisma.user.delete({
 		  where: { id: Number(id) },
 		})

@@ -5,6 +5,7 @@ import { userRoutes } from './routes/users.js'
 import { sessionRoute } from './routes/session.js'
 import { statsRoute } from './routes/stats.js'
 import { otpRoutes } from './routes/otp.js'
+import { palRoutes } from './routes/pals.js'
 import seedUsers from './seed.js'
 import fastifyJwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
@@ -42,6 +43,7 @@ const start = async () => {
 	fastify.register(sessionRoute)
 	fastify.register(statsRoute)
     fastify.register(otpRoutes)
+	fastify.register(palRoutes)
     //add a seed of 5 users to the db
     await seedUsers()
     
