@@ -22,7 +22,7 @@ dev: jwt-secret
 
 restart-front:
 	@docker exec -it frontend pkill -f node || true
-	@docker exec -it frontend sh -c "cd /var/www/html && rm -r dist && npm run build"
+	@docker exec -it frontend sh -c "cd /var/www/html && rm -r dist || true && npm run build"
 
 # env:
 # 	@cd ./backend && echo "DATABASE_URL=\"file:./mydb.sqlite\"" > .env

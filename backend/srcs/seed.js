@@ -86,7 +86,12 @@ async function resetFriendshipData() {
 
 	// reset all friendships
 	try {
-		const users = await prisma.user.findMany();
+		const users = await prisma.user.findMany({
+			include: {
+				friends: true,
+				friendOf: true,
+			},
+		});
 
 		for (const user of users) {
 			await prisma.user.update({

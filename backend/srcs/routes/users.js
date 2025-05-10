@@ -227,5 +227,63 @@ fastify.get('/users/allInfo', async (req, reply) => {
 
 		return users;
 	});
+
+	fastify.get('/users/:id/friends', async (request, reply) => {
+		const userId = parseInt(request.params.id, 10);
+		if (isNaN(userId)) {
+			return reply.code(400).send({ error: 'Invalid user ID' });
+		}
+
+		try {
+			const user = await prisma.user.findUnique({
+				where: { id: userId },
+				include: {
+					friends: {
+						select: { id: true, username: true },
+					},
+					friendOf: {
+						select: { id: true, username: true },
+					},
+				},
+			});
+
+			if (!user) {
+				return reply.code(404).send({ error: 'User not found' });
+			}
+
+			// combine both directions of relationship, avoiding duplicates
+			const allFriendsMap = new Map();
+			[...user.friends, ...user.friendOf].forEach(friend => {
+				allFriendsMap.set(friend.id, friend);
+			});
+
+			const uniqueFriends = Array.from(allFriendsMap.values());
+
+			return reply.send(uniqueFriends);
+
+		} catch (error) {
+			console.error(error);
+			return reply.code(500).send({ error: 'Server error' });
+		}
+	});
+
+	fastify.get('/users/:id/requests', async (request, reply) => {
+		const userId = parseInt(request.params.id, 10);
+		const requests = await prisma.friendRequest.findMany({
+			where: {
+				receiverId: userId,
+				status: 'pending',
+			},
+			include: {
+				sender: { select: { id: true, username: true} },
+			},
+		});
+
+		return requests.map(req => ({
+			id: req.id,
+			senderId: req.sender.id,
+			username: req.sender.username,
+		}))
+	});
   }
 

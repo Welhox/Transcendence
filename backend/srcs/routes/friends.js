@@ -1,9 +1,7 @@
 import prisma from '../prisma.js'
 import { authenticate } from '../middleware/authenticate.js'
 
-console.log('pals.js loaded');
-
-export async function palRoutes(fastify, options) {
+export async function friendRoutes(fastify, options) {
 
 	fastify.get('/friend-status', { preHandler: authenticate }, async (req, reply) => {
 		const { userId1, userId2 } = req.query;
@@ -104,5 +102,50 @@ export async function palRoutes(fastify, options) {
 			console.error('Error sending friend request', error);
 			return reply.code(500).send({ error: 'Internal server error' });
 		}
+	});
+
+	fastify.post('/friends/accept', async (request, reply) => {
+		const { requestId } = request.body;
+
+		const requestRecord = await prisma.friendRequest.update({
+			where: { id: requestId },
+			data: { status: 'accepted' },
+			include: {
+				sender: true,
+				receiver: true,
+			},
+		});
+
+		// add friendship both ways
+		await prisma.user.update({
+			where: { id: requestRecord. receiverId },
+			data: {
+				friends: {
+					connect: { id: requestRecord.senderId },
+				},
+			},
+		});
+
+		await prisma.user.update({
+			where: { id: requestRecord.senderId },
+			data: {
+				friends: {
+					connect: { id: requestRecord.receiverId },
+				},
+			},
+		});
+
+		return { success: true };
+	});
+
+	fastify.post('/friends/decline', async (request, reply) => {
+		const { requestId } = request.body;
+
+		await prisma.friendRequest.update({
+			where: { id: requestId },
+			data: { status: 'rejected' },
+		});
+
+		return { success: true }
 	});
 }
