@@ -20,6 +20,10 @@ const Home: React.FC = () => {
 		}
 	}
 
+	const handleReturn = () => {
+		navigate('/')
+	}
+
 	const handleLogin = () => {
 		navigate('/login');
 	}
@@ -40,13 +44,14 @@ const Home: React.FC = () => {
 
 	return (
 		<div>
-			<NavigationHeader handleStats={handleStats}
-									  handlePals={handlePals}
-									  handleSettings={handleSettings}
-									  logout={logout}
-									  handleLogin={handleLogin}
-									  status={status}
-									  />
+			<NavigationHeader	handleReturn={handleReturn}
+								handleStats={handleStats}
+								handlePals={handlePals}
+								handleSettings={handleSettings}
+								logout={logout}
+								handleLogin={handleLogin}
+								status={status}
+								/>
 			<div className="flex justify-center"><img className="object-contain max-h-full m-auto" src="assets/pong-placeholder.gif"></img></div>
 			<h1 className="text-6xl text-center text-teal-800 m-3">Welcome!</h1>
 

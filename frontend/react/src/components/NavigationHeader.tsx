@@ -1,4 +1,5 @@
 type NavigationHeaderProps = {
+	handleReturn:(React.MouseEventHandler<HTMLButtonElement>);
 	handleStats: (React.MouseEventHandler<HTMLButtonElement>);
 	handlePals: (React.MouseEventHandler<HTMLButtonElement>);
   	handleSettings: (React.MouseEventHandler<HTMLButtonElement>);
@@ -10,10 +11,9 @@ type NavigationButtonProps = {
 	insideText: string;
 	handler: (React.MouseEventHandler<HTMLButtonElement>);
 }
-const NavigationHeader = ({handleStats, handlePals, handleSettings, logout, handleLogin, status}: NavigationHeaderProps) => {
-	const handleReturn = () => {
-		navigate('/');
-	}
+
+const NavigationHeader = ({handleReturn, handleStats, handlePals, handleSettings, logout, handleLogin, status}: NavigationHeaderProps) => {
+
 	const NavButton = ({insideText, handler}: NavigationButtonProps) => {
 		return <button className="border bg-teal-900 font-semibold hover:font-extrabold 
 					  hover:underline hover:text-amber-200 uppercase text-white p-4 mx-4 rounded-2xl" onClick={handler}>{insideText}</button>
