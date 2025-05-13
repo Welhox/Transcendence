@@ -1,45 +1,46 @@
+import { Link } from 'react-router-dom';
 type NavigationHeaderProps = {
-	handleReturn:(React.MouseEventHandler<HTMLButtonElement>);
-	handleStats: (React.MouseEventHandler<HTMLButtonElement>);
-	handlePals: (React.MouseEventHandler<HTMLButtonElement>);
-  	handleSettings: (React.MouseEventHandler<HTMLButtonElement>);
-  	logout: (React.MouseEventHandler<HTMLButtonElement>);
-  	handleLogin: (React.MouseEventHandler<HTMLButtonElement>);
+  	handleLogout: (React.MouseEventHandler<HTMLButtonElement>);
   	status: string;
+	user: any; // fix this
 }
-type NavigationButtonProps = {
+type NavigationLinkProps = {
+	target: string;
+	text: string;
+}
+type LogoutButtonProps = {
 	insideText: string;
 	handler: (React.MouseEventHandler<HTMLButtonElement>);
 }
+const NavigationHeader = ({ handleLogout, status, user }: NavigationHeaderProps) => {
 
-const NavigationHeader = ({handleReturn, handleStats, handlePals, handleSettings, logout, handleLogin, status}: NavigationHeaderProps) => {
-
-	const NavButton = ({insideText, handler}: NavigationButtonProps) => {
-		return <button className="border bg-teal-900 font-semibold hover:font-extrabold 
-					  hover:underline hover:text-amber-200 uppercase text-white p-4 mx-4 rounded-2xl" onClick={handler}>{insideText}</button>
+	const NavLink = ({target, text}: NavigationLinkProps) => {
+		return <Link to={target} 
+					 className="border bg-teal-900 font-semibold hover:font-extrabold 
+								hover:underline hover:text-amber-200 uppercase
+								text-white p-4 mx-4 rounded-2xl">{text}</Link>				
 	}
-	const LoginButton = ({insideText, handler}: NavigationButtonProps) => {
+
+	const LogoutButton = ({insideText, handler}: LogoutButtonProps) => {
 		return <button className="border bg-teal-500 font-semibold hover:font-extrabold 
 					  hover:underline  hover:text-amber-200 uppercase text-white p-4 mx-4 
 					  rounded-2xl" onClick={handler}>{insideText}</button>
-	
 	}
 	if (status === 'authorized')
 		return (
 	<nav className="flex justify-between bg-teal-700 p-2">
-		<NavButton insideText="Home" handler={handleReturn}></NavButton>
-		<NavButton insideText="My Stats" handler={handleStats}></NavButton>
-		<NavButton insideText="Pong pals" handler={handlePals}></NavButton>
-		<NavButton insideText="Settings" handler={handleSettings}></NavButton>
-
-		<LoginButton insideText="Logout" handler={logout}></LoginButton>
+		<NavLink target='/' text='Home'/>
+		<NavLink target={`/stats/${user.id}`} text='My Stats'/>
+		<NavLink target='pongpals' text='Pong Pals'/>
+		<NavLink target='/settings' text='Settings'/>
+		<LogoutButton insideText="Logout" handler={handleLogout}></LogoutButton>
 	</nav>
 )
 	else
 		return(
 			<nav className="flex justify-between bg-teal-700 p-2">
-			<NavButton insideText="Home" handler={handleReturn}></NavButton>
-			<LoginButton insideText="Login" handler={handleLogin}></LoginButton>
+				<NavLink target='/' text='Home'/>
+				<NavLink target='/login' text='Login'/>
 			</nav>
 		)
 };

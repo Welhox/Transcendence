@@ -1,57 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../auth/AuthProvider';
+
 import NavigationHeader from '../components/NavigationHeader';
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
-const Home: React.FC = () => {
-	const navigate = useNavigate();
-	const { status, user, refreshSession } = useAuth();
-
-	const logout = async () => {
-		try {
-			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
-			await refreshSession();
-			navigate('/');
-		} catch (error) {
-			console.error("Error logging out: ", error);
-		}
-	}
-
-	const handleReturn = () => {
-		navigate('/')
-	}
-
-	const handleLogin = () => {
-		navigate('/login');
-	}
-
-	const handleStats = () => {
-		if (user?.id) {
-			navigate(`/stats/${user.id}`);
-		}
-	}
-
-	const handlePals = () => {
-		navigate('/pongpals');
-	}
-
-	const handleSettings = () => {
-		navigate('/settings');
-	}
-
+/* need to add typenames here */
+const Home: React.FC = ({status, user}) => {
 	return (
 		<div>
-			<NavigationHeader	handleReturn={handleReturn}
-								handleStats={handleStats}
-								handlePals={handlePals}
-								handleSettings={handleSettings}
-								logout={logout}
-								handleLogin={handleLogin}
-								status={status}
-								/>
 			<div className="flex justify-center"><img className="object-contain max-h-full m-auto" src="assets/pong-placeholder.gif"></img></div>
 			<h1 className="text-6xl text-center text-teal-800 m-3">Welcome!</h1>
 

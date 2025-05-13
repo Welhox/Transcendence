@@ -9,14 +9,30 @@ import ForgotPassword from './pages/ForgotPassword';
 import Stats from './pages/Stats';
 import VerifyEmail from './pages/VerifyEmail';
 import showDatabase from './components/showDatabase';
+import NavigationHeader from './components/NavigationHeader';
+import { useAuth } from './auth/AuthProvider';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
 const App: React.FC = () => {
-
+	const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+	//const navigate = useNavigate();
+	const logout = async () => {
+		try {
+			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
+			await refreshSession();
+			//navigate('/');
+		} catch (error) {
+			console.error("Error logging out: ", error);
+		}
+	}
+	const { status, user, refreshSession } = useAuth();
   return (
+	<>
     <Router>
-        
+		<NavigationHeader handleLogout={logout} status={status} user={user}/>
 		<Routes>
-			<Route path="/" element={<Home />} />
+			<Route path="/" element={<Home status={status} user={user}/>} />
 			<Route path="/register" element={<Register />} />
 			<Route path="/login" element={<Login />} />
 			<Route path="/forgotpassword" element={<ForgotPassword />} />
@@ -28,7 +44,7 @@ const App: React.FC = () => {
 		<div className="flex justify-center my-4"><button className="border bg-teal-500 font-semibold hover:font-extrabold 
 					  hover:underline uppercase text-white p-4 mx-4 rounded-2xl" 
 					  onClick={showDatabase}>show Database (for dev use only)</button></div>
-    </Router>
+    </Router></>
   )
 }
 
