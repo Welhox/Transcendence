@@ -76,13 +76,16 @@ const Register: React.FC = () => {
 			console.log(error);
 		}
 	}
-
+	const labelStyles = "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+	const inputStyles = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 	return (
     	<div>
-			<h1>Create an account</h1>
-			<form onSubmit={handleSubmit}>
-				<input
+			<h1 className="text-6xl text-center text-teal-800 m-3">Create an account</h1>
+			<form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
+				<div className="mb-5"><label className={labelStyles} htmlFor="username">Username: </label>
+				<input className={inputStyles}
 					type="text"
+					id="username"
 					name="username"
 					placeholder="Username"
 					onChange={handleChange}
@@ -90,18 +93,22 @@ const Register: React.FC = () => {
 					required
 					maxLength={20}
 					minLength={2}
-				/>
-				<input
+				/></div>
+				<div className="mb-5"><label className={labelStyles} htmlFor="email">Email: </label>
+				<input className={inputStyles}
 					type="email"
+					id="email"
 					name="email"
 					placeholder="Email"
 					onChange={handleChange}
 					value={signupData.email}
 					required
 					maxLength={42}
-				/>
-				<input
+				/></div>
+				<div className="mb-5"><label className={labelStyles} htmlFor="password">Password:</label>
+				<input className={inputStyles}
 					type="password"
+					id="password"
 					name="password"
 					placeholder="Password"
 					onChange={handleChange}
@@ -109,9 +116,11 @@ const Register: React.FC = () => {
 					required
 					maxLength={42}
 					minLength={8}
-				/>
-				<input
+				/></div>
+				<div className="mb-5"><label className={labelStyles} htmlFor="verifypassword">Confirm Password:</label>
+				<input className={inputStyles}
 					type="password"
+					id="verifypassword"
 					name="verifypassword"
 					placeholder="Confirm password"
 					onChange={handleChange}
@@ -119,17 +128,17 @@ const Register: React.FC = () => {
 					required
 					maxLength={42}
 					minLength={8}
-				/>
+				/></div>
 
 				{errorMessage && (
 					<p style={{ color: 'red', marginTop: '8px'}}>{errorMessage}</p>
 				)}
 
-				<button type="submit">Register</button>
+				<button className="px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Register</button>
 			</form>
 
-			<p>
-				Already have an account? <Link to="/login">Login</Link>
+			<p className="m-5 text-center">
+				Already have an account? <Link className="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" to="/login">Login</Link>
 			</p>
 		</div>
 	)

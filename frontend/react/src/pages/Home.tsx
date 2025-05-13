@@ -17,15 +17,10 @@ const Home: React.FC = ({status, user}) => {
 			) : status === 'authorized' && user ? (
 				<>
 					<p>Hello, {user.username}</p>
-					
-					
-					
 				</>
 			) : (
 				<>
 					<p className="text-center">Please log in to access exclusive Pong content and connect with other registered players!</p>
-					<button className="border bg-amber-900 font-semibold hover:font-extrabold
-					  hover:underline uppercase text-white p-4 mx-4 rounded-2xl" onClick={handleLogin}>Login</button>
 					<p className="text-center">No account?{' '} <Link className="text-amber-900 font:semi-bold hover:font-extrabold" to="/register">Register</Link></p>
 				</>
 			)}
