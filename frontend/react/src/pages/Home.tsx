@@ -8,7 +8,7 @@ import NavigationHeader from '../components/NavigationHeader';
 /* need to add typenames here */
 const Home: React.FC = ({status, user}) => {
 	return (
-		<div>
+		<div className="text-center">
 			<div className="flex justify-center"><img className="object-contain max-h-full m-auto" src="assets/pong-placeholder.gif"></img></div>
 			<h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Welcome!</h1>
 
