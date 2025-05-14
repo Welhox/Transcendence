@@ -81,6 +81,7 @@ const Register: React.FC = () => {
 	return (
     	<div>
 			<h1 className="text-6xl text-center text-teal-800 m-3">Create an account</h1>
+			<div>
 			<form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
 				<div className="mb-5"><label className={labelStyles} htmlFor="username">Username: </label>
 				<input className={inputStyles}
@@ -134,11 +135,11 @@ const Register: React.FC = () => {
 					<p style={{ color: 'red', marginTop: '8px'}}>{errorMessage}</p>
 				)}
 
-				<button className="px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Register</button>
-			</form>
+				<button className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Register</button>
+			</form></div>
 
 			<p className="m-5 text-center">
-				Already have an account? <Link className="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" to="/login">Login</Link>
+				Already have an account? <Link className="text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 mx-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" to="/login">Login</Link>
 			</p>
 		</div>
 	)

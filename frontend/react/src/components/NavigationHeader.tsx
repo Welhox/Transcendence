@@ -18,12 +18,12 @@ const NavigationHeader = ({ handleLogout, status, user }: NavigationHeaderProps)
 		return <Link to={target} 
 					 className="border bg-teal-900 font-semibold hover:font-extrabold 
 								hover:underline hover:text-amber-200 uppercase
-								text-white p-4 mx-4 rounded-2xl">{text}</Link>				
+								text-white p-4 rounded-2xl">{text}</Link>				
 	}
 
 	const LogoutButton = ({insideText, handler}: LogoutButtonProps) => {
 		return <button className="border bg-teal-500 font-semibold hover:font-extrabold 
-					  hover:underline  hover:text-amber-200 uppercase text-white p-4 mx-4 
+					  hover:underline  hover:text-amber-200 uppercase text-white p-4 mx-2 
 					  rounded-2xl" onClick={handler}>{insideText}</button>
 	}
 	if (status === 'authorized')
