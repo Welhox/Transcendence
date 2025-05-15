@@ -10,7 +10,7 @@ import Stats from './pages/Stats';
 import VerifyEmail from './pages/VerifyEmail';
 import showDatabase from './components/showDatabase';
 import NavigationHeader from './components/NavigationHeader';
-import { useAuth } from './auth/AuthProvider';
+import { AuthContextType, User, useAuth} from './auth/AuthProvider';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
