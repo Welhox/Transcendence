@@ -67,10 +67,13 @@ const Stats: React.FC= () => {
 
 	return (
 		<div>
-			<h1>{paramUserId ? `User ${paramUserId}` : `${user?.username}'s`} Pong Stats</h1>
-			<button onClick={handleReturn}>Back</button>
-
-			<div style={{ marginTop: '20px' }}>
+			<h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">{paramUserId ? `User ${paramUserId}` : `${user?.username}'s`} Pong Stats</h1>
+			<p className="text-center"><button className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
+								  dark:focus:ring-teal-800" onClick={handleReturn}>Back</button></p>
+			<div className="mt-5 text-center dark:text-white">
+			{/* <div style={{ marginTop: '20px' }}> */}
 				<p>Total Wins: {stats?.totalWins}</p>
 				<p>Total Losses: {stats?.totalLosses}</p>
 				<p>Total Tournaments Won: {stats?.totalTournamentsWon}</p>

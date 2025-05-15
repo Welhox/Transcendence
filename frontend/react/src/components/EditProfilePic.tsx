@@ -83,30 +83,33 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange/*, onSave */}
 	};
 
 	return (
-		<div>
+		<div className="max-w-sm mx-auto block">
 			{previewUrl ? (
-				<img
+				<img className="mx-auto my-3"
 					src={previewUrl}
 					alt="Profile pic"
 					style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "50%", marginTop: "0.5rem" }}
 				/>
 			) : (
-				<div style={{ width: "80px", height: "80px", backgroundColor: "#eee", borderRadius: "50%", marginTop: "0.5rem" }} />
+				<div className="mx-auto" style={{ width: "80px", height: "80px", backgroundColor: "#eee", borderRadius: "50%", marginTop: "0.5rem" }} />
 			)}
 			<div>
-				<input
+				<input className="block w-full m-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
 					ref={fileInputRef}
 					type="file"
 					accept="image/png, image/jpeg"
 					onChange={handleFileChange}
 				/>
-				{error && <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>}
-				{success && <div style={{ color: "green", marginTop: "0.5rem" }}>Picture saved!</div>}
+				{error && <div className="text-red-700 dark:text-red-600 mt-0.5">{error}</div>}
+				{success && <div className="text-green-700 dark:text-green-500 mt-0.5">Picture saved!</div>}
 			</div>
 
 			{newPic && !error && (
 				<div style={{ marginTop: "0.5rem" }}>
-					<button onClick={handleSave}>Save</button>
+					<button className="px-5 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
+								  dark:focus:ring-teal-800" onClick={handleSave}>Save</button>
 				</div>
 			)}
 
