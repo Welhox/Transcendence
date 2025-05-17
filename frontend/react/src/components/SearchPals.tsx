@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
+import axios from 'axios';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -33,13 +34,27 @@ const SearchPals: React.FC = () => {
 			}
 
 			setError(null);
-			fetch(apiUrl + `/users/search?query=${trimmed}&excludeUserId=${user?.id}`)
-				.then((res) => res.json())
-				.then((data) => setResults(Array.isArray(data) ? data : []))
-				.catch((error) => {
-					console.error(error);
-					setError("Something went wrong while searching.");
-				});
+
+			const searchUsers = async () => {
+				try {
+					const response = await axios.get(apiUrl + '/users/search',
+						{
+							params: {
+								query: trimmed,
+								excludeUserId: user?.id,
+							},
+							withCredentials: true,
+						}
+					);
+					const data = response.data;
+					setResults(Array.isArray(data) ? data : []);
+				} catch (error) {
+					console.error();
+					setError('Something went wrong while searching.');
+				}
+			};
+
+			searchUsers();
 		}, 300); // debounce for smoother UX
 
 		return () => clearTimeout(delayDebounce);
