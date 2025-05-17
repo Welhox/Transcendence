@@ -33,7 +33,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 				});
 				const data = response.data;
 				setStats({
-					totalWins: data.totalWiins || 0,
+					totalWins: data.totalWins || 0,
 					totalLosses: data.totalLosses || 0,
 					totalTournamentsWon: data.totalTournamentsWon || 0,
 					matchHistory: Array.isArray(data.matchHistory) ? data.matchHistory : [], 
@@ -52,7 +52,6 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 	if (loading) return <div>Loading stats...</div>;
 	if (error) return <div>Error: {error}</div>;
 	if (!stats) return null;
-
 
 	return (
 		<div>
