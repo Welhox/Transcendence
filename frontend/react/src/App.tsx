@@ -19,7 +19,12 @@ const App: React.FC = () => {
 
 	const logout = async () => {
 		try {
-			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
+			await axios.post(apiUrl + '/users/logout', {}, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+				withCredentials: true, 
+			});
 			await refreshSession();
 			
 		} catch (error) {

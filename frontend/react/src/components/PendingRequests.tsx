@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -19,9 +20,17 @@ export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 
 	useEffect(() => {
 		const fetchRequests = async () => {
-			const res = await fetch(apiUrl + `/users/${userId}/requests`);
-			const data = await res.json();
-			setRequests(data);
+			try {
+				const response = await axios.get(apiUrl + `/users/${userId}/requests`, {
+					headers: {
+						"Content-Type": "application/json", // optional but safe
+					},
+					withCredentials: true,
+				});
+				setRequests(response.data);
+			} catch (error) {
+				console.error('Failed to fetch requests:', error);
+			}
 		};
 
 		fetchRequests();
@@ -33,14 +42,18 @@ export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 		senderId: string,
 		action: "accept" | "decline"
 	) => {
-		const res = await fetch(apiUrl + `/friends/${action}`, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ requestId }),
-			credentials: "include",
-		});
+		try {
+			await axios.post(
+				apiUrl + `/friends/${action}`,
+				{ requestId },
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					withCredentials: true,
+				}
+			);
 
-		if (res.ok) {
 			setRequests((prev) => prev.filter((r) => r.id !== requestId));
 			if (action === "accept") {
 				setMessage(`You're now friends with ${username}`);
@@ -49,6 +62,10 @@ export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 				setMessage('Request declined');
 			}
 
+			setTimeout(() => setMessage(null), 3000);
+		} catch (error) {
+			console.error(`Failed to &{action} request:`, error);
+			setMessage('Something went wrong. Please try again.');
 			setTimeout(() => setMessage(null), 3000);
 		}
 	};

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 import SearchPals from '../components/SearchPals';
 import { FriendList } from '../components/FriendList';
@@ -19,11 +20,22 @@ const PongPals: React.FC = () => {
 
 	useEffect(() => {
 		if (user) {
-			fetch(apiUrl + `/users/${user.id}/friends`, {
-				credentials: 'include',
-			})
-			.then((res) => res.json())
-			.then((data) => setFriends(data));
+
+			const fetchFriends = async () => {
+				try {
+					const response = await axios.get(apiUrl + `/users/${user.id}/friends`, {
+						withCredentials: true,
+						headers: {
+							"Content-Type": "application/json", // optional but safe
+						},
+					});
+					setFriends(response.data);
+				} catch (error) {
+					console.error('Failed to fetch friends:', error);
+				}
+			};
+
+			fetchFriends();
 		}
 	}, [user]);
 

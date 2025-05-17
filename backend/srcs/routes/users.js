@@ -209,7 +209,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 
 	// change isActivated = true once MFA is ready
 	// is using queryRaw because Prisma 6 doesn't support the cleaner version I originally went for (requires Prisma < 5)
-	fastify.get('/users/search', async (request, reply) => {
+	fastify.get('/users/search', { preHandler: authenticate } , async (request, reply) => {
 		const { query, excludeUserId } = request.query;
 
 		if (!query || !/^[a-zA-Z0-9]+$/.test(query)) {
@@ -228,7 +228,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 		return users;
 	});
 
-	fastify.get('/users/:id/friends', async (request, reply) => {
+	fastify.get('/users/:id/friends', { preHandler: authenticate } , async (request, reply) => {
 		const userId = parseInt(request.params.id, 10);
 		if (isNaN(userId)) {
 			return reply.code(400).send({ error: 'Invalid user ID' });
@@ -267,7 +267,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 		}
 	});
 
-	fastify.get('/users/:id/requests', async (request, reply) => {
+	fastify.get('/users/:id/requests', { preHandler: authenticate } , async (request, reply) => {
 		const userId = parseInt(request.params.id, 10);
 		const requests = await prisma.friendRequest.findMany({
 			where: {
@@ -279,11 +279,13 @@ fastify.get('/users/allInfo', async (req, reply) => {
 			},
 		});
 
-		return requests.map(req => ({
-			id: req.id,
-			senderId: req.sender.id,
-			username: req.sender.username,
-		}))
+		reply.send(
+			requests.map(req => ({
+				id: req.id,
+				senderId: req.sender.id,
+				username: req.sender.username,
+			}))
+		);
 	});
   }
 

@@ -104,7 +104,7 @@ export async function friendRoutes(fastify, options) {
 		}
 	});
 
-	fastify.post('/friends/accept', async (request, reply) => {
+	fastify.post('/friends/accept', { preHandler: authenticate } , async (request, reply) => {
 		const { requestId } = request.body;
 
 		const requestRecord = await prisma.friendRequest.update({
@@ -138,7 +138,7 @@ export async function friendRoutes(fastify, options) {
 		return { success: true };
 	});
 
-	fastify.post('/friends/decline', async (request, reply) => {
+	fastify.post('/friends/decline', { preHandler: authenticate } , async (request, reply) => {
 		const { requestId } = request.body;
 
 		await prisma.friendRequest.update({
@@ -147,5 +147,40 @@ export async function friendRoutes(fastify, options) {
 		});
 
 		return { success: true }
+	});
+
+	fastify.post('/unfriend', { preHandler: authenticate } , async (request, reply) => {
+		const { userId1, userId2 } = request.body;
+
+		if (!userId1 || !userId2 || userId1 === userId2) {
+			return reply.status(400).send({ error: 'Invalid user IDs' });
+		}
+
+		try {
+			// remove userId2 from userId1's friends
+			await prisma.user.update({
+				where: { id: userId1 },
+				data: {
+					friends: {
+						disconnect: { id: userId2 },
+					},
+				},
+			});
+
+			// remove userId1 from userId2's friends
+			await prisma.user.update({
+				where: { id: userId2 },
+				data: {
+					friends: {
+						disconnect: { id: userId1 },
+					},
+				},
+			});
+
+			reply.send({ success: true });
+		} catch (error) {
+			console.error('Error while unfriending:', error);
+			reply.status(500).send({ error: 'Internal server error' });
+		}
 	});
 }

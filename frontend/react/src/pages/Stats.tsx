@@ -24,6 +24,9 @@ const Stats: React.FC= () => {
 			try {
 				const res = await axios.get(apiUrl + '/users/id', {
 					params: { id: viewedUserId },
+					headers: {
+						"Content-Type": "application/json", // optional but safe
+					},
 					withCredentials: true,
 				});
 				setViewedUserUsername(res.data.username);

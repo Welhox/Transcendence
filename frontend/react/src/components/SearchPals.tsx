@@ -14,6 +14,7 @@ const SearchPals: React.FC = () => {
 	const [query, setQuery] = useState('');
 	const [error, setError] = useState<string | null>(null);
 	const [results, setResults] = useState<User[]>([]);
+	const [hasSearched, setHasSearched] = useState(false);
 	const { user } = useAuth();
 
 	useEffect(() => {
@@ -22,6 +23,7 @@ const SearchPals: React.FC = () => {
 
 			if (!trimmed) {
 				setResults([]);
+				setHasSearched(false);
 				return;
 			}
 
@@ -30,6 +32,7 @@ const SearchPals: React.FC = () => {
 			if (!isValid) {
 				setError("Usernames only contain letters and numbers.");
 				setResults([]);
+				setHasSearched(false);
 				return;
 			}
 
@@ -43,14 +46,19 @@ const SearchPals: React.FC = () => {
 								query: trimmed,
 								excludeUserId: user?.id,
 							},
+							headers: {
+								"Content-Type": "application/json", // optional but safe
+							},
 							withCredentials: true,
 						}
 					);
 					const data = response.data;
 					setResults(Array.isArray(data) ? data : []);
+					setHasSearched(true);
 				} catch (error) {
-					console.error();
+					console.error('Search failed:', error);
 					setError('Something went wrong while searching.');
+					setHasSearched(false);
 				}
 			};
 
@@ -71,11 +79,12 @@ const SearchPals: React.FC = () => {
 				onChange={(e) => setQuery(e.target.value)}
 				maxLength={42}
 			/>
-			<button className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
-								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
-								  dark:focus:ring-teal-800" type="submit">Search</button>
+
 			{error && <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>}
+
+			{hasSearched && results.length === 0 && !error && query.toLowerCase() !== user?.username.toLowerCase() && (
+				<p className="text-center text-gray-600 dark:text-gray-300 mt-4">No matching users found.</p>
+			)}
 
 			<ul>
 				{results.map((user) => (

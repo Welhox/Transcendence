@@ -14,6 +14,11 @@ const fastify = Fastify({ logger: true})
 
 dotenv.config({ path: './.env' });
 
+fastify.addHook('onSend', async (request, reply, payload) => { // tells fastify that all content type is JSON by default
+	reply.type('application/json');
+	return payload;
+});
+
 const start = async () => {
   try {
 
@@ -39,11 +44,11 @@ const start = async () => {
     });
 
     //connect the routes to the backend
-    fastify.register(userRoutes)
-	fastify.register(sessionRoute)
-	fastify.register(statsRoute)
-    fastify.register(otpRoutes)
-	fastify.register(friendRoutes)
+    fastify.register(userRoutes);
+	fastify.register(sessionRoute);
+	fastify.register(statsRoute);
+    fastify.register(otpRoutes);
+	fastify.register(friendRoutes);
     //add a seed of 5 users to the db
     await seedUsers()
     

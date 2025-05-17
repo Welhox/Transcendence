@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
 
 interface MatchHistoryItem {
 	date: string;
@@ -28,7 +28,11 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 	useEffect(() => {
 		const fetchStats = async () => {
 			try {
+				console.log('Frontend matchistory call:', apiUrl + `/stats/${userId}`);
 				const response = await axios.get(apiUrl + `/stats/${userId}`, {
+					headers: {
+						"Content-Type": "application/json", // optional but safe
+					},
 					withCredentials: true,
 				});
 				const data = response.data;
@@ -38,6 +42,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 					totalTournamentsWon: data.totalTournamentsWon || 0,
 					matchHistory: Array.isArray(data.matchHistory) ? data.matchHistory : [], 
 				});
+				console.log('From fetchStats:', data);
 			} catch (error) {
 				console.error(error);
 				setError('Failed to fetch stats');
@@ -62,17 +67,21 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 			</div>
 
 			<h2 className="mt-5 text-center dark:text-white">Match History</h2>
+
 			{stats.matchHistory?.length ? (
-				<ul>
+				<ul className="mt-4 space-y-3">
 					{stats.matchHistory.map((match, index) => (
-						<li className="mt-5 text-center dark:text-white" key={index}>
+						<li
+							key={index}
+							className="text-center text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 p-3 rounded shadow"
+						>
 							{new Date(match.date).toLocaleDateString()} -{' '}
 							{match.result.charAt(0).toUpperCase() + match.result.slice(1)} vs {match.opponent}
 						</li>
 					))}
 				</ul>
 			) : (
-				<p>No match history available</p>
+				<p className="mt-4 text-center text-gray-600 dark:text-gray-400">No match history available</p>
 			)}
 		</div>
 	);
