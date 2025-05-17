@@ -3,12 +3,12 @@ import axios from 'axios';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
-interface User {
+export interface User {
 	id: string;
 	username: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
 	status: 'loading' | 'authorized' | 'unauthorized';
 	user: User | null;
 	refreshSession: () => Promise<void>;

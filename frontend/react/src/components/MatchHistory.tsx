@@ -55,7 +55,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 
 	return (
 		<div>
-			<div>
+			<div className="mt-5 text-center dark:text-white">
 				<p>Total Wins: {stats?.totalWins}</p>
 				<p>Total Losses: {stats?.totalLosses}</p>
 				<p>Total Tournaments Won: {stats?.totalTournamentsWon}</p>

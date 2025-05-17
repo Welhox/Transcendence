@@ -32,9 +32,9 @@ const LanguageSelector: React.FC<SelectorProps> = ({ value, onChange }) => {
 	const hasChanges = selectedLang !== value;
 
 	return (
-		<div>
+		<div className="block">
 			<strong>Language:</strong>{" "}
-			<div>
+			<div className="flex flex-row justify-center items-center">
 				<div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
 					{languages.map((lang) => (
 						<label key={lang.code} style={{ fontSize: "2rem", cursor: "pointer" }}>

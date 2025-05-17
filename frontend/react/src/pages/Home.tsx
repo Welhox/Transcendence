@@ -1,15 +1,23 @@
 import React from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../auth/AuthProvider';
+//import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { User, AuthContextType } from '../auth/AuthProvider'
+import NavigationHeader from '../components/NavigationHeader';
+import placeholderImage from '../../assets/pong-placeholder.gif'
+
+interface HomeProps {
+	status: AuthContextType["status"];
+	user: AuthContextType["user"];
+}
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
-const Home: React.FC = () => {
-	const navigate = useNavigate();
-	const { status, user, refreshSession } = useAuth();
+/* need to add typenames here */
+const Home: React.FC<HomeProps> = ({ status, user }) => {
+	//const navigate = useNavigate();
+	//const { status, user } = useAuth();
 
-	const logout = async () => {
+	/* const logout = async () => {
 		try {
 			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
 			await refreshSession();
@@ -19,43 +27,28 @@ const Home: React.FC = () => {
 		}
 	}
 
-	const handleLogin = () => {
-		navigate('/login');
-	}
-
 	const handleStats = () => {
 		if (user?.id) {
 			navigate('/stats', { state: { from: '/' } });
 		}
-	}
+	} */
 
-	const handlePals = () => {
-		navigate('/pongpals');
-	}
-
-	const handleSettings = () => {
-		navigate('/settings');
-	}
 
 	return (
-		<div>
-			<h1>Welcome!</h1>
+		<div className="text-center">
+			<div className="flex justify-center"><img className="object-contain max-h-full m-auto" src={placeholderImage}></img></div>
+			<h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Welcome!</h1>
 
 			{status === 'loading' ? (
 				<p>Checkin session...</p>
 			) : status === 'authorized' && user ? (
 				<>
-					<p>Hello, {user.username}</p>
-					<button onClick={handleStats}>My stats</button>
-					<button onClick={handlePals}>Pong pals</button>
-					<button onClick={handleSettings}>Settings</button>
-					<button onClick={logout}>Logout</button>
+					<p className="dark:text-white">Hello, {user.username}</p>
 				</>
 			) : (
 				<>
-					<p>Please log in to access exclusive Pong content and connect with other registered players!</p>
-					<button onClick={handleLogin}>Login</button>
-					<p>No account?{' '} <Link to="/register">Register</Link></p>
+					<p className="dark:text-white text-center">Please log in to access exclusive Pong content and connect with other registered players!</p>
+					<p className="dark:text-white text-center">No account?{' '} <Link className="text-amber-900 dark:text-amber-300 font:semi-bold hover:font-extrabold" to="/register">Register</Link></p>
 				</>
 			)}
 		</div>

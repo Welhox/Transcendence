@@ -94,33 +94,45 @@ const Login: React.FC = () => {
 			}
 		}
 	}
-
+	const labelStyles = "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+	const inputStyles = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+	
   return (
     <div>
-      <h1>Player Login</h1>
-      <form onSubmit={handleLogin} autoComplete="off">
-        <input
+      <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Player Login</h1>
+      <div>
+	  <form className="max-w-sm mx-auto" onSubmit={handleLogin} autoComplete="off">
+	  <div className="mb-5"><label className={labelStyles} htmlFor="username">Username:</label>
+	  <input className={inputStyles}
           type="text"
+		  id="username"
           placeholder="Username"
 		  value={username}
 		  onChange={(e) => setUsername(e.target.value)}
 		  autoComplete="username"
 		  disabled={cooldown > 0}
-        />
-        <input
+        /></div>
+		<div className="mb-5">
+		<label className={labelStyles} htmlFor="password">Password:</label>
+        <input className={inputStyles}
           type="password"
+		  id="password"
           placeholder="Password"
 		  value={password}
 		  onChange={(e) => setPassword(e.target.value)}
 		  autoComplete="current-password"
 		  disabled={cooldown > 0}
-        />
-        <button type="submit" disabled={cooldown > 0}>
+        /></div>
+        <button className="block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
+								  dark:focus:ring-teal-800" 
+								  type="submit" disabled={cooldown > 0}>
 			{cooldown > 0 ? `Wait (${cooldown}s)` : 'Login'}
 		</button>
       </form>
-
-      <p>
+	  
+      <p className="text-amber-700 dark:text-amber-300 font-bold text-center mb-5">
         No account?{' '}
         <Link to="/register">
           Register here
@@ -129,7 +141,11 @@ const Login: React.FC = () => {
 
 	  {error && <p style={{ color: 'red' }}>{error}</p>}
 
-	  <p><Link to="/forgotpassword">Forgot password</Link></p>
+	  <p className="m-5 text-center"><Link className="text-white bg-amber-700 hover:bg-amber-800 
+						  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium 
+						  rounded-lg text-sm w-full sm:w-auto px-11 py-3 mx-3 my-3 text-center
+						  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-800"
+						  to="/forgotpassword">Forgot password</Link></p></div>
     </div>
   )
 }
