@@ -71,7 +71,7 @@ const Login: React.FC = () => {
 				{ username, password },
 				{
 					headers: {
-						"Content-Type": "application/json", // optional but safe
+						"Content-Type": "application/json",
 					},
 					withCredentials: true,
 			});

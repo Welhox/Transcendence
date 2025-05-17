@@ -9,8 +9,6 @@ interface HomeProps {
 	user: AuthContextType["user"];
 }
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
-
 /* need to add typenames here */
 const Home: React.FC<HomeProps> = ({ status, user }) => {
 

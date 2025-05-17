@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
 
 interface BefriendButtonProps {
 	currentUserId: string;

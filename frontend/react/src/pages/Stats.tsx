@@ -7,7 +7,7 @@ import StatsHeader from '../components/StatsHeader';
 import MatchHistory from '../components/MatchHistory';
 import BefriendButton from '../components/BefriendButton';
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const Stats: React.FC= () => {
 	const { status, user } = useAuth();

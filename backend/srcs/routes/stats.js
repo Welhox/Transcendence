@@ -2,13 +2,7 @@
 import prisma from '../prisma.js'
 import { authenticate } from '../middleware/authenticate.js'
 
-console.log('📦 pongStats.js loaded');
-
-export async function statsRoute(fastify, options) {
-
-	fastify.addHook('onRequest', async (request, reply) => {
-		console.log('📥 Request received:', request.raw.url);
-	  });	  
+export async function statsRoute(fastify, options) {  
 
 	fastify.get('/stats/:userId', { preHandler: authenticate } , async (request, reply) => {
 		const { userId } = request.params;

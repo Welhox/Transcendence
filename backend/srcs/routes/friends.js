@@ -3,6 +3,10 @@ import { authenticate } from '../middleware/authenticate.js'
 
 export async function friendRoutes(fastify, options) {
 
+/* 	fastify.addHook('onRequest', async (request, reply) => {
+		console.log('📥 Request received:', request.raw.url);
+	  });	 */
+
 	fastify.get('/friend-status', { preHandler: authenticate }, async (req, reply) => {
 		const { userId1, userId2 } = req.query;
 

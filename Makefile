@@ -11,7 +11,7 @@ name = transcendence
 
 
 # all: ssl env
-all: ssl
+all: ssl jwt-secret
 	@docker compose -f docker-compose.yml up -d --build
 
 # dev depends on package called concurrently; if prompted for installation, choose yes

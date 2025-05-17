@@ -28,7 +28,6 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 	useEffect(() => {
 		const fetchStats = async () => {
 			try {
-				console.log('Frontend matchistory call:', apiUrl + `/stats/${userId}`);
 				const response = await axios.get(apiUrl + `/stats/${userId}`, {
 					headers: {
 						"Content-Type": "application/json", // optional but safe
@@ -42,7 +41,6 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 					totalTournamentsWon: data.totalTournamentsWon || 0,
 					matchHistory: Array.isArray(data.matchHistory) ? data.matchHistory : [], 
 				});
-				console.log('From fetchStats:', data);
 			} catch (error) {
 				console.error(error);
 				setError('Failed to fetch stats');
