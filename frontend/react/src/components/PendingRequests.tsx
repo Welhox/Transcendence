@@ -57,7 +57,7 @@ export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 
 	return (
 		<div>
-			<h2>Pending friend requests:</h2>
+			<h2 className="text-3xl text-center text-teal-800 dark:text-teal-300 m-3">Pending friend requests:</h2>
 			{message && <p>{message}</p>}
 			<ul>
 				{requests.map((req) => (

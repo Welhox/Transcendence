@@ -1,5 +1,4 @@
 import React from 'react';
-//import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { User, AuthContextType } from '../auth/AuthProvider'
 import NavigationHeader from '../components/NavigationHeader';
@@ -14,25 +13,6 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 /* need to add typenames here */
 const Home: React.FC<HomeProps> = ({ status, user }) => {
-	//const navigate = useNavigate();
-	//const { status, user } = useAuth();
-
-	/* const logout = async () => {
-		try {
-			await axios.post(apiUrl + '/users/logout', {}, { withCredentials: true });
-			await refreshSession();
-			navigate('/');
-		} catch (error) {
-			console.error("Error logging out: ", error);
-		}
-	}
-
-	const handleStats = () => {
-		if (user?.id) {
-			navigate('/stats', { state: { from: '/' } });
-		}
-	} */
-
 
 	return (
 		<div className="text-center">

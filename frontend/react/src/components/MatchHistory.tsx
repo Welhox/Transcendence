@@ -61,11 +61,11 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userId }) => {
 				<p>Total Tournaments Won: {stats?.totalTournamentsWon}</p>
 			</div>
 
-			<h2>Match History</h2>
+			<h2 className="mt-5 text-center dark:text-white">Match History</h2>
 			{stats.matchHistory?.length ? (
 				<ul>
 					{stats.matchHistory.map((match, index) => (
-						<li key={index}>
+						<li className="mt-5 text-center dark:text-white" key={index}>
 							{new Date(match.date).toLocaleDateString()} -{' '}
 							{match.result.charAt(0).toUpperCase() + match.result.slice(1)} vs {match.opponent}
 						</li>

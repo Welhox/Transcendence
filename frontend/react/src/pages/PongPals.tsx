@@ -17,9 +17,6 @@ const PongPals: React.FC = () => {
 	const { status, user } = useAuth();
 	const [friends, setFriends] = useState<Friend[]>([]);
 
-	if (status === 'loading') return <p>Loading...</p>
-	if (status === 'unauthorized') return <Navigate to="/" replace />;
-
 	useEffect(() => {
 		if (user) {
 			fetch(apiUrl + `/users/${user.id}/friends`, {
@@ -40,11 +37,13 @@ const PongPals: React.FC = () => {
 
 	const inputStyles = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 	
+	if (status === 'loading') return <p>Loading...</p>
+	if (status === 'unauthorized') return <Navigate to="/" replace />;
+
 	// add friend request header to component
 	return (
 		<div className="dark:text-white text-center">
 			<h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Pong Pals</h1>
-			<h2 className="text-3xl text-center text-teal-800 dark:text-teal-300 m-3">Pending friend requests</h2>
 			<PendingRequests userId={user!.id.toString()} onFriendAdded={handleFriendAdded} />
 			<h2 className="text-3xl text-center text-teal-800 dark:text-teal-300 m-3">Search users</h2>
 			<SearchPals />

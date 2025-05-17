@@ -9,10 +9,6 @@ import BefriendButton from '../components/BefriendButton';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
-/*
-Needs logic review on who has access to whose stats. Currently if user accesses stats
-by URL, the header shows "User's Stats"
-*/
 const Stats: React.FC= () => {
 	const { status, user } = useAuth();
 	const { state } = useLocation();
@@ -54,7 +50,7 @@ const Stats: React.FC= () => {
 				from={state?.from}
 			/>
 
-			{viewedUserId && user?.id && (
+			{viewedUserId !== user.id && (
 				<BefriendButton currentUserId={user.id} viewedUserId={viewedUserId} />
 			)}
 

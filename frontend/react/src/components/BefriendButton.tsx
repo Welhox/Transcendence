@@ -48,10 +48,13 @@ const BefriendButton: React.FC<BefriendButtonProps> = ({ currentUserId, viewedUs
 
 	if (currentUserId === viewedUserId) return null;
 
-	if (isFriend) return <p>You are friends.</p>;
-	if (friendRequestSent) return <p>Friend request sent!</p>;
+	if (isFriend) return <p className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">You are friends.</p>;
+	if (friendRequestSent) return <p className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Friend request sent!</p>;
 
-	return <button onClick={handleSendFriendRequest}>Befriend</button>;
+	return <button className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+	focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+	sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
+	dark:focus:ring-teal-800" onClick={handleSendFriendRequest}>Befriend</button>;
 };
 
 export default BefriendButton;
