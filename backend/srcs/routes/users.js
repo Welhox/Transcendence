@@ -132,6 +132,22 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	  const { id } = req.params
 	  console.log('Deleting user with ID:', id)
 	  try {
+
+		// manually disconnects user from all friendships since Cascade is not supported
+		// more thorough deletion needed?
+
+		await prisma.user.update({
+			where: { id: user.id },
+			data: {
+				friends: {
+					disconnect: user.friends,
+				},
+				friendOf: {
+					disconnect: user.friendOf,
+				},
+			},
+		})
+
 		await prisma.user.delete({
 		  where: { id: Number(id) },
 		})
@@ -190,5 +206,86 @@ fastify.get('/users/allInfo', async (req, reply) => {
 		method: 'GET'
 	  });
 	  const data = await response.json(); */
+
+	// change isActivated = true once MFA is ready
+	// is using queryRaw because Prisma 6 doesn't support the cleaner version I originally went for (requires Prisma < 5)
+	fastify.get('/users/search', { preHandler: authenticate } , async (request, reply) => {
+		const { query, excludeUserId } = request.query;
+
+		if (!query || !/^[a-zA-Z0-9]+$/.test(query)) {
+			return reply.status(400).send([]);
+		}
+
+		const users = await prisma.$queryRaw`
+		   SELECT id, username
+		   FROM User
+		   WHERE isActivated = false
+		   	AND id != ${Number(excludeUserId) || -1}
+		    AND LOWER(username) LIKE ${query.toLowerCase() + '%'}
+			LIMIT 20;
+		`;
+
+		return users;
+	});
+
+	fastify.get('/users/:id/friends', { preHandler: authenticate } , async (request, reply) => {
+		const userId = parseInt(request.params.id, 10);
+		if (isNaN(userId)) {
+			return reply.code(400).send({ error: 'Invalid user ID' });
+		}
+
+		try {
+			const user = await prisma.user.findUnique({
+				where: { id: userId },
+				include: {
+					friends: {
+						select: { id: true, username: true },
+					},
+					friendOf: {
+						select: { id: true, username: true },
+					},
+				},
+			});
+
+			if (!user) {
+				return reply.code(404).send({ error: 'User not found' });
+			}
+
+			// combine both directions of relationship, avoiding duplicates
+			const allFriendsMap = new Map();
+			[...user.friends, ...user.friendOf].forEach(friend => {
+				allFriendsMap.set(friend.id, friend);
+			});
+
+			const uniqueFriends = Array.from(allFriendsMap.values());
+
+			return reply.send(uniqueFriends);
+
+		} catch (error) {
+			console.error(error);
+			return reply.code(500).send({ error: 'Server error' });
+		}
+	});
+
+	fastify.get('/users/:id/requests', { preHandler: authenticate } , async (request, reply) => {
+		const userId = parseInt(request.params.id, 10);
+		const requests = await prisma.friendRequest.findMany({
+			where: {
+				receiverId: userId,
+				status: 'pending',
+			},
+			include: {
+				sender: { select: { id: true, username: true} },
+			},
+		});
+
+		reply.send(
+			requests.map(req => ({
+				id: req.id,
+				senderId: req.sender.id,
+				username: req.sender.username,
+			}))
+		);
+	});
   }
 

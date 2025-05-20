@@ -1,7 +1,7 @@
 
 import { authenticate } from '../middleware/authenticate.js'
 
-export async function verifySession(fastify, options) {
+export async function sessionRoute(fastify, options) {
 
 	// for session verification; returns username and user ID
 	fastify.get('/session/user', async (req, reply) => {

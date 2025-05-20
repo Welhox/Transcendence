@@ -1,17 +1,10 @@
 //import the prisma database
 import prisma from '../prisma.js'
-//import the hashing functions
-import bcryptjs from 'bcryptjs'
+import { authenticate } from '../middleware/authenticate.js'
 
-console.log('📦 pongStats.js loaded');
+export async function statsRoute(fastify, options) {  
 
-export async function pongStats(fastify, options) {
-
-	fastify.addHook('onRequest', async (request, reply) => {
-		console.log('📥 Request received:', request.raw.url);
-	  });	  
-
-	fastify.get('/stats/:userId', async (request, reply) => {
+	fastify.get('/stats/:userId', { preHandler: authenticate } , async (request, reply) => {
 		const { userId } = request.params;
 
 		const numericUserId = parseInt(userId, 10);
@@ -83,6 +76,8 @@ export async function pongStats(fastify, options) {
 				totalTournamentsWon: 0, // optional if tournaments are tracked separately; fix this later
 				matchHistory: dedupedMatches,
 			};
+
+			console.log('Succesful stats request:', stats);
 
 			return stats;
 

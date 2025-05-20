@@ -1,15 +1,17 @@
 import React from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-import { User, AuthContextType} from '../auth/AuthProvider'
+import { Link } from 'react-router-dom';
+import { User, AuthContextType } from '../auth/AuthProvider'
 import NavigationHeader from '../components/NavigationHeader';
 import placeholderImage from '../../assets/pong-placeholder.gif'
+
 interface HomeProps {
 	status: AuthContextType["status"];
 	user: AuthContextType["user"];
 }
+
 /* need to add typenames here */
-const Home: React.FC<HomeProps> = ({status, user}) => {
+const Home: React.FC<HomeProps> = ({ status, user }) => {
+
 	return (
 		<div className="text-center">
 			<div className="flex justify-center"><img className="object-contain max-h-full m-auto" src={placeholderImage}></img></div>

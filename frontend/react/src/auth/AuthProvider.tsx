@@ -22,7 +22,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 	const refreshSession = async () => {
 		try {
-			const response = await axios.get<User>(apiUrl + '/session/user', { withCredentials: true });
+			const response = await axios.get<User>(apiUrl + '/session/user', {
+				headers: {
+					"Content-Type": "application/json", // optional but safe
+				},
+				withCredentials: true,
+			});
 			if (response.status === 200 && response.data.id) {
 				setUser(response.data);
 				setStatus('authorized');

@@ -11,7 +11,7 @@ name = transcendence
 
 
 # all: ssl env
-all: ssl
+all: ssl jwt-secret
 	@docker compose -f docker-compose.yml up -d --build
 
 # dev depends on package called concurrently; if prompted for installation, choose yes
@@ -22,7 +22,7 @@ dev: jwt-secret
 
 restart-front:
 	@docker exec -it frontend pkill -f node || true
-	@docker exec -it frontend sh -c "cd /var/www/html && rm -r dist && npm run build"
+	@docker exec -it frontend sh -c "cd /var/www/html && rm -r dist || true && npm run build"
 
 # env:
 # 	@cd ./backend && echo "DATABASE_URL=\"file:./mydb.sqlite\"" > .env

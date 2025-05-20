@@ -69,8 +69,12 @@ const Login: React.FC = () => {
 			response = await axios.post(
 				apiUrl + '/users/login',
 				{ username, password },
-				{ withCredentials: true} // enables HTTP-only cookies
-			);
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+					withCredentials: true,
+			});
 
 			console.log('Login successful: ', response.data);
 			await refreshSession();

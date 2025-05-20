@@ -30,6 +30,12 @@ model User {
 
   matchesAsPlayer   Match[] @relation("PlayerMatches")
   matchesAsOpponent Match[] @relation("OpponentMatches")
+
+  sentFriendRequests     FriendRequest[] @relation("Sender")
+  receivedFriendRequests FriendRequest[] @relation("Receiver")
+
+  friends	User[]	@relation("UserFriends") // Cascadng deletion not supported: needs manual deletion!!!
+  friendOf	User[]	@relation("UserFriends") // Cascadng deletion not supported: needs manual deletion!!!
 }
 
 model Otp {
@@ -51,8 +57,19 @@ model Match {
   result     String // "win" or "loss"
   date       DateTime @default(now())
 
-  player   User @relation("PlayerMatches", fields: [playerId], references: [id])
-  opponent User @relation("OpponentMatches", fields: [opponentId], references: [id])
+  player   User @relation("PlayerMatches", fields: [playerId], references: [id], onDelete: Cascade)
+  opponent User @relation("OpponentMatches", fields: [opponentId], references: [id], onDelete: Cascade)
+}
+// what happens to a match data if one of the players who participated in the game gets deleted?
+
+model FriendRequest {
+  id			Int      @id @default(autoincrement())
+  sender		User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId		Int
+  receiver		User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId	Int
+  status		String   @default("pending") // could be "pending", "accepted", "rejected"
+  createdAt		DateTime @default(now())
 }
 
 //model Post {

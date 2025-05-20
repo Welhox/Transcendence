@@ -5,6 +5,7 @@ import DeleteAccountButton from '../components/DeleteAccount';
 import EditProfilePic from '../components/EditProfilePic';
 import SettingsField from '../components/SettingsField';
 import LanguageSelector from '../components/LanguageSelector';
+import ToggleSwitch from '../components/ToggleSwitch';
 
 // add fields for user customization:
 	// - change password
@@ -22,6 +23,7 @@ const Settings: React.FC = () => {
 	const [password, setPassword] = useState("teehee");
 	const [profilePic, setProfilePic] = useState<File | null>(null);
 	const [language, setLanguage] = useState("en");
+	const [is2FAEnabled, setIs2FAEnabled] = useState(false);
 
 	if (status === 'loading') return <p>Loading...</p>
 	if (status === 'unauthorized') return <Navigate to="/" replace />;
@@ -46,6 +48,11 @@ const Settings: React.FC = () => {
 			<SettingsField label="Email" type="email" value={email} onSave={setEmail} />
 			<SettingsField label="Password" type="password" value={password} onSave={setPassword} mask />
 			<LanguageSelector value={language} onChange={setLanguage} />
+			<ToggleSwitch
+				label="Enable Two-Factor Authentication"
+				enabled={is2FAEnabled}
+				onToggle={setIs2FAEnabled}
+			/>
 			<DeleteAccountButton onDelete={handleDelete} />
 			<button className="block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
 								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 

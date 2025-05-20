@@ -2,9 +2,10 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { userRoutes } from './routes/users.js'
-import { verifySession } from './routes/verifySession.js'
-import { pongStats } from './routes/pongStats.js'
+import { sessionRoute } from './routes/session.js'
+import { statsRoute } from './routes/stats.js'
 import { otpRoutes } from './routes/otp.js'
+import { friendRoutes } from './routes/friends.js'
 import seedUsers from './seed.js'
 import fastifyJwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
@@ -12,6 +13,11 @@ import dotenv from 'dotenv';
 const fastify = Fastify({ logger: true})
 
 dotenv.config({ path: './.env' });
+
+fastify.addHook('onSend', async (request, reply, payload) => { // tells fastify that all content type is JSON by default
+	reply.type('application/json');
+	return payload;
+});
 
 const start = async () => {
   try {
@@ -38,10 +44,11 @@ const start = async () => {
     });
 
     //connect the routes to the backend
-    fastify.register(userRoutes)
-	fastify.register(verifySession)
-	fastify.register(pongStats)
-    fastify.register(otpRoutes)
+    fastify.register(userRoutes);
+	fastify.register(sessionRoute);
+	fastify.register(statsRoute);
+    fastify.register(otpRoutes);
+	fastify.register(friendRoutes);
     //add a seed of 5 users to the db
     await seedUsers()
     
