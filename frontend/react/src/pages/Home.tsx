@@ -26,7 +26,7 @@ const Home: React.FC<HomeProps> = ({ status, user }) => {
 			) : (
 				<>
 					<p className="dark:text-white text-center">Please log in to access exclusive Pong content and connect with other registered players!</p>
-					<p className="dark:text-white text-center">No account?{' '} <Link className="text-amber-900 dark:text-amber-300 font:semi-bold hover:font-extrabold" to="/register">Register</Link></p>
+					<p className="dark:text-white text-center font-bold m-3">No account?{' '} <Link className="text-amber-900 dark:text-amber-300 font:bold hover:font-extrabold" to="/register">Register</Link></p>
 				</>
 			)}
 		</div>
