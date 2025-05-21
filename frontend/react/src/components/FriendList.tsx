@@ -17,7 +17,7 @@ export const FriendList: React.FC<FriendListProps> = ({ friends }) => {
 	if (friends.length === 0) return <div>You don't have any pals yet</div>;
 
 	return (
-		<ul>
+		<ul className="m-5">
 			{friends.map((friend) => (
 				<li key={friend.id}>
 					<Link to={'/stats/'} state={{ userId: friend.id, username: friend.username, from: '/pongpals' }}>{friend.username}</Link>

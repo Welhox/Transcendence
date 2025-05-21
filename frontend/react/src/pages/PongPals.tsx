@@ -62,9 +62,9 @@ const PongPals: React.FC = () => {
 			<h2 className="text-3xl text-center text-teal-800 dark:text-teal-300 m-3">Your friends</h2>
 			<FriendList friends={friends}/>
 			<button className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-							   focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+							   focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full 
 							   sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
-							   dark:focus:ring-teal-800" onClick={handleReturn}>Back</button>
+							   dark:focus:ring-teal-800 font-semibold" onClick={handleReturn}>Back</button>
 		</div>
 	);
 };

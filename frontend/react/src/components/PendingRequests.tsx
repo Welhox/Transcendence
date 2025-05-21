@@ -14,6 +14,8 @@ type Props = {
 	onFriendAdded: (newFriend: { id: string; username: string }) => void;
 }
 
+const buttonStyle = "font-semibold hover:font-extrabold hover:underline  hover:text-amber-200 mx-auto my-5 px-8 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+
 export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 	const [requests, setRequests] = useState<Request[]>([]);
 	const [message, setMessage] = useState<string | null>(null);
@@ -79,12 +81,12 @@ export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 			<ul>
 				{requests.map((req) => (
 					<li key={req.id}>
-						{req.username} wants to be your friend{" "}
-						<button onClick={() => handleAction(req.id, req.username, req.senderId, "accept")}>
-							accept
+						{req.username} wants to be your friend!{" "}<br/>
+						<button className={buttonStyle} onClick={() => handleAction(req.id, req.username, req.senderId, "accept")}>
+							Accept
 						</button>{" "}
-						<button onClick={() => handleAction(req.id, req.username, req.senderId, "decline")}>
-							decline
+						<button className={buttonStyle} onClick={() => handleAction(req.id, req.username, req.senderId, "decline")}>
+							Decline
 						</button>
 					</li>
 				))}

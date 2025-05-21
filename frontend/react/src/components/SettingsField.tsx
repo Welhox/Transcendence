@@ -78,7 +78,7 @@ const SettingsField: React.FC<FieldProps> = ({
 			{!isEditing ? (
 				<>
 					<button className="px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+								  focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
 								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
 								  dark:focus:ring-teal-800"
 						    onClick={() => {
