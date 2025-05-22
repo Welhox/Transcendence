@@ -67,7 +67,9 @@ export async function otpRoutes(fastify, options) {
 
 fastify.post('/auth/send-otp', async (req, reply) => {
 	const { email } = req.body;
-  console.log('got here and all good')
+  if (!email || typeof email !== 'string') {
+    return reply.code(400).sen({ error: 'Email missing' })
+  }
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -132,3 +134,5 @@ fastify.post('/auth/verify-otp', async (req, reply) => {
   } 
   });
 }
+
+

@@ -287,5 +287,55 @@ fastify.get('/users/allInfo', async (req, reply) => {
 			}))
 		);
 	});
-  }
 
+
+  //Rout to get the settings of the users using JWT token
+  fastify.get('/users/settings', { preHandler: authenticate }, async (request, reply) => {
+	const userId = request.user?.id;
+  
+	if (typeof userId !== 'number') {
+	  return reply.code(400).send({ error: 'Invalid or missing user ID' });
+	}
+  
+	try {
+	  const user = await prisma.user.findUnique({
+		where: { id: userId },
+		select: { mfaInUse: true, email: true, language: true /* and the profile picture */ }
+	  });
+  
+	  if (!user) {
+		return reply.code(404).send({ error: 'User not found' });
+	  }
+  
+	  reply.send(user);
+	} catch (err) {
+	  request.log.error(err);
+	  reply.code(500).send({ error: 'Failed to retrieve settings' });
+	}
+  });
+  
+
+  //to update the mfaInUse boolean, using the JWT TOKEN
+  fastify.patch('/auth/mfa', { preHandler: authenticate }, async (request, reply) => {
+	const { mfaInUse } = request.body;
+  
+	// This should get the information from the JWT token
+	const userId = request.user?.id;
+  
+	if (typeof userId !== 'number' || typeof mfaInUse !== 'boolean') {
+	  return reply.code(400).send({ error: 'Invalid input or missing authentication' });
+	}
+  
+	try {
+	  const updatedUser = await prisma.user.update({
+		where: { id: userId },
+		data: { mfaInUse },
+	  });
+  
+	  reply.send({ message: 'MFA status updated', mfaInUse: updatedUser.mfaInUse });
+	} catch (err) {
+	  fastify.log.error(err);
+	  return reply.code(500).send({ error: 'Failed to update MFA status' });
+	}
+  });
+}

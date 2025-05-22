@@ -10,7 +10,7 @@ async function seedUsers(){
 	try{
 		await prisma.user.createMany({
 			data: [
-				{ username: 'casi', password: hashedPassword, email: 'casi@hive.fi' },
+				{ username: 'casi', password: hashedPassword, email: 'casi.lehtovuori@gmail.com' },
 				{ username: 'emmi', password: hashedPassword, email: 'emmi@hive.fi' },
 				{ username: 'armin', password: hashedPassword, email: 'armin@hive.fi' },
 				{ username: 'sahra', password: hashedPassword, email: 'sahra@hive.fi' },

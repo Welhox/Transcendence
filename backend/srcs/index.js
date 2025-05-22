@@ -50,8 +50,12 @@ const start = async () => {
     fastify.register(otpRoutes);
 	fastify.register(friendRoutes);
     //add a seed of 5 users to the db
+    try {
     await seedUsers()
-    
+    } catch (err) {
+      console.warn('⚠️ Seeding skipped or failed gracefully:', err.message);
+    }
+
     fastify.get('/', async (request, reply) => {
       return { hello: 'world' };
     });
