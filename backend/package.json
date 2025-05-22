@@ -5,9 +5,12 @@
   "main": "./srcs/index.js",
   "scripts": {
     "start": "node ./srcs/index.js",
-    "dev": "npx prisma db push && nodemon ./srcs/index.js",
+    "dev": "npx prisma db push && NODE_ENV=development nodemon ./srcs/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "node srcs/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -17,14 +20,15 @@
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.0.1",
     "@fastify/jwt": "^9.1.0",
-    "@prisma/client": "^6.6.0",
+    "@prisma/client": "^6.8.2",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.5.0",
     "fastify": "^5.2.2",
     "nodemailer": "^6.10.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
-    "prisma": "^6.6.0"
+    "prisma": "^6.8.2"
   }
 }

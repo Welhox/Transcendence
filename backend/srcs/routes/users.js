@@ -9,6 +9,11 @@ import { makeCookie, createToken, makeMFACookie, createMFAToken } from '../compo
 
 export async function userRoutes(fastify, options) {
 
+	// for API url checking:
+	/* fastify.addHook('onRequest', async (request, reply) => {
+		console.log('📥 Request received:', request.raw.url);
+	  }); */
+
 	// login user
 	fastify.post('/users/login', {schema:loginUserSchema}, async (req, reply) => {
 		try {
@@ -83,32 +88,10 @@ export async function userRoutes(fastify, options) {
 		}
 	});
 
-	// route to check if user is logged in
-	//should be redundant with the authenticate middleware
-
-	// fastify.get('/users/session', async  (req, reply) => {
-
-	// 	try {
-	// 		const token = req.cookies.token
-
-	// 		if (!token) {
-	// 			return reply.code(299).send({ error: 'Not authenticated' });
-	// 		}
-	// 		const decoded = fastify.jwt.verify(token);
-	// 		return reply.code(200).send({
-	// 			message: 'Session valid',
-	// 			token,
-	// 		});
-	// 	} catch (error) {
-	// 		return reply.code(401).send({ error: 'Invalid or expired session' });
-	// 	}
-	// });
-
-	fastify.post('/users/logout', {preHandler: authenticate},  async (req, reply) => {
-		reply.clearCookie('token', { // tells the browser to delete the cookie by setting an expired date
-			path: '/', // this should match the path used in .setCookie
-		});
-		return reply.send({ message: 'Logged out' });
+	fastify.post('/users/logout', async (req, reply) => {
+		reply
+		.clearCookie('token', { path: '/' }) // tells the browser to delete the cookie, path should match the path used in .setCookie
+		.send({ message: 'Logged out' });
 	});
 
 	//route to fetch all users - passwords
@@ -164,6 +147,22 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	  const { id } = req.params
 	  console.log('Deleting user with ID:', id)
 	  try {
+
+		// manually disconnects user from all friendships since Cascade is not supported
+		// more thorough deletion needed?
+
+		await prisma.user.update({
+			where: { id: user.id },
+			data: {
+				friends: {
+					disconnect: user.friends,
+				},
+				friendOf: {
+					disconnect: user.friendOf,
+				},
+			},
+		})
+
 		await prisma.user.delete({
 		  where: { id: Number(id) },
 		})
@@ -222,5 +221,86 @@ fastify.get('/users/allInfo', async (req, reply) => {
 		method: 'GET'
 	  });
 	  const data = await response.json(); */
+
+	// change isActivated = true once MFA is ready
+	// is using queryRaw because Prisma 6 doesn't support the cleaner version I originally went for (requires Prisma < 5)
+	fastify.get('/users/search', { preHandler: authenticate } , async (request, reply) => {
+		const { query, excludeUserId } = request.query;
+
+		if (!query || !/^[a-zA-Z0-9]+$/.test(query)) {
+			return reply.status(400).send([]);
+		}
+
+		const users = await prisma.$queryRaw`
+		   SELECT id, username
+		   FROM User
+		   WHERE isActivated = false
+		   	AND id != ${Number(excludeUserId) || -1}
+		    AND LOWER(username) LIKE ${query.toLowerCase() + '%'}
+			LIMIT 20;
+		`;
+
+		return users;
+	});
+
+	fastify.get('/users/:id/friends', { preHandler: authenticate } , async (request, reply) => {
+		const userId = parseInt(request.params.id, 10);
+		if (isNaN(userId)) {
+			return reply.code(400).send({ error: 'Invalid user ID' });
+		}
+
+		try {
+			const user = await prisma.user.findUnique({
+				where: { id: userId },
+				include: {
+					friends: {
+						select: { id: true, username: true },
+					},
+					friendOf: {
+						select: { id: true, username: true },
+					},
+				},
+			});
+
+			if (!user) {
+				return reply.code(404).send({ error: 'User not found' });
+			}
+
+			// combine both directions of relationship, avoiding duplicates
+			const allFriendsMap = new Map();
+			[...user.friends, ...user.friendOf].forEach(friend => {
+				allFriendsMap.set(friend.id, friend);
+			});
+
+			const uniqueFriends = Array.from(allFriendsMap.values());
+
+			return reply.send(uniqueFriends);
+
+		} catch (error) {
+			console.error(error);
+			return reply.code(500).send({ error: 'Server error' });
+		}
+	});
+
+	fastify.get('/users/:id/requests', { preHandler: authenticate } , async (request, reply) => {
+		const userId = parseInt(request.params.id, 10);
+		const requests = await prisma.friendRequest.findMany({
+			where: {
+				receiverId: userId,
+				status: 'pending',
+			},
+			include: {
+				sender: { select: { id: true, username: true} },
+			},
+		});
+
+		reply.send(
+			requests.map(req => ({
+				id: req.id,
+				senderId: req.sender.id,
+				username: req.sender.username,
+			}))
+		);
+	});
   }
 
