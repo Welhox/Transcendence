@@ -128,7 +128,7 @@ const Login: React.FC = () => {
 		  disabled={cooldown > 0}
         /></div>
         <button className="block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+								  focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
 								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
 								  dark:focus:ring-teal-800" 
 								  type="submit" disabled={cooldown > 0}>
@@ -146,7 +146,7 @@ const Login: React.FC = () => {
 	  {error && <p style={{ color: 'red' }}>{error}</p>}
 
 	  <p className="m-5 text-center"><Link className="text-white bg-amber-700 hover:bg-amber-800 
-						  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium 
+						  focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold 
 						  rounded-lg text-sm w-full sm:w-auto px-11 py-3 mx-3 my-3 text-center
 						  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-800"
 						  to="/forgotpassword">Forgot password</Link></p></div>

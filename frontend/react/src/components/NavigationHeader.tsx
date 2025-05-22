@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 type NavigationHeaderProps = {
   	handleLogout: () => Promise<void>;
   	status: string;
@@ -13,6 +14,8 @@ type LogoutButtonProps = {
 	handler: (React.MouseEventHandler<HTMLButtonElement>);
 }
 const NavigationHeader = ({ handleLogout, status, user }: NavigationHeaderProps) => {
+	const [isOpen, setIsOpen] = useState(false);
+
 	const navigate = useNavigate();
 
 	const NavLink = ({target, text}: NavigationLinkProps) => {
@@ -39,20 +42,38 @@ const NavigationHeader = ({ handleLogout, status, user }: NavigationHeaderProps)
 
 	if (status === 'authorized')
 		return (
-	<nav className="flex justify-between bg-teal-700 p-2">
+	<>
+	<nav className="hidden sm:flex justify-between bg-teal-700 p-2">
 		<NavLink target='/' text='Home'/>
 		<NavLink target={`/stats/${user.id}`} text='My Stats'/>
 		<NavLink target='pongpals' text='Pong Pals'/>
 		<NavLink target='/settings' text='Settings'/>
 		<LogoutButton insideText="Logout" handler={onLogoutClick}></LogoutButton>
 	</nav>
+	<nav className="sm:hidden flex justify-between bg-teal-700 p-2">
+		<button
+		onClick={() => setIsOpen(!isOpen)}
+		className="focus:outline-none border bg-teal-900 font-semibold hover:font-extrabold 
+				   hover:underline hover:text-amber-200 uppercase
+		           text-white text-4xl p-2 rounded-2xl">≡</button></nav>
+	
+	{isOpen && (<nav className="sm:hidden flex flex-col space-y-4 px-4 pt-2 pb-4">
+		<NavLink target='/' text='Home'/>
+		<NavLink target={`/stats/${user.id}`} text='My Stats'/>
+		<NavLink target='pongpals' text='Pong Pals'/>
+		<NavLink target='/settings' text='Settings'/>
+		<LogoutButton insideText="Logout" handler={onLogoutClick}></LogoutButton>
+	</nav>)}</>
 )
 	else
 		return(
-			<nav className="flex justify-between bg-teal-700 p-2">
+			<><nav className="hidden sm:flex justify-between bg-teal-700 p-2">
 				<NavLink target='/' text='Home'/>
 				<NavLink target='/login' text='Login'/>
 			</nav>
+			<nav className="sm:hidden flex justify-between bg-teal-700 p-2">
+			<NavLink target='/login' text='Login'/>
+		</nav></>
 		)
 };
 

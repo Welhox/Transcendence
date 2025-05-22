@@ -76,10 +76,10 @@ const BefriendButton: React.FC<BefriendButtonProps> = ({ currentUserId, viewedUs
 	if (isFriend) {
 		return (
 			<button
-				className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-				focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+				className="block mx-auto px-17 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+				focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
 				sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
-				dark:focus:ring-teal-800"
+				dark:focus:ring-teal-800 m-5"
 				onClick={handleUnfriend}>
 					Unfriend
 			</button>
@@ -90,10 +90,10 @@ const BefriendButton: React.FC<BefriendButtonProps> = ({ currentUserId, viewedUs
 
 	return (
 		<button 
-			className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-			focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+			className="block mx-auto px-17 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+			focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
 			sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
-			dark:focus:ring-teal-800"
+			dark:focus:ring-teal-800 m-5"
 			onClick={handleSendFriendRequest}>
 				Befriend
 		</button>

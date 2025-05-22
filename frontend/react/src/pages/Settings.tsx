@@ -54,8 +54,8 @@ const Settings: React.FC = () => {
 				onToggle={setIs2FAEnabled}
 			/>
 			<DeleteAccountButton onDelete={handleDelete} />
-			<button className="block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-								  focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full 
+			<button className="font-semibold block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+								  focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full 
 								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
 								  dark:focus:ring-teal-800"
 					onClick={handleReturn}>Back</button>
