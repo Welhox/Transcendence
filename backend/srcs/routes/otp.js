@@ -2,101 +2,37 @@ import nodemailer from 'nodemailer';
 import prisma from '../prisma.js'
 import bcryptjs from 'bcryptjs';
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-async function sendOTP(email, code) {
-  return transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Your Login Code',
-    text: `Your OTP is: ${code}`,
-  });
-}
-
-async function makeOTP(userId) {
-	const code = Math.floor(100000 + Math.random() * 900000).toString();
-	const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-  // hash the code
-  const hashedCode = await bcryptjs.hash(code, 10);
-  //check if user already has a OTP
-  try
-  {
-  const existingOtp = await prisma.otp.findFirst({
-    where: {
-      userId,
-    },
-  });
-  if (existingOtp) {
-    // if the user already has an OTP, update it
-    await prisma.otp.update({
-      where: {
-        id: existingOtp.id,
-      },
-      data: {
-        code: hashedCode,
-        expiresAt,
-      },
-    });
-  }
-  else {
-    // if the user doesn't have an OTP, create a new one
-    await prisma.otp.create({
-      data: {
-        userId,
-        code: hashedCode,
-        expiresAt,
-      },
-    });
-  }
-  return code;
-  }
-  // if there's an error, log it and throw an error
-  catch (error) {
-    console.error('Error creating OTP:', error);
-    throw new Error('Failed to create OTP');
-  }
-}
-
 export async function otpRoutes(fastify, options) {
-
-fastify.post('/auth/send-otp', async (req, reply) => {
-	const { email } = req.body;
-  if (!email || typeof email !== 'string') {
-    return reply.code(400).sen({ error: 'Email missing' })
-  }
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
-  if (!user) {
-    return reply.code(404).send({ error: 'User not found' });
-  }
-  const userId = user.id;
-	try {
-    const code = await makeOTP(userId);
-	  await sendOTP(email, code);
-	  reply.send({ message: 'OTP sent!' });
-	} catch (err) {
-	  fastify.log.error(err);
-	  reply.code(500).send({ error: 'Failed to send OTP' });
-	}
-  });
-
 
   // check if the OTP is valid and not expired
 fastify.post('/auth/verify-otp', async (req, reply) => {
-  const { email, code } = req.body;
+  
+  const temp = req.cookies.otpToken
+  if (!temp) {
+    return reply.code(401).send({ error: 'Missing token'})
+  }
+  let token
+  try {
+    token = fastify.jwt.verify(temp);
+  }
+  catch {
+    return reply.code(401).send({ error: 'Invalid or expired token'})
+  }
+
+  if (!token?.id || !token?.email){
+    return reply.code(401).send({ error: 'Unauthorized'})
+  }
+  
+  const { code } = req.body;
+  console.log(code)
+  const email = token.email
   const user = await prisma.user.findUnique({
-    where: { email },
+    where: {email},
   });
   if (!user) {
     return reply.code(404).send({ error: 'User not found' });
   }
+  await new Promise(resolve => setTimeout(resolve, 1000))
   const userId = user.id;
   try {
     const otp = await prisma.otp.findFirst({
@@ -105,7 +41,7 @@ fastify.post('/auth/verify-otp', async (req, reply) => {
       },
     });
     if (!otp) {
-      return reply.code(404).send({ error: 'OTP not found' });
+      return reply.code(401).send({ error: 'OTP not found' });
     }
     const isValid = await bcryptjs.compare(code, otp.code);
     if (!isValid) {
@@ -114,7 +50,7 @@ fastify.post('/auth/verify-otp', async (req, reply) => {
     //check that otp has not expired
     const now = new Date();
     if (now > otp.expiresAt) {
-      return reply.code(401).send({ error: 'OTP expired' });
+      return reply.code(403).send({ error: 'OTP expired' });
     }
     // delete the OTP after successful verification
     await prisma.otp.delete({
@@ -122,11 +58,30 @@ fastify.post('/auth/verify-otp', async (req, reply) => {
         id: otp.id,
       },
     });
-    // set user to active if inactive
-    await prisma.user.update({
-      where: { id: userId },
-      data: { isActive: true },
-    });
+    // set the acctual cookie and return it
+    const token = fastify.jwt.sign(
+      {
+      id: user.id,
+      username: user.username,
+      },
+      {
+        expiresIn: '1h', // token expiration time
+      }
+    );
+
+    // store JWT in cookie (httpOnly)
+    // httpOnly means the cookie cannot be accessed via JavaScript, which helps mitigate XSS attacks
+    // secure means the cookie will only be sent over HTTPS connections
+    reply.setCookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict', // means the cookie won’t be sent if someone embeds your site in an iframe or from another domain 
+        path: '/',
+        maxAge: 60 * 60, // 1 hour in seconds, same as JWT expiration
+    })
+    //remove the otp token
+    reply.clearCookie('otpToken', { path: '/'})
+    //and return
     reply.code(200).send({ message: 'OTP verified!' });
   } catch (err) {
     fastify.log.error(err);

@@ -13,6 +13,7 @@ import NavigationHeader from './components/NavigationHeader';
 import { AuthContextType, User, useAuth} from './auth/AuthProvider';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Mfa from './pages/Mfa';
 
 const App: React.FC = () => {
 	const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
@@ -45,7 +46,7 @@ const App: React.FC = () => {
 			<Route path="/pongpals" element={<PongPals />} />
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/stats" element={<Stats />} />
-
+			<Route path="/mfa" element={<Mfa />} />
 			<Route path="*" element={<Navigate to="/" replace/>} />
 			<Route path="/stats/:anything" element={<Navigate to="/stats" replace/>}/>
 		</Routes>

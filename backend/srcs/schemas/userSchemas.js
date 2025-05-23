@@ -147,7 +147,8 @@ export const getUserByUsernameSchema = {
 	200: { 
 	  type: 'object',
 	  properties: {
-		message: { type: 'string' }
+		message: { type: 'string' },
+		mfaRequired: { type: 'boolean' }
 	  }
 	},
 	400: {

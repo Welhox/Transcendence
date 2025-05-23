@@ -5,7 +5,7 @@ import bcryptjs from 'bcryptjs'
 //import the schema for the user
 import { deleteUserSchema, getUserByEmailSchema, getUserByUsernameSchema, getUserByIdSchema, registerUserSchema, loginUserSchema } from '../schemas/userSchemas.js'
 import { authenticate } from '../middleware/authenticate.js'
-
+import { handleOtp } from '../handleOtp.js';
 
 export async function userRoutes(fastify, options) {
 
@@ -45,6 +45,42 @@ export async function userRoutes(fastify, options) {
 			// return 401 for invalid credentials
 		  return reply.code(401).send({ error: 'Invalid username or password' })
 		}
+
+		//if mfa is activated for the user, then generate and send a otp to be validated
+		//also send a token, which dose not give access, but in order to validate later that
+		//login had been successfull.
+		if (user.mfaInUse === true) {
+			try
+			{
+				//make and send OTP to the matchin email
+				await handleOtp(user.email)
+				
+				const otpToken = fastify.jwt.sign(
+					{
+						id: user.id,
+						email: user.email,
+					},
+					{
+						expiresIn: '5min',
+					}
+				)
+				//set a otp token to the user and reply so that frontend knows to redirect to OTP page.
+				reply.setCookie('otpToken', otpToken, {
+					httpOnly: true,
+					secure: process.env.NODE_ENV === 'production',
+					sameSite: 'strict',
+					path: '/',
+					maxAge: 5 * 60,
+				})
+				console.log('MFA activated')
+				return reply.code(200).send({ message: 'MFA still required', mfaRequired: true })
+			} catch(error) {
+				console.log('MFA catch activated:', error)
+				return reply.code(401).send({ error: 'Invalid email for mfa' }) 
+			}
+
+		}
+
 		//credentials are valid, so we can create a JWT token
 		const token = fastify.jwt.sign(
 			{
@@ -316,7 +352,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
   
 
   //to update the mfaInUse boolean, using the JWT TOKEN
-  fastify.patch('/auth/mfa', { preHandler: authenticate }, async (request, reply) => {
+  fastify.post('/auth/mfa', { preHandler: authenticate }, async (request, reply) => {
 	const { mfaInUse } = request.body;
   
 	// This should get the information from the JWT token

@@ -76,6 +76,12 @@ const Login: React.FC = () => {
 					withCredentials: true,
 			});
 
+			const data = response.data;
+			console.log('Login response: ', data);
+			if (data.mfaRequired) {
+				navigate('/mfa');
+				return;	
+			}
 			console.log('Login successful: ', response.data);
 			await refreshSession();
 			setAttempts(0);

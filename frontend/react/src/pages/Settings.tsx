@@ -62,7 +62,19 @@ const Settings: React.FC = () => {
 		console.log("Account deleted!");
 	};
 
-	// INTEGRATE SAVING OF SETTINGS HERE
+	//toggle mfa on/off
+	// send request to backend to update mfa status
+	const handle2FAToggle = async () => {
+		try {
+			// send request to backend to update 2FA status
+			const response = await axios.post(apiUrl + '/auth/mfa', { mfaInUse: !is2FAEnabled }, { withCredentials: true });
+			setIs2FAEnabled(response.data.mfaInUse);
+			console.log("2FA toggled!");
+		}
+		catch (error) {
+			console.error('Error updating 2FA status:', error);
+		}
+	};
 
 	return (
 		<div className="text-center dark:text-white">
@@ -74,7 +86,7 @@ const Settings: React.FC = () => {
 			<ToggleSwitch
 				label="Enable Two-Factor Authentication"
 				enabled={is2FAEnabled}
-				onToggle={setIs2FAEnabled}
+				onToggle={handle2FAToggle}
 			/>
 			<DeleteAccountButton onDelete={handleDelete} />
 			<button className="font-semibold block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
