@@ -325,7 +325,7 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	});
 
 
-  //Rout to get the settings of the users using JWT token
+  //Route to get the settings of the users using JWT token
   fastify.get('/users/settings', { preHandler: authenticate }, async (request, reply) => {
 	const userId = request.user?.id;
   

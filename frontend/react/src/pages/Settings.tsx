@@ -29,19 +29,17 @@ const Settings: React.FC = () => {
 	const [language, setLanguage] = useState("en");
 	const [is2FAEnabled, setIs2FAEnabled] = useState(false);
 
-	if (status === 'loading') return <p>Loading...</p>
-	if (status === 'unauthorized') return <Navigate to="/" replace />;
-
+	
 	useEffect(() => {
 		// Fetch user settings from the backend
 		const fetchUserSettings = async () => {
 			try {
 				const response = await axios.get(apiUrl + '/users/settings', { withCredentials: true });
-				console.log('RESPONSE:' + response.data);
+				console.log('RESPONSE:', response.data);
 				setEmail(response.data.email);
 				// setProfilePic(response.data.profilePic);
 				setLanguage(response.data.language);
-				setIs2FAEnabled(response.data.is2FAEnabled);
+				setIs2FAEnabled(response.data.mfaInUse);
 			} catch (error) {
 				console.error('Error fetching user settings:', error);
 			}
@@ -50,6 +48,9 @@ const Settings: React.FC = () => {
 			fetchUserSettings();
 		}
 	}, [status]);
+
+	if (status === 'loading') return <p>Loading...</p>
+	if (status === 'unauthorized') return <Navigate to="/" replace />;
 
 	const handleReturn = () => {
 		navigate('/');
