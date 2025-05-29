@@ -8,6 +8,7 @@ interface FieldProps {
   mask?: boolean; // for password
 }
 
+const buttonStyles = "px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
 /*
 Displays the name of the setting, it's current value next to it (passwords are masked with '*') and
 Update button. When button is clicked, input field opens up with save and cancel option.
@@ -82,14 +83,11 @@ const SettingsField: React.FC<FieldProps> = ({
       {!isEditing ? (
         <>
           <button
-            className="px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
-								  focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
-								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
-								  dark:focus:ring-teal-800"
+            className={buttonStyles}
             id={label + "btn"}
             aria-label={button_aria_label}
             onClick={() => {
-              setTimeout(() => {
+              setTimeout(() => { // this is necessary to workaround a known issue in Voiceover, which moves the focus to the full window
                 inputRef.current?.focus();
               }, 10);
               setInputValue("");
@@ -110,10 +108,10 @@ const SettingsField: React.FC<FieldProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
           />
           <div>
-            <button onClick={handleSave} disabled={!inputValue.trim()}>
+            <button className={buttonStyles} onClick={handleSave} disabled={!inputValue.trim()}>
               Save
             </button>{" "}
-            <button onClick={handleCancel}>Cancel</button>
+            <button className={buttonStyles} onClick={handleCancel}>Cancel</button>
           </div>
           {error && (
             <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>
