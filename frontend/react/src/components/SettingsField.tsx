@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface FieldProps {
   label: string;
@@ -8,7 +8,8 @@ interface FieldProps {
   mask?: boolean; // for password
 }
 
-const buttonStyles = "px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
+const buttonStyles =
+  "px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800";
 /*
 Displays the name of the setting, it's current value next to it (passwords are masked with '*') and
 Update button. When button is clicked, input field opens up with save and cancel option.
@@ -24,8 +25,22 @@ const SettingsField: React.FC<FieldProps> = ({
   const [inputValue, setInputValue] = useState(value);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [liveMessage, setLiveMessage] = useState<string | null>(null);
+  const liveRegionRef = useRef<HTMLDivElement>(null); // for screen reader aria announcements
   const mocPwd = "password";
 
+  useEffect(() => {
+    if (error) {
+      setLiveMessage(null); // force remount
+      setTimeout(() => {
+        setLiveMessage(error);
+        // Give React time to render it
+        setTimeout(() => {
+          liveRegionRef.current?.focus();
+        }, 10);
+      }, 100); // wait for file input focus shift to complete
+    }
+  }, [error]);
   const displayValue = mask ? "*".repeat(mocPwd.length) : value;
 
   const validateInput = (input: string) => {
@@ -87,7 +102,8 @@ const SettingsField: React.FC<FieldProps> = ({
             id={label + "btn"}
             aria-label={button_aria_label}
             onClick={() => {
-              setTimeout(() => { // this is necessary to workaround a known issue in Voiceover, which moves the focus to the full window
+              setTimeout(() => {
+                // this is necessary to workaround a known issue in Voiceover, which moves the focus to the full window
                 inputRef.current?.focus();
               }, 10);
               setInputValue("");
@@ -108,13 +124,32 @@ const SettingsField: React.FC<FieldProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
           />
           <div>
-            <button className={buttonStyles} onClick={handleSave} disabled={!inputValue.trim()}>
+            <button
+              className={buttonStyles}
+              onClick={handleSave}
+              disabled={!inputValue.trim()}
+            >
               Save
             </button>{" "}
-            <button className={buttonStyles} onClick={handleCancel}>Cancel</button>
+            <button className={buttonStyles} onClick={handleCancel}>
+              Cancel
+            </button>
           </div>
           {error && (
             <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>
+          )}
+          {/* This next part is a secret div, visible only to screen readers, which ensures that the error
+	  or success messages get announced using aria. */}
+          {liveMessage && (
+            <div
+              ref={liveRegionRef}
+              tabIndex={-1}
+              aria-live="assertive"
+              aria-atomic="true"
+              className="sr-only"
+            >
+              {liveMessage}
+            </div>
           )}
         </>
       )}
