@@ -23,11 +23,13 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null); // to reset input
   const liveRegionRef = useRef<HTMLDivElement>(null);
-  const [liveMessage, setLiveMessage] = useState<string | null>(null);
+  const [liveMessage, setLiveMessage] = useState<string | null>(null); // for screen reader aria announcements
 
   const allowedTypes = ["image/jpeg", "image/png"];
   const maxSizeMB = 2;
 
+  // This is a workaround for an issue with voiceover moving focus to the wrong place 
+  // (to the entire website window) after exiting a native file upload dialog.
   useEffect(() => {
     if (error || success) {
       setLiveMessage(null); // force remount
@@ -143,6 +145,8 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({
           </span>
         )}
       </div>
+	  {/* This next part is a secret div, visible only to screen readers, which ensures that the error
+	  or success messages get announced using aria. */}
       {liveMessage && (
         <div
           ref={liveRegionRef}
