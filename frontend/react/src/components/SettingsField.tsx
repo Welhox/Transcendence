@@ -71,16 +71,18 @@ const SettingsField: React.FC<FieldProps> = ({
 		setInputValue("");
 		setError(null);
 	};
-
+	const button_aria_label = 'update ' + label;
 	return (
 		<div>
-			<strong>{label}:</strong>{" "}{displayValue}{" "}
+			<label className='font-bold' htmlFor={label + 'btn'}>{label}:</label>{" "}{displayValue}{" "}
 			{!isEditing ? (
 				<>
 					<button className="px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
 								  focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
 								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
 								  dark:focus:ring-teal-800"
+							id={label + 'btn'}
+							aria-label={button_aria_label}
 						    onClick={() => {
 						setInputValue("");
 						setIsEditing(true);
