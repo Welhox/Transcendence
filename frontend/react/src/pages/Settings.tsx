@@ -8,6 +8,7 @@ import LanguageSelector from '../components/LanguageSelector';
 import ToggleSwitch from '../components/ToggleSwitch';
 import axios from 'axios';
 import { useEffect } from 'react';
+import ConfirmOtpField from '../components/ConfirmOtpField';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || '/api';
 
@@ -28,7 +29,8 @@ const Settings: React.FC = () => {
 	const [profilePic, setProfilePic] = useState<File | null>(null);
 	const [language, setLanguage] = useState("en");
 	const [is2FAEnabled, setIs2FAEnabled] = useState(false);
-
+	const [otp, setOtp] = useState('');
+	const [showOtpField, setShowOtpField] = useState(false);
 	
 	useEffect(() => {
 		// Fetch user settings from the backend
@@ -68,9 +70,17 @@ const Settings: React.FC = () => {
 	const handle2FAToggle = async () => {
 		try {
 			// send request to backend to update 2FA status
-			const response = await axios.post(apiUrl + '/auth/mfa', { mfaInUse: !is2FAEnabled }, { withCredentials: true });
-			setIs2FAEnabled(response.data.mfaInUse);
-			console.log("2FA toggled!");
+			if(is2FAEnabled === true)
+			{
+				const response = await axios.post(apiUrl + '/auth/mfa', { mfaInUse: !is2FAEnabled }, { withCredentials: true });
+				setIs2FAEnabled(response.data.mfaInUse);
+				console.log("2FA toggled!");
+			}
+			else //show the Otp field to validate email
+			{
+				setShowOtpField(true);
+				
+			}
 		}
 		catch (error) {
 			console.error('Error updating 2FA status:', error);
@@ -89,6 +99,12 @@ const Settings: React.FC = () => {
 				enabled={is2FAEnabled}
 				onToggle={handle2FAToggle}
 			/>
+			{showOtpField && <ConfirmOtpField 
+				setIs2FAEnabled={setIs2FAEnabled} 
+				setShowOtpField={setShowOtpField}
+				apiUrl={apiUrl}
+				otp={otp}
+				setOtp={setOtp} />}
 			<DeleteAccountButton onDelete={handleDelete} />
 			<button className="font-semibold block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
 								  focus:outline-none focus:ring-blue-300 rounded-lg text-sm w-full 
