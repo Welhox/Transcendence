@@ -28,6 +28,8 @@ model User {
   played      Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  profilePic  String?
+  isOnline    Boolean  @default(false)
 
   matchesAsPlayer   Match[] @relation("PlayerMatches")
   matchesAsOpponent Match[] @relation("OpponentMatches")
@@ -64,14 +66,6 @@ model Match {
   opponent User @relation("OpponentMatches", fields: [opponentId], references: [id], onDelete: Cascade)
 }
 // what happens to a match data if one of the players who participated in the game gets deleted?
-
-
-
-
-
-
-
-
 
 model FriendRequest {
   id			Int      @id @default(autoincrement())

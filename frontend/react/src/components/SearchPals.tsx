@@ -83,12 +83,12 @@ const SearchPals: React.FC = () => {
 			{error && <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>}
 
 			{hasSearched && results.length === 0 && !error && query.toLowerCase() !== user?.username.toLowerCase() && (
-				<p className="text-center text-gray-600 dark:text-gray-300 mt-4">No matching users found.</p>
+				<p className="text-amber-900 dark:text-amber-300 font:bold mt-4">No matching users found.</p>
 			)}
 
 			<ul>
 				{results.map((user) => (
-					<li key={user.id}>
+					<li className="text-amber-900 dark:text-amber-300 font:bold hover:font-extrabold" key={user.id}>
 						<Link to={'/stats/'} state={{ userId: user.id, username: user.username, from: '/pongpals' }}>
 							{user.username}
 						</Link>

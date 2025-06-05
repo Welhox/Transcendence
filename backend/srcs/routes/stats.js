@@ -78,7 +78,6 @@ export async function statsRoute(fastify, options) {
 			};
 
 			console.log('Succesful stats request:', stats);
-
 			return stats;
 
 		} catch (error) {

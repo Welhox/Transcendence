@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { Friend } from '../types/friend';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
@@ -11,7 +12,7 @@ type Request = {
 
 type Props = {
 	userId: string;
-	onFriendAdded: (newFriend: { id: string; username: string }) => void;
+	onFriendAdded: (newFriend: Friend) => void;
 }
 
 const buttonStyle = "font-semibold hover:font-extrabold hover:underline  hover:text-amber-200 mx-auto my-5 px-8 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800"
@@ -59,7 +60,7 @@ export const PendingRequests: React.FC<Props> = ({ userId, onFriendAdded }) => {
 			setRequests((prev) => prev.filter((r) => r.id !== requestId));
 			if (action === "accept") {
 				setMessage(`You're now friends with ${username}`);
-				onFriendAdded({ id: senderId, username });
+				onFriendAdded({ id: senderId, username, isOnline: false });
 			} else {
 				setMessage('Request declined');
 			}

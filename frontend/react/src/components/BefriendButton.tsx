@@ -86,7 +86,7 @@ const BefriendButton: React.FC<BefriendButtonProps> = ({ currentUserId, viewedUs
 		);
 	}
 		
-	if (friendRequestSent) return <p className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Friend request pending...</p>;
+	if (friendRequestSent) return <p className="text-4xl text-center text-teal-800 dark:text-teal-300 m-3">Friend request pending...</p>;
 
 	return (
 		<button 

@@ -9,8 +9,8 @@ interface ToggleSwitchProps {
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ label, enabled, onToggle }) => {
 	return (
 		<div className="flex justify-between items-center max-w-sm mx-auto my-4">
-			<strong>{label}:</strong>
-			<button
+			<label htmlFor='toggleSwitch' className='font-bold'>{label}:</label>
+			<button id='toggleSwitch'
 				onClick={() => onToggle(!enabled)}
 				className={`w-10 h-5 flex items-center rounded-full p-1 transition-colors ${
 					enabled ? 'bg-teal-600' : 'bg-gray-300'

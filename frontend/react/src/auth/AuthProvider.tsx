@@ -6,6 +6,8 @@ const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 export interface User {
 	id: string;
 	username: string;
+	email?: string;
+	profilePic?: string;
 }
 
 export interface AuthContextType {

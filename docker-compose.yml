@@ -29,6 +29,7 @@ services:
       - NODE_ENV=production
     volumes:
       - ./backend/:/backend #this makes the project available inside the container
+      - ./backend/assets/:/backend/assets
     networks:
       - transcendence
     restart: always
@@ -37,7 +38,6 @@ networks:
   transcendence:
     name: transcendence
     driver: bridge
-
 
 
 # volumes:

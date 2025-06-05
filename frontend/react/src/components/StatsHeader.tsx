@@ -11,7 +11,7 @@ const StatsHeader: React.FC<StatsHeaderProps> = ({ username, from }) => {
 
 	return (
 		<div>
-			<h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">{username}'s Pong Stats</h1>
+			<h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-5 p-5">{username}'s Pong Stats</h1>
 			<p className="text-center">
 				<button className="block mx-auto px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
 								  focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 

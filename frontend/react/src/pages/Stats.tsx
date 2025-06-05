@@ -43,7 +43,7 @@ const Stats: React.FC= () => {
 	if (status === 'unauthorized' || !user) return <Navigate to="/" replace/>;
 
 	return (
-		<div>
+		<div className="text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg">
 			<StatsHeader
 				username={
 					viewedUserId === user?.id

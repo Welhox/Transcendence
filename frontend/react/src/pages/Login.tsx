@@ -92,7 +92,7 @@ const Login: React.FC = () => {
 
 			setAttempts(prev => prev + 1);
 
-			if (error.response?.status === 400) {
+			if (error.response?.status === 401) {
 				console.error('Invalid username or password');
 			} else {
 				console.log('Epic failure: ', response);
@@ -108,9 +108,8 @@ const Login: React.FC = () => {
 	const inputStyles = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 	
   return (
-    <div>
-      <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">Player Login</h1>
-      <div>
+    <div className="text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg">
+      <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-5 p-5">Player Login</h1>
 	  <form className="max-w-sm mx-auto" onSubmit={handleLogin} autoComplete="off">
 	  <div className="mb-5"><label className={labelStyles} htmlFor="username">Username:</label>
 	  <input className={inputStyles}
@@ -151,11 +150,11 @@ const Login: React.FC = () => {
 
 	  {error && <p style={{ color: 'red' }}>{error}</p>}
 
-	  <p className="m-5 text-center"><Link className="text-white bg-amber-700 hover:bg-amber-800 
+	  <p className="pt-3 pb-8 text-center"><Link className="text-white bg-amber-700 hover:bg-amber-800 
 						  focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold 
 						  rounded-lg text-sm w-full sm:w-auto px-11 py-3 mx-3 my-3 text-center
 						  dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-800"
-						  to="/forgotpassword">Forgot password</Link></p></div>
+						  to="/forgotpassword">Forgot password</Link></p>
     </div>
   )
 }

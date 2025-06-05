@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+main {
+  margin: 0;
+  background-image: url('../assets/skyline-2.jpg');
+  background-repeat: repeat-x;
+  background-size: auto 100%; /* 100% width, auto height to keep aspect ratio */
+  background-position: top left;
+}
 /* Starting from scratch for Tailwind utilization */
 /*
 :root {
@@ -8,7 +15,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(255, 255, 255, 0.87);	
   background-color: #242424;
 
   font-synthesis: none;
