@@ -54,9 +54,9 @@ fastify.post('/auth/otp/verify', { preHandler: authenticate }, async (request, r
 
 
   // check if the OTP is valid and not expired
-fastify.post('/auth/verify-otp', async (uest, reply) => {
+fastify.post('/auth/verify-otp', async (request, reply) => {
   
-  const temp = req.cookies.otpToken
+  const temp = request.cookies.otpToken
   if (!temp) {
     return reply.code(401).send({ error: 'Missing token'})
   }
@@ -72,7 +72,7 @@ fastify.post('/auth/verify-otp', async (uest, reply) => {
     return reply.code(401).send({ error: 'Unauthorized'})
   }
   
-  const { code } = req.body;
+  const { code } = request.body;
   const email = token.email
   const user = await prisma.user.findUnique({
     where: {email},
