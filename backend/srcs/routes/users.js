@@ -297,6 +297,23 @@ fastify.get('/users/allInfo', async (req, reply) => {
 		reply.send(user)
 	  })
 
+	  	// get user email verification information from JWT (username, id, email, emailVerified)
+	fastify.get('/users/emailStatus', { preHandler: authenticate }, async (req, reply) => {
+		const userId = req.user?.id; 
+		console.log('User ID from JWT:', userId);
+		// if (typeof userId !== 'number') {
+		// return reply.code(400).send({ error: 'Invalid or missing user ID' });
+		// }
+		const user = await prisma.user.findUnique({
+		  where: { id: Number(userId) },
+		  select: { email: true, emailVerified: true },
+		})
+		if (!user) {
+		  return reply.code(404).send({ error: 'User not found' })
+		}
+		reply.send(user)
+	  })
+
 	// get user information with username (username, id, email)
 	fastify.get('/users/username', { schema: getUserByUsernameSchema, preHandler: authenticate }, async (req, reply) => {
 		const { username } = req.query
@@ -459,6 +476,30 @@ fastify.get('/users/allInfo', async (req, reply) => {
 	} catch (err) {
 	  fastify.log.error(err);
 	  return reply.code(500).send({ error: 'Failed to update MFA status' });
+	}
+  });
+
+    //to update the email activation status, using the JWT TOKEN
+  fastify.post('/users/emailActivation', { preHandler: authenticate }, async (request, reply) => {
+	const { emailVerified } = request.body;
+  
+	// This should get the information from the JWT token
+	const userId = request.user?.id;
+  
+	if (typeof userId !== 'number' || typeof emailVerified !== 'boolean') {
+	  return reply.code(400).send({ error: 'Invalid input or missing authentication' });
+	}
+  
+	try {
+	  const updatedUser = await prisma.user.update({
+		where: { id: userId },
+		data: { emailVerified },
+	  });
+  
+	  reply.send({ message: 'Email activation status updated', emailVerified: updatedUser.emailVerified });
+	} catch (err) {
+	  fastify.log.error(err);
+	  return reply.code(500).send({ error: 'Failed to update email verification status' });
 	}
   });
 }

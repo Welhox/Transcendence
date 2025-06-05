@@ -63,10 +63,11 @@ async function makeOTP(userId) {
   }
 }
 
-export async function handleOtp(email) {
+export async function handleOtp( email ) {
   if (!email || typeof email !== 'string') {
     throw new Error('Email is missing, or invalid')
   }
+  console.log('handleOtp called with email:', email);
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -88,10 +89,14 @@ export async function handleOtp(email) {
         return { success: false}
       }
     } catch{}
+    console.log('STEP 1')
     const code = await makeOTP(userId);
-	  await sendOTP(email, code);
+    console.log('STEP 2')
 	  
-    return { sucess: true}
+    await sendOTP(email, code);
+    console.log('STEP 3')
+	  
+    return { success: true}
 	} catch (err) {
 	  throw new Error('Failed to send OTP')
 	}

@@ -68,6 +68,7 @@ const Settings: React.FC = () => {
 
 	//toggle mfa on/off
 	// send request to backend to update mfa status
+	//is a a guard against spamming otps needed?
 	const handle2FAToggle = async () => {
 		try {
 			// send request to backend to update 2FA status
@@ -77,11 +78,24 @@ const Settings: React.FC = () => {
 				setIs2FAEnabled(response.data.mfaInUse);
 				console.log("2FA toggled!");
 			}
-			else //show the Otp field to validate email
+			else //check if email is already validated and show the Otp field to validate email if not
 			{
-				setShowOtpField(true);
-				
-			}
+				const user = await axios.get(apiUrl + '/users/emailStatus', { withCredentials: true });
+				if (user.data.emailVerified === true) {
+					const response = await axios.post(apiUrl + '/auth/mfa', { mfaInUse: !is2FAEnabled }, { withCredentials: true });
+					setIs2FAEnabled(response.data.mfaInUse);
+					console.log("2FA toggled!");
+				} else {
+				// send otp to email
+				try {
+					await axios.post(apiUrl + '/auth/otp/send-otp', {}, { withCredentials: true });
+					setShowOtpField(true);
+				}
+				catch (error) {
+					console.error('Error sending OTP:', error);
+					alert('Failed to send OTP. Please try again later.');
+				}
+			}}
 		}
 		catch (error) {
 			console.error('Error updating 2FA status:', error);
@@ -123,8 +137,6 @@ const Settings: React.FC = () => {
 		}
 	}
 
-	// if (status === 'loading') return <p>Loading...</p>
-	// if (status === 'unauthorized') return <Navigate to="/" replace />;
 
 	return (
 		<div className="p-5 mt-5 text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg text-center dark:text-white">

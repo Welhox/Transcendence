@@ -24,14 +24,17 @@ const ConfirmOtpField: React.FC<Props> = ({apiUrl, otp, setOtp, setIs2FAEnabled,
 				onClick={async () => {
 					try {
 						// send request to backend to verify OTP
-						const response = await axios.post(apiUrl + '/auth/mfa/verify', { otp }, { withCredentials: true });
-						if (response.data.success) {
+						console.log("Verifying OTP:", otp);
+						const response = await axios.post(apiUrl + '/auth/otp/verify', { code: otp }, { withCredentials: true });
+						if (response.status === 200) {
+							// OTP verified successfully, enable 2FA
 							setIs2FAEnabled(true);
 							setShowOtpField(false);
 							setOtp('');
+							axios.post(apiUrl + '/users/emailActivation', { emailVerified: true}, { withCredentials: true });
 							console.log("OTP verified and 2FA enabled!");
 						} else {
-							alert("Invalid OTP. Please try again.");
+							alert("Invalid or expired OTP. Please try again.");
 						}
 					} catch (error) {
 						console.error('Error verifying OTP:', error);
