@@ -7,7 +7,6 @@ import SettingsField from '../components/SettingsField';
 import LanguageSelector from '../components/LanguageSelector';
 import ToggleSwitch from '../components/ToggleSwitch';
 import axios from 'axios';
-import { useEffect } from 'react';
 import ConfirmOtpField from '../components/ConfirmOtpField';
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
@@ -124,8 +123,8 @@ const Settings: React.FC = () => {
 		}
 	}
 
-	if (status === 'loading') return <p>Loading...</p>
-	if (status === 'unauthorized') return <Navigate to="/" replace />;
+	// if (status === 'loading') return <p>Loading...</p>
+	// if (status === 'unauthorized') return <Navigate to="/" replace />;
 
 	return (
 		<div className="p-5 mt-5 text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg text-center dark:text-white">
