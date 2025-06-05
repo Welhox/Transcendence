@@ -19,7 +19,7 @@ model User {
   username    String   @unique
   password    String
   email       String   @unique
-  mfaInUse    Boolean  @default(false) 
+  mfaInUse    Boolean  @default(false)
   OTP         Otp[]
   isActivated Boolean  @default(false)
   language    String   @default("en")
@@ -37,8 +37,11 @@ model User {
   sentFriendRequests     FriendRequest[] @relation("Sender")
   receivedFriendRequests FriendRequest[] @relation("Receiver")
 
-  friends	User[]	@relation("UserFriends") // Cascadng deletion not supported: needs manual deletion!!!
-  friendOf	User[]	@relation("UserFriends") // Cascadng deletion not supported: needs manual deletion!!!
+  friends  User[] @relation("UserFriends") // Cascadng deletion not supported: needs manual deletion!!!
+  friendOf User[] @relation("UserFriends") // Cascadng deletion not supported: needs manual deletion!!!
+
+  tournamentsCreated       Tournament[]            @relation("CreatedTournaments")
+  tournamentParticipations TournamentParticipant[]
 }
 
 model Otp {
@@ -64,17 +67,21 @@ model Match {
 
   player   User @relation("PlayerMatches", fields: [playerId], references: [id], onDelete: Cascade)
   opponent User @relation("OpponentMatches", fields: [opponentId], references: [id], onDelete: Cascade)
+
+  tournament   Tournament? @relation(fields: [tournamentId], references: [id])
+  tournamentId Int?
 }
+
 // what happens to a match data if one of the players who participated in the game gets deleted?
 
 model FriendRequest {
-  id			Int      @id @default(autoincrement())
-  sender		User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
-  senderId		Int
-  receiver		User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
-  receiverId	Int
-  status		String   @default("pending") // could be "pending", "accepted", "rejected"
-  createdAt		DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  sender     User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   Int
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId Int
+  status     String   @default("pending") // could be "pending", "accepted", "rejected"
+  createdAt  DateTime @default(now())
 }
 
 //model Post {
@@ -101,3 +108,25 @@ model FriendRequest {
 //  posts   Post[]
 //  profile Profile?
 //}
+
+model Tournament {
+  id           Int                     @id @default(autoincrement())
+  name         String
+  size         Int
+  createdById  Int
+  createdBy    User                    @relation("CreatedTournaments", fields: [createdById], references: [id])
+  createdAt    DateTime                @default(now())
+  matches      Match[]
+  participants TournamentParticipant[]
+  status       String // "waiting" | "in_progress" | "finished"
+}
+
+model TournamentParticipant {
+  id           Int        @id @default(autoincrement())
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int
+  user         User?      @relation(fields: [userId], references: [id])
+  userId       Int?
+  alias        String // for guests
+  joinedAt     DateTime   @default(now())
+}

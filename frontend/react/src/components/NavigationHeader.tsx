@@ -61,6 +61,7 @@ const NavigationHeader = ({ handleLogout, status, user }: NavigationHeaderProps)
 		<NavLink target='/' text='Home'/>
 		<NavLink target={`/stats/${user.id}`} text='My Stats'/>
 		<NavLink target='pongpals' text='Pong Pals'/>
+		<NavLink target='/tournaments' text='Tournaments'/>
 		<NavLink target='/settings' text='Settings'/>
 		<LogoutButton insideText="Logout" handler={onLogoutClick}></LogoutButton>
 	</nav>)}</>
