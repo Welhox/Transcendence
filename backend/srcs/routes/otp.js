@@ -3,6 +3,7 @@ import prisma from '../prisma.js'
 import bcryptjs from 'bcryptjs';
 import { handleOtp } from '../handleOtp.js';
 import { authenticate } from '../middleware/authenticate.js'
+import { authenticateOptional } from '../middleware/authenticateOptional.js';
 
 export async function otpRoutes(fastify, options) {
 
@@ -17,12 +18,7 @@ fastify.post('/auth/otp/verify', { preHandler: authenticate }, async (request, r
 
   const { code } = request.body;
   console.log('Verifying OTP for user ID:', userId, 'with code:', code);
-  // const user = await prisma.user.findUnique({
-  //   where: {email},
-  // });
-  // if (!user) {
-  //   return reply.code(404).send({ error: 'User not found' });
-  // }
+
   await new Promise(resolve => setTimeout(resolve, 1000))
   // const userId = user.id;
     const otp = await prisma.otp.findFirst({
@@ -143,12 +139,21 @@ fastify.post('/auth/verify-otp', async (uest, reply) => {
 
 
 
- // check if therre is a Otp and how long beofre a new one can be generated
-fastify.get('/auth/otp-wait-time', async (req, reply) => {
+ // check if there is a Otp and how long beofre a new one can be generated
+fastify.get('/auth/otp-wait-time', { preHandler: authenticateOptional },async (req, reply) => {
   const temp = req.cookies.otpToken
-  if (!temp) {
+  const userId = req.user?.id;
+
+  if (!temp && !userId) {
     return reply.code(401).send({ error: 'Missing token'})
   }
+  let otp;
+  if (userId) {
+    otp = await prisma.otp.findFirst({
+      where: { userId }
+    })
+  }
+  else {
   let token
   try {
     token = fastify.jwt.verify(temp);
@@ -157,9 +162,10 @@ fastify.get('/auth/otp-wait-time', async (req, reply) => {
     return reply.code(401).send({ error: 'Invalid or expired token'})
   }
   
-  const otp = await prisma.otp.findFirst({
+  otp = await prisma.otp.findFirst({
     where: { userId: token.id }
   })
+  }
   if (!otp) {
     return reply.send({ secondsLeft: 0 })
   }

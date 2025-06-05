@@ -37,7 +37,8 @@ export async function settingsRoutes(fastify, options) {
 			await prisma.user.update({
 				where: { id: userId },
 				data: { email: newValue.trim(),
-						isActivated: false,
+						emailVerified: false,
+						mfaInUse: false, // Reset MFA status on email change
 				 },
 			});
 

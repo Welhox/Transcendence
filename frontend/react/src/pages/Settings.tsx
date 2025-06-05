@@ -22,16 +22,17 @@ const Settings: React.FC = () => {
 	const [otp, setOtp] = useState('');
 	const [showOtpField, setShowOtpField] = useState(false);
 	
+	//this effect runs twice at the moment as it also triggers on email change
+	// this is because the email state is updated after fetching user settings
+	// the email state is needed for updating the is2FAEnabled state upon email change
 	useEffect(() => {
 		// Fetch user settings from the backend
 		const fetchUserSettings = async () => {
 			try {
 				const response = await axios.get(apiUrl + '/users/settings', { withCredentials: true });
 				console.log('RESPONSE:', response.data);
-				console.log('RESPONSE:', response.data);
 				setEmail(response.data.email);
 				setLanguage(response.data.language);
-				setIs2FAEnabled(response.data.mfaInUse);
 				setIs2FAEnabled(response.data.mfaInUse);
 			} catch (error) {
 				console.error('Error fetching user settings:', error);
@@ -40,7 +41,7 @@ const Settings: React.FC = () => {
 		if (status === 'authorized') {
 			fetchUserSettings();
 		}
-	}, [status]);
+	}, [status, email]);
 
 	if (status === 'loading') return <p>Loading...</p>
 	if (status === 'unauthorized') return <Navigate to="/" replace />;
@@ -88,8 +89,15 @@ const Settings: React.FC = () => {
 				} else {
 				// send otp to email
 				try {
+					const response = await axios.get(apiUrl + '/auth/otp-wait-time',  { withCredentials: true})
+					const waitTime = response.data.secondsLeft
+					
+					if( waitTime > 0) {
+						alert(`Please wait ${waitTime} seconds before requesting a new OTP.`);
+					} else {
 					await axios.post(apiUrl + '/auth/otp/send-otp', {}, { withCredentials: true });
 					setShowOtpField(true);
+					}
 				}
 				catch (error) {
 					console.error('Error sending OTP:', error);
