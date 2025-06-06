@@ -16,7 +16,7 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ status, user }) => {
 
 	return (
-		<div className="text-center">
+		<div className="text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg my-5">
 			<div className="flex justify-center">
 				<PongGameWithRegistration />
 			</div>

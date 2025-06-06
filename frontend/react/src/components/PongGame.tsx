@@ -256,8 +256,8 @@ const PongGame: React.FC<PongGameProps> = ({ player1, player2 }) => {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-        <span style={{ color: '#fff' }}>{player1.username}</span>
-        <span style={{ color: '#fff' }}>{player2.username}</span>
+        <span className="dark:text-white text-black">{player1.username}</span>
+        <span className="dark:text-white text-black">{player2.username}</span>
       </div>
       <canvas
         ref={canvasRef}

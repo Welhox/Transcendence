@@ -34,7 +34,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center w-full">
+    <form onSubmit={handleSubmit} className="flex flex-col items-center w-full bg-white dark:bg-black dark:text-teal-200">
       <label className="mb-2 font-bold">{label}</label>
       <input
         className="mb-2 p-2 border rounded w-48"
