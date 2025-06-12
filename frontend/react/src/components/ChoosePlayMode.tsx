@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PongGameWithRegistration from "./PongGameWithRegistration";
+import TournamentBuilder from "./TournamentBuilder";
 
 const ChoosePlayMode = () => {
   const [selectedMode, setSelectedMode] = useState<string | null>(null);
@@ -16,33 +17,47 @@ const ChoosePlayMode = () => {
   };
 
   const handleTwoPlayer = () => {
-	setSelectedMode("two-player-single-game");
-  }
+    setSelectedMode("two-player-single-game");
+  };
 
   const handleCreateTournament = () => {
-	setSelectedMode("create-tournament");
-  }
+    setSelectedMode("create-tournament");
+  };
 
   const handleJoinTournament = () => {
-	setSelectedMode("join-tournament");
+    setSelectedMode("join-tournament");
+  };
+
+  if (selectedMode === "two-player-single-game") {
+    return <PongGameWithRegistration />;
+  } else if (selectedMode === "create-tournament") {
+    return <TournamentBuilder />;
+  } else if (selectedMode === "single-player") {
+    return (
+      <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">
+        Single player mode will live here someday
+      </h1>
+    );
   }
   return (
     <div>
-      {selectedMode  === 'two-player-single-game' ? (
-        <PongGameWithRegistration />
-      ) : (
-        <div>
-          <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">
-            Choose Play Mode
-          </h1>
-          <div className="flex">
-            <button className={buttonStyles} onClick={handleSinglePlayer}>Single Player vs AI</button>
-            <button className={buttonStyles} onClick={handleTwoPlayer}>2 Player Single Game</button>
-            <button className={buttonStyles} onClick={handleCreateTournament}>Create Tournament</button>
-            {/* <button className={buttonStyles} onClick={handleJoinTournament}>Join Tournament</button> */}
-          </div>
+      <div>
+        <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">
+          Choose Play Mode
+        </h1>
+        <div className="flex">
+          <button className={buttonStyles} onClick={handleSinglePlayer}>
+            Single Player vs AI
+          </button>
+          <button className={buttonStyles} onClick={handleTwoPlayer}>
+            2 Player Single Game
+          </button>
+          <button className={buttonStyles} onClick={handleCreateTournament}>
+            Create Tournament
+          </button>
+          {/* <button className={buttonStyles} onClick={handleJoinTournament}>Join Tournament</button> */}
         </div>
-      )}
+      </div>
     </div>
   );
 };
