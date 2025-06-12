@@ -14,7 +14,7 @@ const TournamentBuilder = () => {
 
   const PlayerInput = ({ playerNumber }) => {
     return (
-      <div className="flex p-5 mt-5 text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg dark:text-white">
+      <div className="p-5 text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg dark:text-white">
         <label htmlFor={playerNumber}>Player {playerNumber.toString()}: </label>
         <input id={playerNumber} className={inputStyles} />
       </div>
@@ -23,6 +23,9 @@ const TournamentBuilder = () => {
   const handlePlayers = (players: number) => {
     // <input className={inputStyles}></input>;
     setPlayerCount(players);
+  };
+  const handleCreateTournament = () => {
+    console.log(`Let's make a tournament`);
   };
 
   if (playerCount === 0)
@@ -43,14 +46,21 @@ const TournamentBuilder = () => {
     );
   else
     return (
-      <div>
+      <div className="flex flex-col">
         <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">
           Create Tournament
         </h1>
-
-        {Array.from({ length: playerCount }, (element, index) => (
-          <PlayerInput playerNumber={index + 1} key={index} />
-        ))}
+        <p className="dark:text-white">
+          Enter the usernames of all tournament participants.
+        </p>
+        <form className="flex flex-col">
+          {Array.from({ length: playerCount }, (element, index) => (
+            <PlayerInput playerNumber={index + 1} key={index} />
+          ))}
+          <button className={buttonStyles} type="submit">
+            Create Tournament
+          </button>
+        </form>
       </div>
     );
 };
