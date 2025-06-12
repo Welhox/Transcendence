@@ -7,7 +7,9 @@
     "start": "node ./srcs/index.js",
     "dev": "npx prisma db push && NODE_ENV=development nodemon ./srcs/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "lint": "eslint ./srcs --ext .js",
+    "check": "node check-startup.js"
   },
   "prisma": {
     "seed": "node srcs/seed.js"
@@ -33,6 +35,10 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "eslint": "^9.28.0",
+    "@eslint/js": "^9.0.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.2.0",
     "nodemon": "^3.1.9",
     "prisma": "^6.9.0"
   }

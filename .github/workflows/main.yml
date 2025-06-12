@@ -1,0 +1,60 @@
+name: Docker Compile Check + Lint
+
+on:
+  push:     # All branches
+  pull_request:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y make docker-compose openssl
+
+    - name: Generate SSL and JWT Secret
+      run: make ssl jwt-secret
+
+    - name: Build Docker containers
+      run: make all
+
+    - name: Wait for services to start
+      run: sleep 10
+
+    - name: Check frontend build
+      id: frontend
+      run: |
+        set +e
+        docker exec --workdir /var/www/html frontend npm run build
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+        set -e
+
+    - name: Run backend ESLint
+      id: backend
+      run: |
+        set +e
+        docker exec --workdir /backend backend npx eslint ./srcs
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+        set -e
+
+    - name: ❌ Fail job if frontend or backend failed
+      run: |
+        FRONTEND_CODE=${{ steps.frontend.outputs.exit_code }}
+        BACKEND_CODE=${{ steps.backend.outputs.exit_code }}
+        echo "Frontend exit code: $FRONTEND_CODE"
+        echo "Backend exit code: $BACKEND_CODE"
+
+        if [ "$FRONTEND_CODE" -ne 0 ] || [ "$BACKEND_CODE" -ne 0 ]; then
+          echo "❌ One or more checks failed."
+          exit 1
+        else
+          echo "✅ All checks passed."
+        fi
+
+
+    - name: Shutdown containers
+      if: always()
+      run: make down

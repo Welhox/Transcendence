@@ -3,8 +3,12 @@
 # # Exit immediately if a command fails
 # set -e
 
+# echo "Installing dependencies..."
+# npm install
+
 echo "Installing dependencies..."
-npm install
+npm install --include=dev
+
 
 # echo "Rebuilding sqlite3 from source (if needed)..."
 # npm install --build-from-source sqlite3
