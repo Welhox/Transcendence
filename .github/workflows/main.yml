@@ -36,9 +36,12 @@ jobs:
       id: backend
       run: |
         set +e
-        docker exec --workdir /backend backend npx eslint ./srcs
+        echo "Running ESLint on backend..."
+        docker exec --workdir /backend backend npx eslint ./srcs --ext .js,.ts > eslint_output.log 2>&1
+        cat eslint_output.log
         echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
+
 
     - name: ❌ Fail job if frontend or backend failed
       run: |
