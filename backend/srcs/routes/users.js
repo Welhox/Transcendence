@@ -59,7 +59,7 @@ export async function userRoutes(fastify, options) {
 					path: '/',
 					maxAge: 5 * 60,
 				})
-				return reply.code(200).send({ message: 'MFA still required', mfaRequired: true })
+				return reply.code(200).send({ message: 'MFA still required', mfaRequired: true, language: user.language || 'en' })
 			} catch(error) {return reply.code(401).send({ error: 'Invalid email for mfa' })}
 		}
 		//credentials are valid, so we can create a JWT token
@@ -82,7 +82,7 @@ export async function userRoutes(fastify, options) {
 				maxAge: 60 * 60, // 1 hour in seconds, same as JWT expiration
 		})
 		// send response with without token (token is in the cookie)
-		return reply.code(200).send({message: 'Login successful'});
+		return reply.code(200).send({message: 'Login successful', language: user.language || 'en' });
 		} catch (error) {return reply.code(500).send({ error: 'Internal server error' });}
 	});
 

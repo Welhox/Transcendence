@@ -88,19 +88,20 @@ const Login: React.FC = () => {
 			});
 
 			const data = response.data;
-			console.log('Login response: ', data);
-			if (data.mfaRequired) {
-				navigate('/mfa');
-				return;	
-			}
 			const userLang = response.data.language ?? 'en';
 
     		// Change language immediately
     		if (i18n.language !== userLang) {
-      			i18n.changeLanguage(userLang);
+      			await i18n.changeLanguage(userLang);
       			localStorage.setItem('language', userLang);
     		}
+			
+			if (data.mfaRequired) {
+				navigate('/mfa');
+				return;	
+			}
 			console.log('Login successful: ', response.data);
+
 			await refreshSession();
 			setAttempts(0);
 			return;

@@ -136,5 +136,20 @@
   	},
 	"statsHeader": {
 		"back": "Back"
-	}
+	},
+	
+  	"mfa": {
+		"heading": "Multi-Factor Authentication",
+		"otpLabel": "OTP",
+		"verify": "Verify",
+		"verifying": "Verifying...",
+		"loading": "Loading...",
+		"resend": "Resend OTP",
+		"invalidOtp": "Invalid OTP. Please try again.",
+		"otpExpired": "OTP expired. Please request a new one.",
+		"generalError": "An error occurred. Please try again later.",
+		"otpResent": "OTP has been resent. Please check your email.",
+		"resendError": "An error occurred while resending the OTP. Please try again later.",
+		"waitTime": "Please wait {{count}} seconds before requesting a new OTP."
+  }
 }

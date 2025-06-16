@@ -136,5 +136,20 @@
   	},
 	"statsHeader": {
 		"back": "Takaisin"
-	}
+	},
+	"mfa": {
+		"heading": "Monivaiheinen todennus",
+		"otpLabel": "Kertakäyttökoodi (OTP)",
+		"verify": "Vahvista",
+		"verifying": "Vahvistetaan...",
+		"resend": "Lähetä uusi OTP",
+		"invalidOtp": "Virheellinen OTP. Yritä uudelleen.",
+		"otpExpired": "OTP on vanhentunut. Pyydä uusi koodi.",
+		"tryAgainError": "Tapahtui virhe. Yritä myöhemmin uudelleen.",
+		"generalError": "Tapahtui virhe",
+		"otpResent": "OTP on lähetetty uudelleen. Tarkista sähköpostisi.",
+		"resendError": "Virhe OTP:n uudelleenlähetyksessä. Yritä myöhemmin uudelleen.",
+		"waitTime": "Odota {{count}} sekuntia ennen uuden OTP:n pyytämistä.",
+		"loading": "Ladataan..."
+  	}	
 }
