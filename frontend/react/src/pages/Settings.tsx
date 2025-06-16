@@ -119,7 +119,7 @@ const Settings: React.FC = () => {
 			const formData = new FormData();
 			formData.append("file", file);
 
-			const res = await axios.post(apiUrl + '/user/profile-pic', formData, {
+			/* const res =  */await axios.post(apiUrl + '/user/profile-pic', formData, {
 				withCredentials: true,
 			});
 

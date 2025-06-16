@@ -53,7 +53,7 @@ function drawSevenSegment(ctx: CanvasRenderingContext2D, digit: number, x: numbe
 const PongGame: React.FC<PongGameProps> = ({ player1, player2 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const keysPressed = useRef<Record<string, boolean>>({});
-  const [score, setScore] = useState({ left: 0, right: 0 });
+  const [_score, setScore] = useState({ left: 0, right: 0 }); //score renamed to _score until it is used somewhere for linter
   const [winner, setWinner] = useState<string | null>(null);
   const [restartKey, setRestartKey] = useState(0);
 

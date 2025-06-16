@@ -22,7 +22,7 @@ const Register: React.FC = () => {
   });
 
   const [errorMessage, setErrorMsg] = useState<string>(""); // custom error message
-  const fileInputRef = useRef<HTMLInputElement>(null); // to reset input
+  // const fileInputRef = useRef<HTMLInputElement>(null); // to reset input
   const liveRegionRef = useRef<HTMLDivElement>(null);
   const [liveMessage, setLiveMessage] = useState<string | null>(null); // for screen reader aria announcements
   useEffect(() => {

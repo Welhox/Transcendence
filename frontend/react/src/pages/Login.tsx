@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../auth/AuthProvider';
 import i18n from '../i18n';
@@ -11,12 +11,13 @@ const COOLDOWN_SECONDS = 30;
 
 const isValidUsername = (username: string) => /^[a-zA-Z0-9]{2,20}$/.test(username);
 
-const isValidPassword = (password: string) => {
-	const pwdValidationRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-	const lengthOK = password.length >= 8 && password.length <= 42;
-	const matchesSpecs = pwdValidationRegex.test(password);
-	return lengthOK && matchesSpecs;
-};
+// enable for production
+// const isValidPassword = (password: string) => {
+// 	const pwdValidationRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+// 	const lengthOK = password.length >= 8 && password.length <= 42;
+// 	const matchesSpecs = pwdValidationRegex.test(password);
+// 	return lengthOK && matchesSpecs;
+// };
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState('');
@@ -27,7 +28,6 @@ const Login: React.FC = () => {
 	//const [sessionExpired, setSessionExpired] = useState(false);
 
 	const navigate = useNavigate();
-	//const location = useLocation();
 	const { status, refreshSession } = useAuth();
 
 	/* useEffect(() => {

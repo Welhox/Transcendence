@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { User, AuthContextType } from '../auth/AuthProvider';
-import NavigationHeader from '../components/NavigationHeader';
-import PongGame from '../components/PongGame';
+import { AuthContextType } from '../auth/AuthProvider';
 import PongGameWithRegistration from '../components/PongGameWithRegistration';
 
 import { useTranslation } from 'react-i18next';

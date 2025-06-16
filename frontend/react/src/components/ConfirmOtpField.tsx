@@ -1,4 +1,3 @@
-import react from "react";
 import axios from "axios";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";

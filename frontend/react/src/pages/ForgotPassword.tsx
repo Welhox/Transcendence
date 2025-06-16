@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 import { useTranslation } from 'react-i18next';
-
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 const ForgotPassword: React.FC = () => {
 	const [email, setEmail] = useState('');

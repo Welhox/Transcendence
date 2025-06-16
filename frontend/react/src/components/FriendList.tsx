@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Friend } from "../types/friend";
 import { useTranslation } from "react-i18next";
 
-const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
+// const apiUrl = import.meta.env.VITE_API_BASE_URL || 'api';
 
 type FriendListProps = {
 	friends: Friend[];
