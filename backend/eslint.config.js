@@ -7,6 +7,8 @@ export default [
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
+        console: 'readonly',
+        setTimeout: 'readonly',
         process: 'readonly',
         __dirname: 'readonly',
       },
