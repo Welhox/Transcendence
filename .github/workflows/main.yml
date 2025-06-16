@@ -40,19 +40,22 @@ jobs:
         echo "Checking if backend container is responsive..."
         set +e
         for i in {1..10}; do
-          docker exec backend curl -s -f http://localhost:3000/ping && success=true && break
+          docker exec backend node -e "http.get('http://localhost:3000/ping', res => { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', () => process.exit(1));"
+          if [ $? -eq 0 ]; then
+            echo "✅ Backend is responsive"
+            echo "exit_code=0" >> $GITHUB_OUTPUT
+            break
+          fi
           echo "Backend not responding yet... ($i/10)"
           sleep 2
         done
-        if [ "$success" != "true" ]; then
+        if [ "$i" -eq 10 ]; then
           echo "❌ Backend did not become responsive in time."
           echo "exit_code=1" >> $GITHUB_OUTPUT
           exit 1
-        else
-          echo "✅ Backend is responsive"
-          echo "exit_code=0" >> $GITHUB_OUTPUT
         fi
         set -e
+
 
 
 
