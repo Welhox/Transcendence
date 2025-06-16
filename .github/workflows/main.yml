@@ -40,21 +40,20 @@ jobs:
         echo "Checking if backend container is responsive..."
         set +e
         for i in {1..10}; do
-          docker exec backend node -e "require('http').get('http://localhost:3000/ping', res => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
-          if [ $? -eq 0 ]; then
-            echo "✅ Backend is responsive"
-            echo "exit_code=0" >> $GITHUB_OUTPUT
-            break
-          else
-            echo "Backend not responding yet... ($i/10)"
-            sleep 2
-          fi
+          docker exec backend curl -s -f http://localhost:3000/ping && success=true && break
+          echo "Backend not responding yet... ($i/10)"
+          sleep 2
         done
-        if [ "$i" -eq 10 ]; then
+        if [ "$success" != "true" ]; then
           echo "❌ Backend did not become responsive in time."
           echo "exit_code=1" >> $GITHUB_OUTPUT
+          exit 1
+        else
+          echo "✅ Backend is responsive"
+          echo "exit_code=0" >> $GITHUB_OUTPUT
         fi
         set -e
+
 
 
     # ✅ Backend ESLint check (run regardless of backend health)
