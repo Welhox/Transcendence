@@ -39,7 +39,7 @@ jobs:
       run: |
         echo "Waiting for backend to become responsive..."
         for i in {1..10}; do
-          if curl -sSf https://localhost:3000/health > /dev/null; then
+          if curl -sSf http://localhost:3000/ping > /dev/null; then
             echo "✅ Backend is up!"
             echo "exit_code=0" >> $GITHUB_OUTPUT
             exit 0

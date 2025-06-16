@@ -17,6 +17,11 @@ content-type: application/json
 
 
 ###
+//ping the server to see if it is running
+//this should return a 200 OK response
+GET http://localhost:3000/ping HTTP/1.1
+
+###
 
 //SHOW WHOLE DATABASE
 GET http://localhost:3000/users/allInfo HTTP/1.1

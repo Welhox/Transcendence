@@ -80,7 +80,7 @@ const start = async () => {
       console.warn("⚠️ Seeding skipped or failed gracefully:", err.message);
     }
 
-    fastify.get('/health', async () => {
+    fastify.get('/ping', async (request, reply) => {
       return { status: 'ok' };
     });
 
