@@ -32,7 +32,7 @@ jobs:
         echo "exit_code=$?" >> $GITHUB_OUTPUT
         set -e
 
-    - name: Run backend ESLint
+    - name: Run backend build + ESLint
       id: backend
       run: |
         echo "Running ESLint on backend..."
@@ -44,7 +44,7 @@ jobs:
 
 
 
-    - name: ❌ Fail job if frontend or backend failed
+    - name: Check for errors
       run: |
         FRONTEND_CODE=${{ steps.frontend.outputs.exit_code }}
         BACKEND_CODE=${{ steps.backend.outputs.exit_code }}

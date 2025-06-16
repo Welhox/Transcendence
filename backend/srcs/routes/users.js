@@ -4,7 +4,7 @@ import { userSchemas } from "../schemas/userSchemas.js";
 import { authenticate } from "../middleware/authenticate.js";
 import { handleOtp } from "../handleOtp.js";
 
-export async function userRoutes(fastify, options) {
+export async function userRoutes(fastify, _options) {
   const rateLimitConfig = {
     config: {
       rateLimit: {
@@ -133,7 +133,7 @@ export async function userRoutes(fastify, options) {
           .send({ message: "Logged out" });
       } catch (error) {
         console.error("Logout error:", error);
-        if (err.code === "P2025")
+        if (error.code === "P2025")
           return reply.code(404).send({ error: "User not found" });
         return reply.code(500).send({ error: "Internal server error" });
       }
