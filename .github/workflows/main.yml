@@ -35,12 +35,12 @@ jobs:
     - name: Run backend ESLint
       id: backend
       run: |
-        set +e
         echo "Running ESLint on backend..."
-        docker exec --workdir /backend backend sh -c "npx eslint ./srcs --ext .js,.ts" > eslint_output.log 2>&1
+        set +e
+        docker exec --workdir /backend backend sh -c "npx eslint ./srcs --ext .js,.ts > eslint_output.log 2>&1; exit_code=\$?; cat eslint_output.log; exit \$exit_code"
         echo "exit_code=$?" >> $GITHUB_OUTPUT
-        cat eslint_output.log
         set -e
+
 
 
 
