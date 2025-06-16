@@ -236,7 +236,7 @@ export async function userRoutes(fastify, _options) {
         });
         return reply.code(200).send({ message: "User deleted successfully" });
       } catch (err) {
-        console.log("Error deleting user:", err);
+        // console.log("Error deleting user:", err);
         if (err.code === "P2025") {
           return reply.code(404).send({ error: "User not found" }); //should maybe be 409
         }
