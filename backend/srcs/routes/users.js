@@ -133,7 +133,7 @@ export async function userRoutes(fastify, options) {
           .send({ message: "Logged out" });
       } catch (error) {
         console.error("Logout error:", error);
-        if (error.code === "P2025")
+        if (err.code === "P2025")
           return reply.code(404).send({ error: "User not found" });
         return reply.code(500).send({ error: "Internal server error" });
       }
