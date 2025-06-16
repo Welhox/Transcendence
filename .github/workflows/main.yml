@@ -21,6 +21,10 @@ jobs:
     - name: Build Docker containers
       run: make all
 
+    - name: Debug backend container logs
+      run: docker logs backend || true
+
+
     - name: Wait for services to start
       run: sleep 10
 
