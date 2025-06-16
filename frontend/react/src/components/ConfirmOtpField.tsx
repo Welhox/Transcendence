@@ -43,6 +43,11 @@ const ConfirmOtpField: React.FC<Props> = ({
           { emailVerified: true },
           { withCredentials: true }
         );
+        axios.post(
+          apiUrl + "/auth/mfa",
+          { mfaInUse: true },
+          { withCredentials: true }
+        );
         setError(t("confirmOtp.email_verified_success"));
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
         setError(""); // Clear the error message after 2 seconds

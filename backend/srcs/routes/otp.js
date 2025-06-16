@@ -45,8 +45,8 @@ export async function otpRoutes(fastify, options) {
         id: otp.id,
       },
     });
-
     reply.code(200).send({ message: 'OTP verified!' });
+
   } catch (err) {
     fastify.log.error(err);
     reply.code(500).send({ error: 'Failed to verify OTP' });
