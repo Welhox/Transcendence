@@ -35,8 +35,8 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "eslint": "^9.28.0",
     "@eslint/js": "^9.0.0",
+    "eslint": "^9.28.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.2.0",
     "nodemon": "^3.1.9",

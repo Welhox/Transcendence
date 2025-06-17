@@ -18,12 +18,14 @@ const ConfirmOtpField: React.FC<Props> = ({
   setIs2FAEnabled,
   setShowOtpField,
 }) => {
-  const [error, setError] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [isError, setIsError] = useState<boolean>(true);
   const { t } = useTranslation();
 
   const handleSubmit = async () => {
     if (otp.length !== 6) {
-      setError(t("confirmOtp.invalid_otp_format"));
+      setIsError(true);
+      setMessage(t("confirmOtp.invalid_otp_format"));
       return;
     }
     try {
@@ -43,17 +45,25 @@ const ConfirmOtpField: React.FC<Props> = ({
           { emailVerified: true },
           { withCredentials: true }
         );
-        setError(t("confirmOtp.email_verified_success"));
+        axios.post(
+          apiUrl + "/auth/mfa",
+          { mfaInUse: true },
+          { withCredentials: true }
+        );
+        setIsError(false);
+        setMessage(t("confirmOtp.email_verified_success"));
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
-        setError(""); // Clear the error message after 2 seconds
+        setMessage(""); // Clear the message after 2 seconds
         setShowOtpField(false);
         console.log("OTP verified and 2FA enabled!");
       } else {
-        setError(t("confirmOtp.otp_invalid"));
+        setIsError(true);
+        setMessage(t("confirmOtp.otp_invalid"));
       }
-    } catch (error) {
-      setError(t("confirmOtp.otp_invalid"));
-      // console.error('Error verifying OTP:', error);
+    } catch (message) {
+      setIsError(true);
+      setMessage(t("confirmOtp.otp_invalid"));
+      // console.error('error verifying OTP:', error);
     }
   };
   const inputStyles =
@@ -81,8 +91,7 @@ const ConfirmOtpField: React.FC<Props> = ({
         className={inputStyles}
       />
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-
+      {message && (<p className={isError ? "text-red-500 mt-2" : "text-green-500 mt-2"}>{message}</p>)}
       <button className={buttonStyles} onClick={handleSubmit}>
         {t("confirmOtp.confirm")}
       </button>

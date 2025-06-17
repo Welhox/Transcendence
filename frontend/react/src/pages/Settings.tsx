@@ -93,12 +93,12 @@ const Settings: React.FC = () => {
 				try {
 					const response = await axios.get(apiUrl + '/auth/otp-wait-time',  { withCredentials: true})
 					const waitTime = response.data.secondsLeft
+					setShowOtpField(true);
 					
 					if( waitTime > 0) {
 						alert(`Please wait ${waitTime} seconds before requesting a new OTP.`);
 					} else {
 					await axios.post(apiUrl + '/auth/otp/send-otp', {}, { withCredentials: true });
-					setShowOtpField(true);
 					}
 				}
 				catch (error) {

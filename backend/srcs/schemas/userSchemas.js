@@ -313,7 +313,7 @@ const loginUserSchema = {
 	required: ['username', 'password']
   },
   response: {
-	200: { type: 'object', properties: { message: { type: 'string' }, mfaRequired: { type: 'boolean' }}},
+	200: { type: 'object', properties: { message: { type: 'string' }, mfaRequired: { type: 'boolean' }, language: { type: 'string'}}},
 	400: { type: 'object', properties: { error: { type: 'string' }}},
 	401: { type: 'object', properties: { error: { type: 'string' }}},
 	500: { type: 'object', properties: { error: { type: 'string' }}}

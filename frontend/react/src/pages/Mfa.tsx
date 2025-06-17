@@ -2,6 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../auth/AuthProvider";
+import { useTranslation } from 'react-i18next';
+import i18n from "../i18n"; // make sure this is imported
+
+
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || "api";
 
@@ -13,6 +17,7 @@ const Mfa: React.FC = () => {
   const { status, refreshSession } = useAuth();
   const liveRegionRef = useRef<HTMLDivElement>(null);
   const [liveMessage, setLiveMessage] = useState<string | null>(null); // for screen reader aria announcements
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (status === "authorized") {
@@ -35,7 +40,7 @@ const Mfa: React.FC = () => {
     }
   }, [error]);
 
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <p>{t("mfa.loading")}</p>;
 
   // sends post request to server for credential validation
   const handleMfaSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -61,14 +66,14 @@ const Mfa: React.FC = () => {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         if (error.response.status === 401) {
-          setError("Invalid OTP. Please try again.");
+          setError(t("mfa.invalidOtp"));
         } else if (error.response.status === 403) {
-          setError("OTP expired. Please request a new one.");
+          setError(t("mfa.otpExpired"));
         } else {
-          setError("An error occurred. Please try again later.");
+          setError(t("mfa.tryAgainError"));
         }
       } else {
-        setError("An error occurred");
+        setError(t("mfa.generalError"));
       }
     } finally {
       setIsLoading(false);
@@ -86,7 +91,7 @@ const Mfa: React.FC = () => {
 
       if (waitTime > 0) {
         setError(
-          `Please wait ${waitTime} seconds before requesting a new OTP.`
+          (t("mfa.waitTime", { count: waitTime }))
         );
       } else {
         await axios.post(
@@ -94,12 +99,12 @@ const Mfa: React.FC = () => {
           {},
           { withCredentials: true }
         );
-        setError("OTP has been resent. Please check your email.");
+        setError(t("mfa.otpResent"));
       }
     } catch (error) {
       console.error("Error resending OTP:", error);
       setError(
-        "An error occurred while resending the OTP. Please try again later."
+        t("mfa.resendError")
       );
     } finally {
       setIsLoading(false);
@@ -115,7 +120,7 @@ const Mfa: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center my-5 max-w-2xl bg-white text-center dark:bg-black mx-auto rounded-lg">
       <h1 className="text-6xl m-4 text-teal-800 dark:text-teal-300">
-        Multi-Factor Authentication
+        {t("mfa.heading")}
       </h1>
       <form
         onSubmit={handleMfaSubmit}
@@ -126,7 +131,7 @@ const Mfa: React.FC = () => {
             htmlFor="code"
             className="text-md text-center text-teal-800 dark:text-teal-300 m-3"
           >
-            OTP
+            {t("mfa.otpLabel")}
           </label>
           <input
             type="text"
@@ -152,7 +157,7 @@ const Mfa: React.FC = () => {
         )}
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
         <button type="submit" className={buttonStyles} disabled={isLoading}>
-          {isLoading ? "Verifying..." : "Verify"}
+          {isLoading ? t("mfa.verifying") : t("mfa.verify")}
         </button>
         <button
           onClick={handleResendOtp}
@@ -160,10 +165,11 @@ const Mfa: React.FC = () => {
           className={buttonStyles}
           disabled={isLoading}
         >
-          Resend OTP
+           {t("mfa.resend")}
         </button>
       </form>
     </div>
   );
 };
+
 export default Mfa;
