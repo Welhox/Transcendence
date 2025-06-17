@@ -12,11 +12,14 @@ const TournamentBuilder = () => {
   const buttonStyles =
     "px-5 mx-3 py-5 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800";
 
-  const PlayerInput = ({ playerNumber }) => {
+  type PlayerInputProps = { playerNumber: number };
+  const PlayerInput = ({ playerNumber }: PlayerInputProps) => {
     return (
       <div className="p-5 text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg dark:text-white">
-        <label htmlFor={playerNumber}>Player {playerNumber.toString()}: </label>
-        <input id={playerNumber} className={inputStyles} />
+        <label htmlFor={playerNumber.toString()}>
+          Player {playerNumber.toString()}:{" "}
+        </label>
+        <input id={playerNumber.toString()} className={inputStyles} />
       </div>
     );
   };
