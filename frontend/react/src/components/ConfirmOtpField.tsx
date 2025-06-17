@@ -91,7 +91,11 @@ const ConfirmOtpField: React.FC<Props> = ({
         className={inputStyles}
       />
 
-      {message && (<p className={isError ? "text-red-500 mt-2" : "text-green-500 mt-2"}>{message}</p>)}
+      {message && (
+        <p className={isError ? "text-red-500 mt-2" : "text-green-500 mt-2"}>
+          {message}
+        </p>
+      )}
       <button className={buttonStyles} onClick={handleSubmit}>
         {t("confirmOtp.confirm")}
       </button>

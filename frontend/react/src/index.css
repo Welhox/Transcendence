@@ -2,7 +2,7 @@
 
 main {
   margin: 0;
-  background-image: url('../assets/skyline-2.jpg');
+  background-image: url("../assets/skyline-2.jpg");
   background-repeat: repeat-x;
   background-size: auto 100%; /* 100% width, auto height to keep aspect ratio */
   background-position: top left;

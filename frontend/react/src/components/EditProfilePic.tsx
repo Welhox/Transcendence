@@ -2,28 +2,31 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 interface ProfilePicProps {
-	pic: File | string | null;
-	onChange: (file: File | null) => void;
-	onSave?: (file: File | null) => void;
+  pic: File | string | null;
+  onChange: (file: File | null) => void;
+  onSave?: (file: File | null) => void;
 }
 
 function validateImageMagicBytes(file: File): Promise<boolean> {
-	return new Promise((resolve) => {
-		const reader = new FileReader();
-		reader.onloadend = () => {
-			const arr = new Uint8Array(reader.result as ArrayBuffer).subarray(0, 4);
-			const header = Array.from(arr).map(byte => byte.toString(16)).join('');
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const arr = new Uint8Array(reader.result as ArrayBuffer).subarray(0, 4);
+      const header = Array.from(arr)
+        .map((byte) => byte.toString(16))
+        .join("");
 
-			// JPEG: ff d8 ff e0 || ff d8 ff e1
-			if (header.startsWith("ffd8ffe0") || header.startsWith("ffd8ffe1")) return resolve(true);
+      // JPEG: ff d8 ff e0 || ff d8 ff e1
+      if (header.startsWith("ffd8ffe0") || header.startsWith("ffd8ffe1"))
+        return resolve(true);
 
-			// PNG: 89 50 4e 47
-			if (header === "89504e47") return resolve(true);
+      // PNG: 89 50 4e 47
+      if (header === "89504e47") return resolve(true);
 
-			return resolve(false);
-		};
-		reader.readAsArrayBuffer(file.slice(0, 4));
-	});
+      return resolve(false);
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4));
+  });
 }
 
 /*
@@ -33,7 +36,11 @@ won't display the erroneous filename next to Choose file button. Displays a prop
 picture file in the circle and changes will be committed only after user clicks Save.
 Allows only file types .jpg, .jpeg and .png. Max file size is limited to 2MB.
 */
-const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) => {
+const EditProfilePic: React.FC<ProfilePicProps> = ({
+  pic,
+  onChange,
+  onSave,
+}) => {
   const { t } = useTranslation();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [newPic, setNewPic] = useState<File | null>(null); // holds unconfirmed file
@@ -46,7 +53,7 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) =>
   const allowedTypes = ["image/jpeg", "image/png"];
   const maxSizeMB = 2;
 
-  // This is a workaround for an issue with voiceover moving focus to the wrong place 
+  // This is a workaround for an issue with voiceover moving focus to the wrong place
   // (to the entire website window) after exiting a native file upload dialog.
   useEffect(() => {
     if (error || success) {
@@ -66,21 +73,20 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) =>
     let url: string | null = null;
 
     if (newPic) {
-		url = URL.createObjectURL(newPic);
-	} else if (pic instanceof File) {
-		url = URL.createObjectURL(pic);
-	} else if (typeof pic === 'string') {
-		url = pic;
-	}
+      url = URL.createObjectURL(newPic);
+    } else if (pic instanceof File) {
+      url = URL.createObjectURL(pic);
+    } else if (typeof pic === "string") {
+      url = pic;
+    }
 
-	setPreviewUrl(url);
+    setPreviewUrl(url);
 
-	return () => {
-		if (newPic || pic instanceof File) {
-			URL.revokeObjectURL(url!);
-		}
-	};
-
+    return () => {
+      if (newPic || pic instanceof File) {
+        URL.revokeObjectURL(url!);
+      }
+    };
   }, [pic, newPic]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +95,7 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) =>
 
     const isValidType = allowedTypes.includes(file.type);
     const isValidSize = file.size <= maxSizeMB * 1024 * 1024;
-	const isValidContent = await validateImageMagicBytes(file);
+    const isValidContent = await validateImageMagicBytes(file);
 
     if (!isValidType) {
       setError(t("editProfilePic.onlyImages"));
@@ -98,24 +104,24 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) =>
       return;
     }
 
-	if (!isValidSize) {
-		setError(t("editProfilePic.fileTooLarge"));
-		setNewPic(null);
-		resetInput();
-		return;
-	}
+    if (!isValidSize) {
+      setError(t("editProfilePic.fileTooLarge"));
+      setNewPic(null);
+      resetInput();
+      return;
+    }
 
-	if (!isValidContent) {
-		setError(t("editProfilePic.notValidImage"));
-		setNewPic(null);
-		resetInput();
-		return;
-	}
+    if (!isValidContent) {
+      setError(t("editProfilePic.notValidImage"));
+      setNewPic(null);
+      resetInput();
+      return;
+    }
 
-	setError(null);
-	setNewPic(file);
-	console.log(file);
-	};
+    setError(null);
+    setNewPic(file);
+    console.log(file);
+  };
 
   const resetInput = () => {
     if (fileInputRef.current) {
@@ -123,21 +129,21 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) =>
     }
   };
 
-	const handleSave = async () => {
-		if (!newPic) return;
-		
-		try {
-			onChange(newPic); // updates parent state
-			await onSave?.(newPic); // triggers the actual upload
-			setNewPic(null);
-			setSuccess(true);
-			resetInput();
-			setTimeout(() => setSuccess(false), 2000); // clears after 2s
-		} catch (error) {
-			console.error("Failed to save profile picture:", error);
-			setError("Upload failed. Please try again.");
-		}
-	};
+  const handleSave = async () => {
+    if (!newPic) return;
+
+    try {
+      onChange(newPic); // updates parent state
+      await onSave?.(newPic); // triggers the actual upload
+      setNewPic(null);
+      setSuccess(true);
+      resetInput();
+      setTimeout(() => setSuccess(false), 2000); // clears after 2s
+    } catch (error) {
+      console.error("Failed to save profile picture:", error);
+      setError("Upload failed. Please try again.");
+    }
+  };
 
   return (
     <div className="max-w-sm flex flex-col justify-center items-center mx-auto">
@@ -183,7 +189,7 @@ const EditProfilePic: React.FC<ProfilePicProps> = ({ pic, onChange, onSave }) =>
           </span>
         )}
       </div>
-	  {/* This next part is a secret div, visible only to screen readers, which ensures that the error
+      {/* This next part is a secret div, visible only to screen readers, which ensures that the error
 	  or success messages get announced using aria. */}
       {liveMessage && (
         <div
