@@ -26,7 +26,7 @@ jobs:
 
 
     - name: Wait for services to start
-      run: sleep 10
+      run: sleep 30
 
     # ✅ Frontend build check
     - name: Check frontend build
