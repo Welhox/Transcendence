@@ -38,7 +38,8 @@ const Register: React.FC = () => {
     }
   }, [errorMessage]);
 
-  const usernameRegex = /^[a-zA-Z0-9]+$/;
+  const usernameRegex = /^[a-zA-Z0-9]{2,20}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const pwdValidationRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,42}$/;
   const navigate = useNavigate();
@@ -55,7 +56,12 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     if (!usernameRegex.test(signupData.username)) {
-      setErrorMsg("Username must contain only letters and numbers.");
+      setErrorMsg("Username must contain only letters and numbers and be between 2 and 20 characters long.");
+      return;
+    }
+
+    if (!emailRegex.test(signupData.email)) {
+      setErrorMsg("Email must be a valid email address.");
       return;
     }
 
