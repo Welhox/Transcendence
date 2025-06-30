@@ -102,7 +102,11 @@ const Register: React.FC = () => {
         Create an account
       </h1>
       <div>
-        <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
+        <form
+          className="max-w-sm mx-auto"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <div className="mb-5">
             <label className={labelStyles} htmlFor="username">
               Username:{" "}
@@ -116,8 +120,8 @@ const Register: React.FC = () => {
               onChange={handleChange}
               value={signupData.username}
               required
-              maxLength={20}
-              minLength={2}
+              maxLength={20} // no longer enforced by browser for accessibility reasons
+              minLength={2} // no longer enforced by browser for accessibility reasons
             />
           </div>
           <div className="mb-5">
@@ -133,7 +137,7 @@ const Register: React.FC = () => {
               onChange={handleChange}
               value={signupData.email}
               required
-              maxLength={42}
+              maxLength={42} // no longer enforced by browser for accessibility reasons 
             />
           </div>
           <div className="mb-5">
@@ -149,8 +153,8 @@ const Register: React.FC = () => {
               onChange={handleChange}
               value={signupData.password}
               required
-              maxLength={42}
-              minLength={8}
+              maxLength={42} // no longer enforced by browser for accessibility reasons
+              minLength={8} // no longer enforced by browser for accessibility reasons
             />
           </div>
           <div className="mb-5">
@@ -172,7 +176,7 @@ const Register: React.FC = () => {
           </div>
 
           {errorMessage && (
-            <p style={{ color: "red", marginTop: "8px" }}>{errorMessage}</p>
+            <p className="m-5 text-red-600 dark:text-red-500">{errorMessage}</p>
           )}
           {/* This next part is a secret div, visible only to screen readers, which ensures that the error
 	  or success messages get announced using aria. */}
