@@ -40,7 +40,7 @@ const Register: React.FC = () => {
 
   const usernameRegex = /^[a-zA-Z0-9]+$/;
   const pwdValidationRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,42}$/;
   const navigate = useNavigate();
 
   // saves data to the object
@@ -61,7 +61,7 @@ const Register: React.FC = () => {
 
     if (!pwdValidationRegex.test(signupData.password)) {
       setErrorMsg(
-        "Password must be at least 8 characters, including uppercase, lowercase, number and special character."
+        "Password must be at least 8 and no more than 42 characters, including at least one uppercase, lowercase, number and special character."
       );
       return;
     }
