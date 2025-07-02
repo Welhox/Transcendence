@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import api from '../api/axios';
-import { useAuth } from '../auth/AuthProvider';
-import i18n from '../i18n';
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../api/axios";
+import { useAuth } from "../auth/AuthProvider";
+import i18n from "../i18n";
 
 const MAX_ATTEMPTS = 5;
 const COOLDOWN_SECONDS = 30;
@@ -19,22 +19,22 @@ const isValidPassword = (password: string) => {
 };
 
 const Login: React.FC = () => {
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const [error, setError] = useState<string | null>(null);
-	const [attempts, setAttempts] = useState(0);
-	const [cooldown, setCooldown] = useState(0);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [attempts, setAttempts] = useState(0);
+  const [cooldown, setCooldown] = useState(0);
 
-	const navigate = useNavigate();
-	const { status, refreshSession } = useAuth();
+  const navigate = useNavigate();
+  const { status, refreshSession } = useAuth();
 
-	useEffect(() => {
-		let timer: ReturnType<typeof setTimeout>;
-		if (cooldown > 0) {
-			timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
-		}
-		return () => clearTimeout(timer);
-	}, [cooldown]);
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   useEffect(() => {
     if (status === "authorized") {
@@ -65,11 +65,15 @@ const Login: React.FC = () => {
 			return;
 		} */
 
-		let response
-		try {
-			response = await api.post('/users/login', { username, password }, {
-					headers: { "Content-Type": "application/json" }
-			});
+    let response;
+    try {
+      response = await api.post(
+        "/users/login",
+        { username, password },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
       const data = response.data;
       const userLang = response.data.language ?? "en";
@@ -95,6 +99,7 @@ const Login: React.FC = () => {
       setAttempts((prev) => prev + 1);
 
       if (error.response?.status === 401) {
+        setError("Invalid username or password");
         console.error("Invalid username or password");
       } else {
         console.log("Epic failure: ", response);
@@ -113,30 +118,46 @@ const Login: React.FC = () => {
 
   return (
     <div className="text-center max-w-2xl dark:bg-black bg-white mx-auto rounded-lg">
-      <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-5 p-5">Player Login</h1>
-	  <form className="max-w-sm mx-auto" onSubmit={handleLogin} autoComplete="off">
-	  <div className="mb-5"><label className={labelStyles} htmlFor="username">Username:</label>
-	  <input className={inputStyles}
-          type="text"
-		  id="username"
-          placeholder="Username"
-		  value={username}
-		  onChange={(e) => setUsername(e.target.value)}
-		  autoComplete="username"
-		  disabled={cooldown > 0}
-        /></div>
-		<div className="mb-5">
-		<label className={labelStyles} htmlFor="password">Password:</label>
-        <input className={inputStyles}
-          type="password"
-		  id="password"
-          placeholder="Password"
-		  value={password}
-		  onChange={(e) => setPassword(e.target.value)}
-		  autoComplete="current-password"
-		  disabled={cooldown > 0}
-        /></div>
-        <button className="block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
+      <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-5 p-5">
+        Player Login
+      </h1>
+      <form
+        className="max-w-sm mx-auto"
+        onSubmit={handleLogin}
+        autoComplete="off"
+      >
+        <div className="mb-5">
+          <label className={labelStyles} htmlFor="username">
+            Username:
+          </label>
+          <input
+            className={inputStyles}
+            type="text"
+            id="username"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoComplete="username"
+            disabled={cooldown > 0}
+          />
+        </div>
+        <div className="mb-5">
+          <label className={labelStyles} htmlFor="password">
+            Password:
+          </label>
+          <input
+            className={inputStyles}
+            type="password"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            disabled={cooldown > 0}
+          />
+        </div>
+        <button
+          className="block mx-auto my-5 px-20 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 
 								  focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full 
 								  sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700
 								  dark:focus:ring-teal-800"
@@ -146,12 +167,12 @@ const Login: React.FC = () => {
           {cooldown > 0 ? `Wait (${cooldown}s)` : "Login"}
         </button>
       </form>
-
+      {error && <p className="m-5 text-red-500">{error}</p>}
       <p className="text-amber-700 dark:text-amber-300 font-bold text-center mb-5">
         No account? <Link to="/register">Register here</Link>
       </p>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+     
 
       <p className="pt-3 pb-8 text-center">
         <Link
