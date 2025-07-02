@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL || "api";
 
@@ -56,7 +56,9 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     if (!usernameRegex.test(signupData.username)) {
-      setErrorMsg("Username must contain only letters and numbers and be between 2 and 20 characters long.");
+      setErrorMsg(
+        "Username must contain only letters and numbers and be between 2 and 20 characters long."
+      );
       return;
     }
 
@@ -96,6 +98,13 @@ const Register: React.FC = () => {
       return;
     } catch (error) {
       console.log(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 409) {
+          setErrorMsg(error.response.data.error);
+        } else {
+          setErrorMsg("An error occurred. Please try again.");
+        }
+      }
     }
   };
   const labelStyles =
@@ -108,11 +117,7 @@ const Register: React.FC = () => {
         Create an account
       </h1>
       <div>
-        <form
-          className="max-w-sm mx-auto"
-          onSubmit={handleSubmit}
-          noValidate
-        >
+        <form className="max-w-sm mx-auto" onSubmit={handleSubmit} noValidate>
           <div className="mb-5">
             <label className={labelStyles} htmlFor="username">
               Username:{" "}
@@ -143,7 +148,7 @@ const Register: React.FC = () => {
               onChange={handleChange}
               value={signupData.email}
               required
-              maxLength={42} // no longer enforced by browser for accessibility reasons 
+              maxLength={42} // no longer enforced by browser for accessibility reasons
             />
           </div>
           <div className="mb-5">

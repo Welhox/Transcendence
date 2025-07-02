@@ -185,9 +185,10 @@ export async function userRoutes(fastify, options) {
         // reply.send({ message: 'User added successfully' })
       } catch (err) {
         if (err.code === "P2002") {
+          const field = err.meta?.target?.[0];
           return reply
-            .code(400)
-            .send({ error: "Username or email already exists" }); //should maybe be 409
+            .code(409) // if code is other than 400, update userSchemas.js accordingly
+            .send({ error: `${field} already exists` }); //should maybe be 409
         }
         reply.code(500).send({ error: "Internal server error" });
       }
