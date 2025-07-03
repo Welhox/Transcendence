@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../auth/AuthProvider";
@@ -25,10 +25,18 @@ const Login: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [cooldown, setCooldown] = useState(0);
-
+  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const [liveMessage, setLiveMessage] = useState<string | null>(null); // for screen reader aria announcements
   const navigate = useNavigate();
   const { status, refreshSession } = useAuth();
 
+  useEffect(() => {
+     if (error || success) {
+      setLiveMessage(null); // force remount
+      setTimeout(() => {
+        setLiveMessage(success ? success : error);
+      }, 100);
+  }}, [error, success]);
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (cooldown > 0) {
@@ -169,6 +177,19 @@ const Login: React.FC = () => {
           {cooldown > 0 ? `Wait (${cooldown}s)` : "Login"}
         </button>
       </form>
+            {/* This next part is a secret div, visible only to screen readers, which ensures that the error
+	  or success messages get announced using aria. */}
+       {liveMessage && (
+        <div
+          ref={liveRegionRef}
+          tabIndex={-1}
+          aria-live="assertive"
+          aria-atomic="true"
+          className="sr-only"
+        >
+          {liveMessage}
+        </div>
+      )}
       {error && <p className="m-5 text-red-500">{error}</p>}
       {success && <p className="m-5 text-green-500">{success}</p>}
       <p className="text-amber-700 dark:text-amber-300 font-bold text-center mb-5">
