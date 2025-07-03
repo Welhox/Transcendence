@@ -22,6 +22,7 @@ const Login: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [cooldown, setCooldown] = useState(0);
 
@@ -38,7 +39,8 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (status === "authorized") {
-      navigate("/");
+        setSuccess("Login successful, redirecting to main page");
+        setTimeout(() => {navigate("/");}, 3000);
     }
   }, [status]);
 
@@ -168,6 +170,7 @@ const Login: React.FC = () => {
         </button>
       </form>
       {error && <p className="m-5 text-red-500">{error}</p>}
+      {success && <p className="m-5 text-green-500">{success}</p>}
       <p className="text-amber-700 dark:text-amber-300 font-bold text-center mb-5">
         No account? <Link to="/register">Register here</Link>
       </p>
