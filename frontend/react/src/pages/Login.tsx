@@ -50,7 +50,7 @@ const Login: React.FC = () => {
         setSuccess("Login successful, redirecting to main page");
         setTimeout(() => {navigate("/");}, 3000);
     }
-  }, [status]);
+  }, [navigate, status]);
 
   if (status === "loading") return <p>Loading...</p>;
 

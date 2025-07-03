@@ -9,6 +9,7 @@ import i18n from "../i18n"; // make sure this is imported
 const Mfa: React.FC = () => {
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { status, refreshSession } = useAuth();
@@ -17,25 +18,24 @@ const Mfa: React.FC = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (status === "authorized") {
-      navigate("/");
+        if (status === "authorized"){
+          setSuccess("Login successful, redirecting to main page");
+          setTimeout(() => {
+          navigate("/");
+        }, 3000);
     }
-  }, [status]);
+  }, [navigate, status]);
 
   // This is a workaround for an issue with voiceover moving focus to the wrong place
   // (to the entire website window) after exiting a native file upload dialog.
   useEffect(() => {
-    if (error) {
+    if (error || success) {
       setLiveMessage(null); // force remount
       setTimeout(() => {
-        setLiveMessage(error);
-        // Give React time to render it
-        setTimeout(() => {
-          liveRegionRef.current?.focus();
-        }, 10);
-      }, 100); // wait for file input focus shift to complete
+        setLiveMessage(success ? success : error);
+      }, 100);
     }
-  }, [error]);
+  }, [error, success]);
 
   if (status === "loading") return <p>{t("mfa.loading")}</p>;
 
@@ -52,7 +52,9 @@ const Mfa: React.FC = () => {
       );
       if (response.status === 200) {
         await refreshSession();
-        navigate("/");
+        setSuccess("Login successful, redirecting to main page");
+
+        //navigate("/");
       }
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -139,6 +141,7 @@ const Mfa: React.FC = () => {
           </div>
         )}
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {success && <p className="text-green-500 text-sm mb-4">{success}</p>}
         <button type="submit" className={buttonStyles} disabled={isLoading}>
           {isLoading ? t("mfa.verifying") : t("mfa.verify")}
         </button>
