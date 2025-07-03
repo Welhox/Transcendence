@@ -1,5 +1,5 @@
 import api from '../api/axios';
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 interface Props {
@@ -17,7 +17,22 @@ const ConfirmOtpField: React.FC<Props> = ({
 }) => {
   const [message, setMessage] = useState<string>("");
   const [isError, setIsError] = useState<boolean>(true);
+  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const [liveMessage, setLiveMessage] = useState<string | null>(null); // for screen reader aria announcements
+  
   const { t } = useTranslation();
+  useEffect(() => {
+    if (message) {
+      setLiveMessage(null); // force remount
+      setTimeout(() => {
+        setLiveMessage(message);
+        // Give React time to render it
+        setTimeout(() => {
+          liveRegionRef.current?.focus();
+        }, 10);
+      }, 100); // wait for file input focus shift to complete
+    }
+  }, [message]);
 
   const handleSubmit = async () => {
     if (otp.length !== 6) {
@@ -44,8 +59,8 @@ const ConfirmOtpField: React.FC<Props> = ({
         );
         setIsError(false);
         setMessage(t("confirmOtp.email_verified_success"));
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait for 2 seconds
-        setMessage(""); // Clear the message after 2 seconds
+        await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 2 seconds
+        setMessage(""); // Clear the message after 5 seconds
         setShowOtpField(false);
         console.log("OTP verified and 2FA enabled!");
       } else {
@@ -65,6 +80,20 @@ const ConfirmOtpField: React.FC<Props> = ({
     "px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800";
 
   return (
+    <>
+    {/* This next part is a secret div, visible only to screen readers, which ensures that the error
+	    or success messages get announced using aria. */}
+    {liveMessage && (
+        <div
+          ref={liveRegionRef}
+          tabIndex={-1}
+          aria-live="assertive"
+          aria-atomic="true"
+          className="sr-only"
+        >
+          {liveMessage}
+        </div>
+      )}
     <div className="mt-4 flex flex-col justify-center items-center">
       <input
         type="text"
@@ -91,7 +120,7 @@ const ConfirmOtpField: React.FC<Props> = ({
       <button className={buttonStyles} onClick={handleSubmit}>
         {t("confirmOtp.confirm")}
       </button>
-    </div>
+    </div></>
   );
 };
 export default ConfirmOtpField;
