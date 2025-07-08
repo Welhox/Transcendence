@@ -100,7 +100,7 @@ const ConfirmOtpField: React.FC<Props> = ({
         inputMode="numeric"
         pattern="\d{6}"
         maxLength={6}
-        aria-label="OTP Input"
+        aria-label="Enter your 6-digit One time password"
         placeholder={t("confirmOtp.otp_placeholder")}
         value={otp}
         onChange={(e) => {

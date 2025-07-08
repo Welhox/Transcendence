@@ -33,6 +33,9 @@ const Mfa: React.FC = () => {
       setLiveMessage(null); // force remount
       setTimeout(() => {
         setLiveMessage(success ? success : error);
+        setTimeout(() => {
+          liveRegionRef.current?.focus();
+        }, 10);
       }, 100);
     }
   }, [error, success]);
