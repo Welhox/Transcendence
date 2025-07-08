@@ -103,9 +103,10 @@ const TournamentBuilder = () => {
         createdById: user?.id,
         status: "waiting",
       });*/
+      console.log("Missing tournament saving API");
 
       //const tournamentId = res.data.id;
-      const tournamentId = 0;
+      const tournamentId = 0; // for testing without backend
 
       // add participants
       /*await Promise.all(
@@ -117,7 +118,9 @@ const TournamentBuilder = () => {
           })
         )
       );*/
-      navigate(`/tournament/${tournamentId}`);
+      console.log("Missing tournament players init API");
+      //navigate(`/tournament/${tournamentId}`); production
+      navigate(`/tournament/${tournamentId}`, { state: { players } }); // for testing without backend
     } catch (error) {
       console.error("Tournament creation failed.");
       alert("Error creating tournament.");
