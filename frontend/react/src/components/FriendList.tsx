@@ -25,6 +25,7 @@ export const FriendList: React.FC<FriendListProps> = ({ friends }) => {
                 friend.isOnline ? "bg-green-500" : "bg-gray-400"
               }`}
             />
+            <span className="sr-only">{friend.isOnline ? "Online" : "Offline"}</span>
             <Link
               to={"/stats/"}
               state={{
