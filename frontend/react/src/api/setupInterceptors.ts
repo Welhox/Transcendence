@@ -4,10 +4,10 @@ import { logoutFromInterceptor } from "../auth/AuthProvider";
 let isHandlingSessionExpiry = false;
 
 const isSessionAuthFailure = (status: number, url: string): boolean => {
-  return (
-    (status === 401 || status === 419) &&
-    (url.includes("/session") || url.includes("/users"))
-  );
+  const isSessionOrUserEndpoint =
+    url.includes("/session") ||
+    (url.includes("/users") && !url.includes("/users/login"));
+  return (status === 401 || status === 419) && isSessionOrUserEndpoint;
 };
 
 export function setupInterceptors({ api }: { api: AxiosInstance }) {
