@@ -91,14 +91,14 @@ export async function tournamentsRoute(fastify, _options) {
   // Get tournament details (including participants and matches)
   fastify.get(
     "/tournaments/:id",
-    { schema: tournamentsSchemas.getTournamentSchema },
+    { /* schema: tournamentsSchemas.getTournamentSchema */ },
     async (req, reply) => {
       const { id } = req.params;
       const tournament = await prisma.tournament.findUnique({
         where: { id: Number(id) },
         include: {
           participants: true,
-          matches: true,
+          tournamentMatches: true,
         },
       });
       reply.send(tournament);
@@ -141,12 +141,13 @@ export async function tournamentsRoute(fastify, _options) {
               matches.push({
               round: 1,
               tournamentId: tournament.id,
-              participant1Id: p1.userId ?? null,
-              participant1Alias: p1.alias ?? null,
-              participant2Id: p2.userId ?? null,
-              participant2Alias: p2.alias ?? null,
+              player1Id: p1.userId ?? null,
+              player1Alias: p1.alias ?? null,
+              player2Id: p2.userId ?? null,
+              player2Alias: p2.alias ?? null,
             });
         }
+        console.log("Generated matches:", matches);
         // Create matches in the database
         await prisma.TournamentMatch.createMany({
           data: matches,
@@ -164,6 +165,41 @@ export async function tournamentsRoute(fastify, _options) {
         reply.code(500).send({ message: "Server error" });
       }
   });
+  
+  //##############################################################
+
+  // update a tournament match
+  fastify.post(
+    "/tournaments/:id/match/:matchId/update",
+    { /* schema: tournamentsSchemas.updateTournamentMatchSchema */ },
+    async (req, reply) => {
+      const { id, matchId } = req.params;
+      const { winnerId } = req.body;
+      console.log("Updating match for tournament ID:", id, "Match ID:", matchId);
+      try {
+        const match = await prisma.tournamentMatch.findUnique({
+          where: { id: Number(matchId) },
+        });
+        if (!match) {
+          return reply.code(404).send({ message: "Match not found" });
+        }
+        if (match.tournamentId !== Number(id)) {
+          return reply.code(400).send({ message: "Match does not belong to this tournament" });
+        }
+        const updatedMatch = await prisma.tournamentMatch.update({
+          where: { id: Number(matchId) },
+          data: {
+            winnerId: winnerId || null,
+          },
+        });
+        reply.send(updatedMatch);
+      } catch (error) {
+        console.error("Error updating match:", error);
+        reply.code(500).send({ message: "Server error" });
+      }
+    }
+  );
+
 }
 
-//##############################################################
+

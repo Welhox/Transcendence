@@ -1,6 +1,15 @@
 export async function authenticateOptional(request, reply) {
   console.log("running optional authenticate middleware");
   try {
+
+    // Decode the JWT token from the request
+    // This will not throw an error if the token is invalid or missing
+    // It will simply return undefined if the token is not present or invalid
+    const decoded = request.jwtDecode();
+    if (!decoded || typeof decoded !== "object") {
+      request.user = undefined;
+      return;
+    }
     // Check if the request has a valid JWT token and store it for time validation
     const currentToken = await request.jwtVerify();
 
