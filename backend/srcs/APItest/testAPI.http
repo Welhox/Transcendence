@@ -84,7 +84,16 @@ POST http://localhost:3000/tournaments/8/start HTTP/1.1
 
 ###
 
+//update a tournament match
+POST http://localhost:3000/tournaments/8/match/1/update HTTP/1.1
+content-type: application/json
 
+{
+    "winnerId": null,
+    "winnerAlias": "asd"
+}
+
+###
 
 
 
