@@ -76,11 +76,11 @@ content-type: application/json
 GET http://localhost:3000/tournaments HTTP/1.1
 ###
 //GET TOURNAMENT BY ID
-GET http://localhost:3000/tournaments/2 HTTP/1.1
+GET http://localhost:3000/tournaments/8 HTTP/1.1
 
 ###
 //start a  tournament
-POST http://localhost:3000/tournaments/2/start HTTP/1.1
+POST http://localhost:3000/tournaments/8/start HTTP/1.1
 
 ###
 
