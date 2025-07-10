@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import api from "../api/axios";
 import Bracket from "../components/Bracket";
 import { Match, Player } from "../types/game";
+import { useGameSettings } from "../contexts/GameSettingsContext";
 
 const TournamentPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,7 @@ const TournamentPage = () => {
   const [matchesFromBackend, setMatchesFromBackend] = useState<Match[]>([]);
   const [upcomingMatches, setUpcomingMatches] = useState<Match[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { settings } = useGameSettings();
 
   useEffect(() => {
     if (state?.players && state.players.length > 0) {
@@ -230,6 +232,19 @@ const TournamentPage = () => {
       <h1 className="text-4xl font-bold text-teal-700 dark:text-teal-300 mb-6">
         Tournament #{tournamentId}
       </h1>
+
+      <div className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md w-full max-w-md">
+        <h3 className="text-xl font-semibold text-teal-700 dark:text-teal-300 mb-2">
+          Tournament Settings
+        </h3>
+        <div className="grid grid-cols-2 gap-2">
+          <p><strong>Map:</strong> {settings.mapType === 'classic' ? 'Classic' : 
+                           settings.mapType === 'corners' ? 'Corner Walls' : 'Center Wall'}</p>
+          <p><strong>Score to Win:</strong> {settings.scoreToWin}</p>
+          <p><strong>Power-ups:</strong> {settings.powerUpsEnabled ? 'Enabled' : 'Disabled'}</p>
+        </div>
+      </div>
+      
       {isLoading ? (
         <p>Loading...</p>
       ) : (

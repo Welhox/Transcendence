@@ -12,6 +12,7 @@ import TournamentPage from "./pages/TournamentPage";
 import showDatabase from "./components/showDatabase";
 import NavigationHeader from "./components/NavigationHeader";
 import { useAuth } from "./auth/AuthProvider";
+import { GameSettingsProvider } from "./contexts/GameSettingsContext";
 import api from "./api/axios";
 import Mfa from "./pages/Mfa";
 import i18n from "./i18n";
@@ -35,7 +36,7 @@ const App: React.FC = () => {
   };
   const { status, user, refreshSession } = useAuth();
   return (
-    <>
+    <GameSettingsProvider>
       <NavigationHeader handleLogout={logout} status={status} user={user} />
       <Routes>
         <Route path="/" element={<Home status={status} user={user} />} />
@@ -63,7 +64,7 @@ const App: React.FC = () => {
           show Database (for dev use only)
         </button>
       </div>
-    </>
+    </GameSettingsProvider>
   );
 };
 

@@ -3,6 +3,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import PlayerRegistrationBox from "./PlayerRegistrationBox";
 import api from "../api/axios";
+import { useGameSettings } from "../contexts/GameSettingsContext";
 
 type RegisteredPlayer = {
   username: string;
@@ -14,6 +15,7 @@ const TournamentBuilder = () => {
   const [players, setPlayers] = useState<RegisteredPlayer[]>([]);
   const [registeredPlayers, setRegisteredPlayers] = useState<boolean[]>([]);
   const { user } = useAuth();
+  const { settings } = useGameSettings();
   const navigate = useNavigate();
   const usernameRegex = /^[a-zA-Z0-9]+$/;
 
@@ -153,6 +155,20 @@ const TournamentBuilder = () => {
         <h1 className="text-6xl text-center text-teal-800 dark:text-teal-300 m-3">
           Create Tournament
         </h1>
+        
+        <div className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow">
+          <h3 className="text-lg font-semibold text-teal-700 dark:text-teal-300 mb-2">
+            Game Settings
+          </h3>
+          
+          <div className="grid grid-cols-2 gap-4 dark:text-white">
+            <p><strong>Map:</strong> {settings.mapType === 'classic' ? 'Classic' : 
+                             settings.mapType === 'corners' ? 'Corner Walls' : 'Center Wall'}</p>
+            <p><strong>Score to Win:</strong> {settings.scoreToWin}</p>
+            <p><strong>Power-ups:</strong> {settings.powerUpsEnabled ? 'Enabled' : 'Disabled'}</p>
+          </div>
+        </div>
+        
         <p className="dark:text-white">
           Enter the usernames or register as a guest.
         </p>
