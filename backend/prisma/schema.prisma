@@ -101,6 +101,8 @@ model Tournament {
   updatedAt         DateTime                @updatedAt
   tournamentMatches TournamentMatch[]
   participants      TournamentParticipant[]
+  winnerId          Int?
+  winnerAlias       String?
   status            String // "waiting" | "in_progress" | "finished"
 }
 

@@ -80,20 +80,22 @@ GET http://localhost:3000/tournaments/8 HTTP/1.1
 
 ###
 //start a  tournament
-POST http://localhost:3000/tournaments/8/start HTTP/1.1
+POST http://localhost:3000/tournaments/2/start HTTP/1.1
 
 ###
 
 //update a tournament match
-POST http://localhost:3000/tournaments/8/match/1/update HTTP/1.1
+POST http://localhost:3000/tournaments/2/match/6/update HTTP/1.1
 content-type: application/json
 
 {
     "winnerId": null,
-    "winnerAlias": "asd"
+    "winnerAlias": "ccc"
 }
 
 ###
+
+
 
 
 

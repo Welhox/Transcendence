@@ -200,8 +200,16 @@ export async function tournamentsRoute(fastify, _options) {
             status: "completed",
           },
         });
+        console.log("Match updated successfully:", updatedMatch);
+        try {
         // generate matches for net round if applicable
-        //add function here to generate next round matches
+        generateNextRoundMatches(id);
+        //check if the tournament is finished
+        isTournamentFinished(id, updatedMatch);
+        
+        } catch (error) {
+          console.error("Error generating next round matches:", error);
+        }
         reply.send(updatedMatch);
       } catch (error) {
         console.error("Error updating match:", error);
@@ -213,6 +221,32 @@ export async function tournamentsRoute(fastify, _options) {
 }
 
 //##############################################################
+
+// Function to check if all matches in a tournament are completed
+async function isTournamentFinished(id, updatedMatch) {
+  const tournament = await prisma.tournament.findUnique({
+    where: { id: Number(id) },
+    include: { tournamentMatches: true },
+  });
+  const pendingMatches = tournament.tournamentMatches.filter(match => match.status === "pending");
+  if (pendingMatches.length === 0) {
+    // If no pending matches, update tournament status to 'finished'
+    await prisma.tournament.update({
+      where: { id: Number(id) },
+      data: { status: "finished", winnerId: updatedMatch.winnerId, 
+        winnerAlias: updatedMatch.winnerAlias },
+    });
+    console.log("Tournament finished:", id);
+    //increment the user's tournament wins
+    if (updatedMatch.winnerId) {
+      await prisma.user.update({
+        where: { id: updatedMatch.winnerId },
+        data: { tournamentWins: { increment: 1 } },
+      });
+      console.log("User's tournament wins incremented:", updatedMatch.winnerId);
+    }
+  }
+}
 
 //function for generating next round matches
 async function generateNextRoundMatches(tournamentId) {
@@ -229,7 +263,7 @@ async function generateNextRoundMatches(tournamentId) {
   });
   console.log("Winners from completed matches:", winners);
   
-  round = matches[matches.length -1].round;
+  const round = matches[0].round +1;
   const nextRoundMatches = [];
   for (let i = 0; i < winners.length; i += 2) {
     const p1 = winners[i];
@@ -246,6 +280,12 @@ async function generateNextRoundMatches(tournamentId) {
   
   console.log("Generated next round matches:", nextRoundMatches);
   
+  // change the status of the used match reults to 'archived'
+  await prisma.tournamentMatch.updateMany({
+    where: { tournamentId: Number(tournamentId), status: "completed" },
+    data: { status: "archived" },
+  });
+
   // Create next round matches in the database
   await prisma.tournamentMatch.createMany({
     data: nextRoundMatches,
