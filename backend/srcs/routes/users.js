@@ -216,9 +216,11 @@ export async function userRoutes(fastify, _options) {
 
         // Always return generic response
         if (!user) {
-          return reply.code(200).send({
-            message: "If this email exists, a reset link has been sent",
-          });
+          return reply
+            .code(200)
+            .send({
+              message: "If this email exists, a reset link has been sent",
+            });
         }
 
         const resetToken = fastify.jwt.sign(
@@ -241,9 +243,11 @@ export async function userRoutes(fastify, _options) {
 
         await sendResetPasswordEmail(email, resetToken);
 
-        return reply.code(200).send({
-          message: "If this email exists, a reset link has been sent",
-        });
+        return reply
+          .code(200)
+          .send({
+            message: "If this email exists, a reset link has been sent",
+          });
       } catch (err) {
         console.error("Password reset error:", err);
         return reply.code(500).send({ error: "Internal server error" });
@@ -284,10 +288,12 @@ export async function userRoutes(fastify, _options) {
         }
 
         if (!isValidPassword(newPassword)) {
-          return reply.code(400).send({
-            error:
-              "Password must be 8–42 characters long and include uppercase, lowercase, number, and special character.",
-          });
+          return reply
+            .code(400)
+            .send({
+              error:
+                "Password must be 8–42 characters long and include uppercase, lowercase, number, and special character.",
+            });
         }
 
         // Hash the new password
