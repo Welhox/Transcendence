@@ -119,7 +119,7 @@ const TournamentBuilder = () => {
           })
         )
       );
-      console.log("Missing tournament players init API");
+      // console.log("Missing tournament players init API");
       //navigate(`/tournament/${tournamentId}`); production
       navigate(`/tournament/${tournamentId}`, { state: { players } }); // for testing without backend
     } catch (error) {
