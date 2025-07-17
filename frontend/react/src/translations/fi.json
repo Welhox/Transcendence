@@ -201,7 +201,7 @@
     "errorAllPlayersRequired": "Kaikkien pelaajien on annettava käyttäjänimi.",
     "errorTournamentCreation": "Turnauksen luominen epäonnistui.",
     "consoleCreating": "Luodaan turnaus",
-	  "placeholder": "Pong Turnaus"
+    "placeholder": "Pong Turnaus"
   },
   "gamecustomization": {
     "title": "Pelin mukautus",
@@ -257,5 +257,51 @@
     "winnerMessage": "{{winner}} voitti!",
     "restartMatch": "Aloita Uudelleen",
     "returnToMainMenu": "Palaa Päävalikkoon"
+  },
+  "pongGameAI": {
+    "title": "Yksinpeli tekoälyä vastaan",
+    "defaultPlayer": "Pelaaja",
+    "aiOpponent": "Tekoälyvastustaja",
+    "labels": {
+      "map": "Kartta",
+      "difficulty": "Tekoälyn vaikeustaso",
+      "scoreToWin": "Voittoon vaadittavat pisteet",
+      "powerUps": "Tehosteet"
+    },
+    "difficulty": {
+      "easy": "Helppo",
+      "medium": "Keskitaso",
+      "hard": "Vaikea",
+      "expert": "Ekspertti"
+    },
+    "map": {
+      "classic": "Klassinen",
+      "corners": "Kulmaseinät",
+      "centerWall": "Keskiseinä"
+    },
+    "enabled": "Käytössä",
+    "disabled": "Ei käytössä",
+    "instructions": "Käytä W/S-näppäimiä ohjataksesi mailaa"
+  },
+  "pongGameWithRegistration": {
+    "title": "2 Pelaajan Peli",
+    "player1": "Pelaaja 1",
+    "player2": "Pelaaja 2",
+    "labels": {
+      "map": "Kartta",
+      "scoreToWin": "Voittopisteet",
+      "powerUps": "Tehosteet"
+    },
+    "map": {
+      "classic": "Klassinen",
+      "corners": "Kulmaseinät",
+      "centerWall": "Keskiseinä"
+    },
+    "enabled": "Käytössä",
+    "disabled": "Ei käytössä",
+    "instructions": "Pelaaja 1: W/S-näppäimet | Pelaaja 2: Nuoli ylös/alas"
+  },
+  "round": {
+    "roundTitle": "Kierros {{round}}"
   }
 }

@@ -201,7 +201,7 @@
     "errorAllPlayersRequired": "Alla spelare måste ange ett användarnamn.",
     "errorTournamentCreation": "Fel vid skapande av turnering.",
     "consoleCreating": "Skapar turnering",
-	  "placeholder": "Pong Turnering" 
+    "placeholder": "Pong Turnering"
   },
   "gamecustomization": {
     "title": "Spelanpassning",
@@ -257,5 +257,51 @@
     "winnerMessage": "{{winner}} vinner!",
     "restartMatch": "Starta om Match",
     "returnToMainMenu": "Tillbaka till Huvudmenyn"
+  },
+  "pongGameAI": {
+    "title": "Enspelare mot AI",
+    "defaultPlayer": "Spelare",
+    "aiOpponent": "AI-motståndare",
+    "labels": {
+      "map": "Bana",
+      "difficulty": "AI-svårighetsgrad",
+      "scoreToWin": "Poäng för att vinna",
+      "powerUps": "Power-ups"
+    },
+    "difficulty": {
+      "easy": "Lätt",
+      "medium": "Medel",
+      "hard": "Svår",
+      "expert": "Expert"
+    },
+    "map": {
+      "classic": "Klassisk",
+      "corners": "Hörnväggar",
+      "centerWall": "Mittvägg"
+    },
+    "enabled": "Aktiverat",
+    "disabled": "Avaktiverat",
+    "instructions": "Använd W/S för att styra din racket"
+  },
+  "pongGameWithRegistration": {
+    "title": "2 Spelare",
+    "player1": "Spelare 1",
+    "player2": "Spelare 2",
+    "labels": {
+      "map": "Bana",
+      "scoreToWin": "Poäng för vinst",
+      "powerUps": "Power-ups"
+    },
+    "map": {
+      "classic": "Klassisk",
+      "corners": "Hörnväggar",
+      "centerWall": "Mittvägg"
+    },
+    "enabled": "Aktiverat",
+    "disabled": "Avaktiverat",
+    "instructions": "Spelare 1: W/S-tangenter | Spelare 2: Pil upp/ner"
+  },
+  "round": {
+    "roundTitle": "Omgång {{round}}"
   }
 }

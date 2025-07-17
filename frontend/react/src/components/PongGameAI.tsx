@@ -2,6 +2,7 @@ import React from "react";
 import PongGame from "./PongGame";
 import { useAuth } from "../auth/AuthProvider";
 import { useGameSettings } from "../contexts/GameSettingsContext";
+import { useTranslation } from "react-i18next";
 
 interface PongGameAIProps {
   onReturnToMenu?: () => void;
@@ -10,45 +11,46 @@ interface PongGameAIProps {
 const PongGameAI: React.FC<PongGameAIProps> = ({ onReturnToMenu }) => {
   const { user } = useAuth();
   const { settings } = useGameSettings();
+  const { t } = useTranslation();
 
   // Default player setup for AI game
   const player1 = user 
     ? { username: user.username, isGuest: false }
-    : { username: "Player", isGuest: true };
+    : { username: t("pongGameAI.defaultPlayer"), isGuest: true };
   
-  const player2 = { username: "AI Opponent", isGuest: true };
+  const player2 = { username: t("pongGameAI.aiOpponent"), isGuest: true };
 
   const getDifficultyDisplayName = () => {
     switch (settings.aiDifficulty) {
-      case 'easy': return 'Easy';
-      case 'medium': return 'Medium';
-      case 'hard': return 'Hard';
-      case 'expert': return 'Expert';
-      default: return 'Medium';
+      case 'easy': return t("pongGameAI.difficulty.easy");
+      case 'medium': return t("pongGameAI.difficulty.medium");
+      case 'hard': return t("pongGameAI.difficulty.hard");
+      case 'expert': return t("pongGameAI.difficulty.expert");
+      default: return t("pongGameAI.difficulty.medium");
     }
   };
 
   const getMapDisplayName = () => {
     switch (settings.mapType) {
-      case 'classic': return 'Classic';
-      case 'corners': return 'Corner Walls';
-      case 'center-wall': return 'Center Wall';
-      default: return 'Classic';
+      case 'classic': return t("pongGameAI.map.classic");
+      case 'corners': return t("pongGameAI.map.corners");
+      case 'center-wall': return t("pongGameAI.map.centerWall");
+      default: return t("pongGameAI.map.classic");
     }
   };
 
   return (
     <div className="flex flex-col items-center">
       <h2 className="text-2xl font-bold text-teal-700 dark:text-teal-300 mb-2">
-        Single Player vs AI
+        {t("pongGameAI.title")}
       </h2>
       
       <div className="mb-4 text-center dark:text-white space-y-1">
-        <p><strong>Map:</strong> {getMapDisplayName()}</p>
-        <p><strong>AI Difficulty:</strong> {getDifficultyDisplayName()}</p>
-        <p><strong>Score to Win:</strong> {settings.scoreToWin}</p>
-        <p><strong>Power-ups:</strong> {settings.powerUpsEnabled ? 'Enabled' : 'Disabled'}</p>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">Use W/S keys to control your paddle</p>
+        <p><strong>{t("pongGameAI.labels.map")}:</strong> {getMapDisplayName()}</p>
+        <p><strong>{t("pongGameAI.labels.difficulty")}:</strong> {getDifficultyDisplayName()}</p>
+        <p><strong>{t("pongGameAI.labels.scoreToWin")}:</strong> {settings.scoreToWin}</p>
+        <p><strong>{t("pongGameAI.labels.powerUps")}:</strong> {settings.powerUpsEnabled ? t("pongGameAI.enabled") : t("pongGameAI.disabled")}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t("pongGameAI.instructions")}</p>
       </div>
       
       <PongGame 

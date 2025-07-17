@@ -200,7 +200,7 @@
     "errorAllPlayersRequired": "All players must enter a username.",
     "errorTournamentCreation": "Error creating tournament",
     "consoleCreating": "Let's make a tournament",
-	  "placeholder": "Pong Tournament" 
+    "placeholder": "Pong Tournament"
   },
   "gamecustomization": {
     "title": "Game Customization",
@@ -256,5 +256,51 @@
     "winnerMessage": "{{winner}} wins!",
     "restartMatch": "Restart Match",
     "returnToMainMenu": "Return to Main Menu"
+  },
+  "pongGameAI": {
+    "title": "Single Player vs AI",
+    "defaultPlayer": "Player",
+    "aiOpponent": "AI Opponent",
+    "labels": {
+      "map": "Map",
+      "difficulty": "AI Difficulty",
+      "scoreToWin": "Score to Win",
+      "powerUps": "Power-ups"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard",
+      "expert": "Expert"
+    },
+    "map": {
+      "classic": "Classic",
+      "corners": "Corner Walls",
+      "centerWall": "Center Wall"
+    },
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "instructions": "Use W/S keys to control your paddle"
+  },
+  "pongGameWithRegistration": {
+    "title": "2 Player Game",
+    "player1": "Player 1",
+    "player2": "Player 2",
+    "labels": {
+      "map": "Map",
+      "scoreToWin": "Score to Win",
+      "powerUps": "Power-ups"
+    },
+    "map": {
+      "classic": "Classic",
+      "corners": "Corner Walls",
+      "centerWall": "Center Wall"
+    },
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "instructions": "Player 1: W/S keys | Player 2: Arrow Up/Down"
+  },
+  "round": {
+    "roundTitle": "Round {{round}}"
   }
 }
