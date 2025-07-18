@@ -99,6 +99,8 @@ const SettingsField: React.FC<FieldProps> = ({
       });
 
       setSuccess(t("settings.updateSuccess", { label }));
+	  setConfirmInput("");
+	  setCurrentPassword("");
       setError(null);
       setIsEditing(false);
       onUpdate?.(inputValue.trim());
