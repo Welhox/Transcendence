@@ -216,12 +216,14 @@ const PlayerRegistrationBox: React.FC<PlayerBoxProps> = ({
         <input
           className="mb-2 p-2 border rounded w-48"
           placeholder={t("playerBox.usernamePlaceholder")}
+		  aria-label={t("playerBox.usernamePlaceholder")}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
 		  maxLength={20}
         />
         <input
           className="mb-2 p-2 border rounded w-48"
+		  aria-label={t("playerBox.passwordPlaceholder")}
           type="password"
           placeholder={t("playerBox.passwordPlaceholder")}
           value={password}
