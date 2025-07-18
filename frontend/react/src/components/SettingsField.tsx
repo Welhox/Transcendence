@@ -41,17 +41,17 @@ const SettingsField: React.FC<FieldProps> = ({
   }, [value]);
 
   useEffect(() => {
-    if (error) {
+    if (error || success) {
       setLiveMessage(null); // force remount
       setTimeout(() => {
-        setLiveMessage(error);
+        setLiveMessage(error ? error : success);
         // Give React time to render it
         setTimeout(() => {
           liveRegionRef.current?.focus();
         }, 10);
       }, 100); // wait for file input focus shift to complete
     }
-  }, [error]);
+  }, [error, success]);
 
   const validateInput = () => {
     if (inputValue.trim() !== confirmInput.trim()) {
@@ -99,13 +99,15 @@ const SettingsField: React.FC<FieldProps> = ({
       });
 
       setSuccess(t("settings.updateSuccess", { label }));
+	  setTimeout(() => {setSuccess(null);}, 5000);
 	  setConfirmInput("");
 	  setCurrentPassword("");
       setError(null);
-      setIsEditing(false);
+      setTimeout(() => {setIsEditing(false);}, 5000);
       onUpdate?.(inputValue.trim());
     } catch (error: any) {
       setError(error?.response?.data?.message || t("settings.updateFailed"));
+	  setTimeout(() => {setError(null);}, 8000);
     }
   };
 
