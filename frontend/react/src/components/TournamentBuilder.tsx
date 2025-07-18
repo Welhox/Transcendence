@@ -285,6 +285,7 @@ const TournamentBuilder = () => {
             value={tournamentName}
             className="dark:text-white mb-2 p-2 border rounded w-100"
             onChange={(e) => setTournamentName(e.target.value)}
+			maxLength={50}
           />
         </div>
         <p className="dark:text-white">{t("tournament.enterUsernames")}</p>
