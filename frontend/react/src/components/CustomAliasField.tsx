@@ -52,6 +52,7 @@ const CustomAliasField: React.FC<Props> = ({
           onChange={(e) => setCustomName(e.target.value)}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 w-48 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
           placeholder={t("tournament.playerLabel") || "Enter new display name"}
+          aria-label={t("tournament.customizeDisplayName")}
           maxLength={20}
         />
         <button
