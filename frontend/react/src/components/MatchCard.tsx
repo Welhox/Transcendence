@@ -20,6 +20,8 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onLaunch }) => {
     }
     return winnerAlias ?? t("matchcard.unknownPlayer");
   })();
+  const buttonStyles =
+    "w-full py-2 text-white text-lg font-semibold rounded text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800";
 
   return (
     <div className="p-3 border rounded mb-2">
@@ -30,7 +32,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onLaunch }) => {
             <span className="font-semibold">{player2.name}</span>
           </div>
           <button
-            className="w-full py-2 bg-blue-600 text-white text-lg font-semibold rounded hover:bg-blue-700"
+            className={buttonStyles}
             onClick={() => onLaunch(match)}
           >
             {t("matchcard.play")}
@@ -52,4 +54,3 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, onLaunch }) => {
 };
 
 export default MatchCard;
-
