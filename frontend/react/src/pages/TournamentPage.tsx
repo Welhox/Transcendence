@@ -30,7 +30,7 @@ const TournamentPage = () => {
   const { settings } = useGameSettings();
 
   useEffect(() => {
-    if (announceReady) {
+    if (announceReady && finalStandings.length > 0) {
       setLiveMessage(null); // force remount
       setTimeout(() => {
         setLiveMessage(
@@ -44,7 +44,7 @@ const TournamentPage = () => {
         setTimeout(() => {
           liveRegionRef.current?.focus();
         }, 10);
-      }, 100); // wait for file input focus shift to complete
+      }, 100);
     }
   }, [t, finalStandings, announceReady]);
 
@@ -110,7 +110,7 @@ const TournamentPage = () => {
         const top3 = getTop3FromMatches(formattedMatches);
         setFinalStandings(top3);
         console.log("Final standings", top3);
-        setAnnounceReady(true);
+        if (!announceReady) setAnnounceReady(true);
       }
     } catch (error) {
       console.error("Failed to fetch tournament data:", error);
