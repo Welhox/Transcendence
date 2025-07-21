@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -21,20 +21,27 @@ const CustomAliasField: React.FC<Props> = ({
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [customName, setCustomName] = useState(username);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editing) {
+      inputRef.current?.focus();
+    }
+  }, [editing]);
 
   if (finalized) {
     return (
       <div className="flex items-center space-x-2 justify-center text-teal-800 dark:text-teal-300 font-semibold">
         <span className="font-bold text-lg">
-        {isYou
+          {isYou
             ? t("tournament.playerYou", {
                 index: index + 1,
                 username,
-            })
+              })
             : t("tournament.player", {
                 index: index + 1,
                 username,
-            })}
+              })}
         </span>
       </div>
     );
@@ -47,6 +54,7 @@ const CustomAliasField: React.FC<Props> = ({
           {t("tournament.playerLabel")} {index + 1}:
         </label>
         <input
+          ref={inputRef}
           type="text"
           value={customName}
           onChange={(e) => setCustomName(e.target.value)}
@@ -88,13 +96,17 @@ const CustomAliasField: React.FC<Props> = ({
   // dropdown display
   return (
     <div className="flex items-center justify-center space-x-2 text-lg">
-      <label htmlFor={`custom-alias-select-${index}`} className="font-bold text-teal-800 dark:text-teal-300 whitespace-nowrap">
+      <label
+        htmlFor={`custom-alias-select-${index}`}
+        className="font-bold text-teal-800 dark:text-teal-300 whitespace-nowrap"
+      >
         {t("tournament.playerLabel")} {index + 1}:
       </label>
-      <select id={`custom-alias-select-${index}`}
+      <select
+        id={`custom-alias-select-${index}`}
         aria-label={t("tournament.customAliasSelectAriaLabel", {
-        index: index + 1,
-        username,
+          index: index + 1,
+          username,
         })}
         className="text-teal-800 dark:text-teal-300 font-semibold bg-transparent text-lg"
         onChange={(e) => {
@@ -108,7 +120,9 @@ const CustomAliasField: React.FC<Props> = ({
         <option value="" disabled>
           {username}
         </option>
-        <option value="customize">{t("tournament.customizeDisplayName")}</option>
+        <option value="customize">
+          {t("tournament.customizeDisplayName")}
+        </option>
       </select>
     </div>
   );
