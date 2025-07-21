@@ -23,6 +23,11 @@ const CustomAliasField: React.FC<Props> = ({
   const [customName, setCustomName] = useState(username);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const buttonStyles =
+    "px-5 mx-3 my-2 text-white bg-teal-700 hover:bg-teal-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto py-2.5 text-center dark:bg-teal-600 dark:hover:bg-teal-700 dark:focus:ring-teal-800";
+  const altButtonStyles =
+    "text-white bg-amber-700 hover:bg-amber-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm w-full sm:w-auto px-5 mx-2 py-2.5 text-center dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-800";
+
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus();
@@ -64,7 +69,8 @@ const CustomAliasField: React.FC<Props> = ({
           maxLength={20}
         />
         <button
-          className="bg-green-500 text-white px-4 py-1 rounded"
+          className={buttonStyles}
+          // className="bg-green-500 text-white px-4 py-1 rounded"
           onClick={() => {
             const newName = customName.trim();
             if (
@@ -84,7 +90,8 @@ const CustomAliasField: React.FC<Props> = ({
           {t("settings.save")}
         </button>
         <button
-          className="bg-gray-400 text-white px-4 py-1 rounded"
+          className={altButtonStyles}
+          // className="bg-gray-400 text-white px-4 py-1 rounded"
           onClick={() => setEditing(false)}
         >
           {t("settings.cancel")}
