@@ -138,7 +138,9 @@ content-type: application/json
 
 ###
 
+GET http://localhost:3000/users/findByUsername/casi HTTP/1.1
 
+###
 
 
 

@@ -5,8 +5,8 @@ services:
       dockerfile: ./frontend/Dockerfile
     container_name: frontend
     image:  frontend
-    # depends_on:
-    #   - backend
+    depends_on:
+      - backend
     ports:
       - "8443:8443"
     volumes:
@@ -24,7 +24,7 @@ services:
     # depends_on:
     #   - database
     ports:
-      - "3000:3000" #should only be "3000"
+      - "3000" #change to "3000:3000" if you want to access the backend directly
     environment:
       - NODE_ENV=production
     volumes:

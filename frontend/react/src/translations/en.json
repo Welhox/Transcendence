@@ -127,12 +127,18 @@
     "totalLosses": "Total Losses",
     "totalTournamentsWon": "Total Tournaments Won",
     "matchHistoryTitle": "Match History",
-    "noHistory": "No match history available"
+    "noHistory": "No match history available",
+    "backToSummary": "Back",
+    "matchesVs": "Matches vs",
+    "wins": "Wins",
+    "losses": "Losses",
+    "matches": "Matches"
   },
   "playerBox": {
     "usernameLengthError": "Username must be between 3 and 30 characters.",
     "passwordLengthError": "Password must be between 8 and 42 characters.",
     "alreadyLoggedIn": "You're already logged in with this username.",
+    "cannotUseTheSameAccount": "Cannot use the same account for both players.",
     "login": "Login",
     "guest": "Guest",
     "continue": "Continue",

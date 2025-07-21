@@ -28,6 +28,30 @@ const PongGameWithRegistration: React.FC<PongGameWithRegistrationProps> = ({
     isGuest: boolean;
     id?: string;
   } | null>(null);
+  
+  // Custom wrapper for player2 registration that handles login redirection
+  const handlePlayer2Registration = (playerData: any) => {
+    console.log("Player 2 registration attempt:", playerData);
+    
+    // If this is a login (not a guest) and player1 isn't set yet,
+    // move this login to player1 instead
+    if (playerData && !playerData.isGuest && !player1) {
+      console.log("Player 2 logged in while player 1 not set - moving login to player 1");
+      
+      // Set player1 to the logged in user
+      setPlayer1({
+        username: playerData.username,
+        isGuest: playerData.isGuest,
+        id: playerData.id
+      });
+      
+      // Reset player2 to null since we've moved the login
+      setPlayer2(null);
+    } else {
+      // Normal case - just set player2
+      setPlayer2(playerData);
+    }
+  };
 
   // If logged in, set player1 automatically with user ID
   React.useEffect(() => {
@@ -73,10 +97,11 @@ const PongGameWithRegistration: React.FC<PongGameWithRegistrationProps> = ({
           {!player2 && (
             <PlayerRegistrationBox
               label={t("pongGameWithRegistration.player2")}
-              onRegister={setPlayer2}
+              onRegister={handlePlayer2Registration}
               playerId={2}
             />
           )}
+          {player2 && <span className="text-white">{player2.username}</span>}
         </div>
       </div>
     );

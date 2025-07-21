@@ -121,12 +121,18 @@
     "totalLosses": "Totala förluster",
     "totalTournamentsWon": "Totala vunna turneringar",
     "matchHistoryTitle": "Matchhistorik",
-    "noHistory": "Ingen matchhistorik tillgänglig"
+    "noHistory": "Ingen matchhistorik tillgänglig",
+    "backToSummary": "Tillbaka",
+    "matchesVs": "Matcher mot",
+    "wins": "Vinster",
+    "losses": "Förluster",
+    "matches": "Matcher"
   },
   "playerBox": {
     "usernameLengthError": "Användarnamnet måste vara mellan 3 och 30 tecken långt.",
     "passwordLengthError": "Lösenordet måste vara mellan 2 och 30 tecken långt.",
     "alreadyLoggedIn": "Du är redan inloggad med detta användarnamn.",
+    "cannotUseTheSameAccount": "Du kan inte använda samma konto för båda spelarna.",
     "login": "Logga in",
     "guest": "Gäst",
     "continue": "Fortsätt",

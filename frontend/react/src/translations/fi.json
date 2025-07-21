@@ -20,7 +20,12 @@
     "totalLosses": "Häviöt yhteensä",
     "totalTournamentsWon": "Voitetut turnaukset yhteensä",
     "matchHistoryTitle": "Otteluhistoria",
-    "noHistory": "Ei otteluhistoriaa saatavilla"
+    "noHistory": "Ei otteluhistoriaa saatavilla",
+    "backToSummary": "Takaisin",
+    "matchesVs": "Ottelut vs",
+    "wins": "Voitot",
+    "losses": "Häviöt",
+    "matches": "Ottelut"
   },
   "forgotPassword": {
     "title": "Palauta salasana",
@@ -127,6 +132,7 @@
     "usernameLengthError": "Käyttäjänimen on oltava 3–30 merkkiä pitkä.",
     "passwordLengthError": "Salasanan on oltava 8–42 merkkiä pitkä.",
     "alreadyLoggedIn": "Olet jo kirjautunut sisään tällä käyttäjänimellä.",
+    "cannotUseTheSameAccount": "Samaa tiliä ei voi käyttää molemmille pelaajille.",
     "login": "Kirjaudu sisään",
     "guest": "Vieras",
     "continue": "Jatka",

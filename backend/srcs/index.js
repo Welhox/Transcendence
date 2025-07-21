@@ -34,8 +34,12 @@ const start = async () => {
       throw new Error("❌ JWT_SECRET is not defined in the environment.");
     }
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     await fastify.register(cors, {
-      origin: true, // according to chatGPT this good for development, but we gotta figure out something else for the final product
+      origin: isProduction
+        ? ["https://transcendance.fi", "https://www.transcendance.fi"]
+        : true, // allow any origin in dev, including REST client and postman etc.
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     });
