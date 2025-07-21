@@ -19,7 +19,9 @@ const TournamentPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const hasStartedRef = useRef(false);
-
+  const liveRegionRef = useRef<HTMLDivElement>(null);
+  const [liveMessage, setLiveMessage] = useState<string | null>(null);
+  const [announceReady, setAnnounceReady] = useState(false); // for screen reader aria announcements
   const [players, setPlayers] = useState<Player[]>([]);
   const [matches, setMatches] = useState<Match[]>([]);
   const [currentMatch, setCurrentMatch] = useState<Match | null>(null);
@@ -27,6 +29,24 @@ const TournamentPage = () => {
   const [finalStandings, setFinalStandings] = useState<Player[]>([]);
   const { settings } = useGameSettings();
 
+  useEffect(() => {
+    if (announceReady) {
+      setLiveMessage(null); // force remount
+      setTimeout(() => {
+        setLiveMessage(
+          `${t("victory.tournamentFinished")} ${t("victory.first")} ${
+            finalStandings[0]?.name
+          }, ${t("victory.second")} ${finalStandings[1]?.name}, ${t(
+            "victory.third"
+          )} ${finalStandings[2]?.name}`
+        );
+        // Give React time to render it
+        setTimeout(() => {
+          liveRegionRef.current?.focus();
+        }, 10);
+      }, 100); // wait for file input focus shift to complete
+    }
+  }, [t, finalStandings, announceReady]);
 
   useEffect(() => {
     if (!location.state) {
@@ -65,7 +85,7 @@ const TournamentPage = () => {
     setIsLoading(true);
     try {
       console.log("Tournament id:", id);
-      
+
       // Re-fetch after starting
       const tournamentRes = await api.get(`/tournaments/${id}`);
       let tournament = tournamentRes.data;
@@ -75,9 +95,9 @@ const TournamentPage = () => {
       if (tournament.status === "waiting" && !hasStartedRef.current) {
         hasStartedRef.current = true;
         await api.post(`/tournaments/${id}/start`);
-         const updatedTournament = await api.get(`/tournaments/${id}`);
-         tournament = updatedTournament.data;
-         setTournamentName(tournament.name);
+        const updatedTournament = await api.get(`/tournaments/${id}`);
+        tournament = updatedTournament.data;
+        setTournamentName(tournament.name);
       }
 
       const playersData = formatPlayers(tournament.participants);
@@ -90,12 +110,12 @@ const TournamentPage = () => {
         const top3 = getTop3FromMatches(formattedMatches);
         setFinalStandings(top3);
         console.log("Final standings", top3);
-     }
-
+        setAnnounceReady(true);
+      }
     } catch (error) {
       console.error("Failed to fetch tournament data:", error);
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -115,8 +135,7 @@ const TournamentPage = () => {
     }, 15_000); // ← 15 seconds
 
     return () => clearTimeout(timer);
-  }, [finalStandings, tournamentId, tournamentName, navigate, /*t*/]);
-
+  }, [finalStandings, tournamentId, tournamentName, navigate /*t*/]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white py-8 px-4 flex flex-col items-center">
@@ -134,7 +153,8 @@ const TournamentPage = () => {
             {t(`map.${settings.mapType}`)}
           </p>
           <p>
-            <strong>{t("tournamentPage.scoreToWin")}:</strong> {settings.scoreToWin}
+            <strong>{t("tournamentPage.scoreToWin")}:</strong>{" "}
+            {settings.scoreToWin}
           </p>
           <p>
             <strong>{t("tournamentPage.powerUps")}:</strong>{" "}
@@ -145,21 +165,36 @@ const TournamentPage = () => {
         </div>
       </div>
 
-        {isLoading ? (
+      {isLoading ? (
         <p>{t("tournamentPage.loading")}</p>
-        ) : currentMatch ? (
+      ) : currentMatch ? (
         <PongGame
-            player1={mapToPongPlayer(currentMatch.player1)}
-            player2={mapToPongPlayer(currentMatch.player2)}
-            onGameEnd={handleGameEnd}
+          player1={mapToPongPlayer(currentMatch.player1)}
+          player2={mapToPongPlayer(currentMatch.player2)}
+          onGameEnd={handleGameEnd}
         />
-        ) : finalStandings.length > 0 ? (
-        <Victory standings={finalStandings} />
-        ) : (
+      ) : finalStandings.length > 0 ? (
+        <>
+          {/* This next part is a secret div, visible only to screen readers, which ensures that the error
+	  or success messages get announced using aria. */}
+          {
+            <div
+              ref={liveRegionRef}
+              tabIndex={-1}
+              aria-live="assertive"
+              aria-atomic="true"
+              className="sr-only"
+            >
+              {liveMessage}
+            </div>
+          }
+          <Victory standings={finalStandings} />
+        </>
+      ) : (
         <Bracket matches={matches} onLaunch={handleLaunch} />
-        )}
+      )}
     </div>
-    );
+  );
 };
 
 export default TournamentPage;
