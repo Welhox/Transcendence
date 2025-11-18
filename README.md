@@ -111,6 +111,13 @@ It’s designed as a learning-friendly, production-style codebase you can explor
 ## Visuals & Demos
 
 <details>
+  <summary>▶️ Video Showcase</summary>
+
+  🎬 **YouTube Demo:**  
+  https://youtu.be/6TZGFZVT26I
+</details>
+
+<details>
   <summary>▶️ Homepage</summary>
   
   ![Homepage](https://github.com/user-attachments/assets/7c0e21ab-4517-4db3-892f-a6c08ab1acc7)
